@@ -2,8 +2,7 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/material.dart';
 
-import 'fixed_column_name_area.dart';
-import 'scrollable_column_name_area.dart';
+import 'table_name_row_widget.dart';
 
 ///表头部
 class TableViewHeader<T> extends StatelessWidget {
@@ -33,11 +32,15 @@ class TableViewHeader<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //可动列名区域
-    final Widget scrollableNames = ScrollableColumnNameArea<T>(
-      controller,
-      columns: scrollableColumns,
-      rowHeight: headerHeight,
-      nameAlignment: nameAlignment,
+    final Widget scrollableNames = SingleChildScrollView(
+      controller: controller.nameRowScrollController,
+      scrollDirection: Axis.horizontal,
+      child: TableNameRowWidget<T>(
+        controller,
+        columns: fixedColumns,
+        rowHeight: headerHeight,
+        nameAlignment: nameAlignment,
+      ),
     );
     if (fixedColumns.isEmpty) {
       return scrollableNames;
@@ -45,7 +48,7 @@ class TableViewHeader<T> extends StatelessWidget {
     return Row(
       children: [
         //不动列区域
-        FixedColumnNameArea<T>(
+        TableNameRowWidget<T>(
           controller,
           columns: fixedColumns,
           rowHeight: headerHeight,

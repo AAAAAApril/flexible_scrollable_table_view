@@ -2,24 +2,24 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/material.dart';
 
-import 'table_column_info_list.dart';
+import 'table_column_name_widget.dart';
 
-///固定不动的列信息区域
-class FixedColumnInfoArea<T> extends StatelessWidget {
-  const FixedColumnInfoArea(
+///表的列名行
+class TableNameRowWidget<T> extends StatelessWidget {
+  const TableNameRowWidget(
     this.controller, {
     Key? key,
     required this.columns,
+    required this.nameAlignment,
     required this.rowHeight,
-    this.infoAlignment,
   }) : super(key: key);
 
   final FlexibleTableController<T> controller;
   final Set<FlexibleColumn<T>> columns;
-  final double rowHeight;
 
-  ///列信息组件在容器内的对齐方式
-  final AlignmentGeometry? infoAlignment;
+  ///列名组件在容器内的对齐方式
+  final AlignmentGeometry? nameAlignment;
+  final double rowHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,11 @@ class FixedColumnInfoArea<T> extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: columns
           .map<Widget>(
-            (currentColumn) => TableColumnInfoList<T>(
+            (e) => TableColumnNameWidget<T>(
               controller,
-              column: currentColumn,
-              rowHeight: rowHeight,
-              infoAlignment: infoAlignment,
+              column: e,
+              nameAlignment: nameAlignment,
+              height: rowHeight,
             ),
           )
           .toList(growable: false),

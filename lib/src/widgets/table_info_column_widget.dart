@@ -3,9 +3,9 @@ import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dar
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
 import 'package:flutter/material.dart';
 
-///可左右滚动的列信息列
-class TableColumnInfoList<T> extends StatelessWidget {
-  const TableColumnInfoList(
+///列信息列
+class TableInfoColumnWidget<T> extends StatelessWidget {
+  const TableInfoColumnWidget(
     this.controller, {
     Key? key,
     required this.column,

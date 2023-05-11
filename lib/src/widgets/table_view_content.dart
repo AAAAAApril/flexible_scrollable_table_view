@@ -2,8 +2,7 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/material.dart';
 
-import 'fixed_column_info_area.dart';
-import 'scrollable_column_info_area.dart';
+import 'table_info_row_widget.dart';
 
 ///表内容
 class TableViewContent<T> extends StatelessWidget {
@@ -33,11 +32,15 @@ class TableViewContent<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //可动列信息区域
-    final Widget scrollableColumnInfoArea = ScrollableColumnInfoArea<T>(
-      controller,
-      columns: scrollableColumns,
-      rowHeight: infoRowHeight,
-      infoAlignment: infoAlignment,
+    final Widget scrollableColumnInfoArea = SingleChildScrollView(
+      controller: controller.dataAreaScrollController,
+      scrollDirection: Axis.horizontal,
+      child: TableInfoRowWidget<T>(
+        controller,
+        columns: scrollableColumns,
+        rowHeight: infoRowHeight,
+        infoAlignment: infoAlignment,
+      ),
     );
     if (fixedColumns.isEmpty) {
       return scrollableColumnInfoArea;
@@ -45,7 +48,7 @@ class TableViewContent<T> extends StatelessWidget {
     return Row(
       children: [
         //不动列信息区域
-        FixedColumnInfoArea<T>(
+        TableInfoRowWidget<T>(
           controller,
           columns: fixedColumns,
           rowHeight: infoRowHeight,
