@@ -6,7 +6,6 @@ export 'src/mixins/sortable_column_mixin.dart';
 export 'src/widgets/table_column_info_widget.dart';
 export 'src/widgets/table_column_name_widget.dart';
 
-export 'src/widgets/table_info_column_widget.dart';
 export 'src/widgets/table_info_row_widget.dart';
 
 export 'src/widgets/table_name_row_widget.dart';

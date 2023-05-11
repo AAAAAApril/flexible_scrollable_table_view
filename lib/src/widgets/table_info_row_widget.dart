@@ -1,8 +1,7 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'table_info_column_widget.dart';
 
 ///表信息行组件
 class TableInfoRowWidget<T> extends StatelessWidget {
@@ -27,11 +26,22 @@ class TableInfoRowWidget<T> extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: columns
           .map<Widget>(
-            (currentColumn) => TableInfoColumnWidget<T>(
-              controller,
-              column: currentColumn,
-              rowHeight: rowHeight,
-              infoAlignment: infoAlignment,
+            (currentColumn) => ValueListenableBuilder<List<T>>(
+              valueListenable: controller,
+              builder: (context, value, child) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: value
+                    .map<Widget>(
+                      (data) => TableColumnInfoWidget<T>(
+                        controller,
+                        data: data,
+                        column: currentColumn,
+                        height: rowHeight,
+                        infoAlignment: infoAlignment,
+                      ),
+                    )
+                    .toList(growable: false),
+              ),
             ),
           )
           .toList(growable: false),
