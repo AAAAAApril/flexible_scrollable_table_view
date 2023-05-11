@@ -1,0 +1,41 @@
+import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
+import 'package:flutter/material.dart';
+
+import 'table_column_info_list.dart';
+
+///可左右滚动的列信息区域
+class ScrollableColumnInfoArea<T> extends StatelessWidget {
+  const ScrollableColumnInfoArea(
+    this.controller, {
+    Key? key,
+    required this.columns,
+    required this.rowHeight,
+    this.infoAlignment,
+  }) : super(key: key);
+
+  final FlexibleTableController<T> controller;
+  final Set<FlexibleColumn<T>> columns;
+  final double rowHeight;
+
+  ///列信息组件在容器内的对齐方式
+  final AlignmentGeometry? infoAlignment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: columns
+          .map<Widget>(
+            (currentColumn) => TableColumnInfoList<T>(
+              controller,
+              column: currentColumn,
+              rowHeight: rowHeight,
+              infoAlignment: infoAlignment,
+            ),
+          )
+          .toList(growable: false),
+    );
+  }
+}
