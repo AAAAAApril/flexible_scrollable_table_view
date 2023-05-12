@@ -32,10 +32,13 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     Widget child = SizedBox(
       width: column.fixedWidth,
       height: height,
-      child: column.infoBuilder.call(
-        context,
-        data,
-        Size(column.fixedWidth, height),
+      child: Align(
+        alignment: infoAlignment ?? column.infoAlignment,
+        child: column.infoBuilder.call(
+          context,
+          data,
+          Size(column.fixedWidth, height),
+        ),
       ),
     );
     final TableColumnInfoPressedCallback<T>? pressedCallback = column.onColumnInfoPressed;

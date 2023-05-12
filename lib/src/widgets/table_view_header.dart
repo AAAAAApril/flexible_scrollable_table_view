@@ -37,7 +37,7 @@ class TableViewHeader<T> extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: TableNameRowWidget<T>(
         controller,
-        columns: pinnedColumns,
+        columns: scrollableColumns,
         rowHeight: headerHeight,
         nameAlignment: nameAlignment,
       ),

@@ -12,7 +12,7 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
     required this.nameRowHeight,
     required this.infoRowHeight,
     this.verticalScrollable = true,
-    this.pinnedColumns = const <FlexibleColumn<T>>{},
+    required this.pinnedColumns,
     required this.scrollableColumns,
   })  : assert(scrollableColumns.length > 0, 'At least one scrollable column is needed.'),
         super(key: key);

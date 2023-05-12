@@ -17,7 +17,6 @@ class _NormalListState extends State<NormalList> {
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
-    refreshData();
   }
 
   @override
@@ -26,10 +25,10 @@ class _NormalListState extends State<NormalList> {
     super.dispose();
   }
 
-  void refreshData() {
+  Future refreshData() async {
     final Random random = Random.secure();
     controller.value = List<TableDataBean>.generate(
-      random.nextInt(20),
+      random.nextInt(20) + 20,
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',
@@ -42,33 +41,34 @@ class _NormalListState extends State<NormalList> {
 
   @override
   Widget build(BuildContext context) {
+    refreshData();
     final FlexibleColumn<TableDataBean> id = FlexibleColumn(
       'id',
-      fixedWidth: 30,
+      fixedWidth: 60,
       nameBuilder: (context, fixedSize) => const Text('id列'),
       infoBuilder: (context, data, fixedSize) => Text(data.id.toString()),
     );
     final FlexibleColumn<TableDataBean> title = FlexibleColumn(
       'title',
-      fixedWidth: 50,
+      fixedWidth: 100,
       nameBuilder: (context, fixedSize) => const Text('title列'),
       infoBuilder: (context, data, fixedSize) => Text(data.title),
     );
     final FlexibleColumn<TableDataBean> value1 = FlexibleColumn(
       'value1',
-      fixedWidth: 100,
+      fixedWidth: 200,
       nameBuilder: (context, fixedSize) => const Text('value1列'),
       infoBuilder: (context, data, fixedSize) => Text(data.value1),
     );
     final FlexibleColumn<TableDataBean> value2 = FlexibleColumn(
       'value2',
-      fixedWidth: 50,
+      fixedWidth: 100,
       nameBuilder: (context, fixedSize) => const Text('value2列'),
       infoBuilder: (context, data, fixedSize) => Text(data.value2.toString()),
     );
     final FlexibleColumn<TableDataBean> value3 = FlexibleColumn(
       'value3',
-      fixedWidth: 80,
+      fixedWidth: 160,
       nameBuilder: (context, fixedSize) => const Text('value3列'),
       infoBuilder: (context, data, fixedSize) => Text(data.value3.toStringAsFixed(4)),
     );
@@ -78,9 +78,9 @@ class _NormalListState extends State<NormalList> {
       infoRowHeight: 50,
       pinnedColumns: {
         id,
+        title,
       },
       scrollableColumns: {
-        title,
         value1,
         value2,
         value3,
