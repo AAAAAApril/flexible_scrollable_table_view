@@ -7,7 +7,7 @@ class FlexibleColumn<T> {
   const FlexibleColumn(
     this.id, {
     required this.fixedWidth,
-    required this.name,
+    required this.nameBuilder,
     required this.infoBuilder,
     this.nameAlignment = Alignment.center,
     this.infoAlignment = Alignment.center,
@@ -23,7 +23,7 @@ class FlexibleColumn<T> {
   final double fixedWidth;
 
   ///列名组件
-  final Widget Function(BuildContext context, Size fixedSize) name;
+  final Widget Function(BuildContext context, Size fixedSize) nameBuilder;
 
   ///列信息组件
   final Widget Function(BuildContext context, T data, Size fixedSize) infoBuilder;

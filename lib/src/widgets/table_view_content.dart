@@ -9,7 +9,7 @@ class TableViewContent<T> extends StatelessWidget {
   const TableViewContent(
     this.controller, {
     Key? key,
-    required this.fixedColumns,
+    required this.pinnedColumns,
     required this.scrollableColumns,
     required this.infoRowHeight,
     this.infoAlignment,
@@ -18,7 +18,7 @@ class TableViewContent<T> extends StatelessWidget {
   final FlexibleTableController<T> controller;
 
   ///不能左右滑动的列（会堆积在左侧）
-  final Set<FlexibleColumn<T>> fixedColumns;
+  final Set<FlexibleColumn<T>> pinnedColumns;
 
   ///可以左右滑动的列
   final Set<FlexibleColumn<T>> scrollableColumns;
@@ -42,7 +42,7 @@ class TableViewContent<T> extends StatelessWidget {
         infoAlignment: infoAlignment,
       ),
     );
-    if (fixedColumns.isEmpty) {
+    if (pinnedColumns.isEmpty) {
       return scrollableColumnInfoArea;
     }
     return Row(
@@ -50,7 +50,7 @@ class TableViewContent<T> extends StatelessWidget {
         //不动列信息区域
         TableInfoRowWidget<T>(
           controller,
-          columns: fixedColumns,
+          columns: pinnedColumns,
           rowHeight: infoRowHeight,
           infoAlignment: infoAlignment,
         ),

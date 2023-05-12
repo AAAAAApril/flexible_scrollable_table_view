@@ -11,9 +11,9 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
     required this.controller,
     required this.nameRowHeight,
     required this.infoRowHeight,
-    required this.fixedColumns,
-    required this.scrollableColumns,
     this.verticalScrollable = true,
+    this.pinnedColumns = const <FlexibleColumn<T>>{},
+    required this.scrollableColumns,
   })  : assert(scrollableColumns.length > 0, 'At least one scrollable column is needed.'),
         super(key: key);
 
@@ -21,7 +21,7 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
   final FlexibleTableController<T> controller;
 
   ///不能左右滑动的列（会堆积在左侧）
-  final Set<FlexibleColumn<T>> fixedColumns;
+  final Set<FlexibleColumn<T>> pinnedColumns;
 
   ///可以左右滑动的列
   final Set<FlexibleColumn<T>> scrollableColumns;
@@ -39,13 +39,13 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget header = TableViewHeader<T>(
       controller,
-      fixedColumns: fixedColumns,
+      pinnedColumns: pinnedColumns,
       scrollableColumns: scrollableColumns,
       headerHeight: nameRowHeight,
     );
     final Widget content = TableViewContent<T>(
       controller,
-      fixedColumns: fixedColumns,
+      pinnedColumns: pinnedColumns,
       scrollableColumns: scrollableColumns,
       infoRowHeight: infoRowHeight,
     );

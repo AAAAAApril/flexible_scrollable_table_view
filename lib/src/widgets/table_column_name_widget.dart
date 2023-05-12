@@ -31,7 +31,7 @@ class TableColumnNameWidget<T> extends StatelessWidget {
       height: height,
       child: Align(
         alignment: nameAlignment ?? column.nameAlignment,
-        child: column.name.call(
+        child: column.nameBuilder.call(
           context,
           Size(column.fixedWidth, height),
         ),

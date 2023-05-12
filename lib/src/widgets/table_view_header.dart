@@ -9,7 +9,7 @@ class TableViewHeader<T> extends StatelessWidget {
   const TableViewHeader(
     this.controller, {
     Key? key,
-    required this.fixedColumns,
+    required this.pinnedColumns,
     required this.scrollableColumns,
     this.nameAlignment,
     required this.headerHeight,
@@ -18,7 +18,7 @@ class TableViewHeader<T> extends StatelessWidget {
   final FlexibleTableController<T> controller;
 
   ///不能左右滑动的列（会堆积在左侧）
-  final Set<FlexibleColumn<T>> fixedColumns;
+  final Set<FlexibleColumn<T>> pinnedColumns;
 
   ///可以左右滑动的列
   final Set<FlexibleColumn<T>> scrollableColumns;
@@ -37,12 +37,12 @@ class TableViewHeader<T> extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: TableNameRowWidget<T>(
         controller,
-        columns: fixedColumns,
+        columns: pinnedColumns,
         rowHeight: headerHeight,
         nameAlignment: nameAlignment,
       ),
     );
-    if (fixedColumns.isEmpty) {
+    if (pinnedColumns.isEmpty) {
       return scrollableNames;
     }
     return Row(
@@ -50,7 +50,7 @@ class TableViewHeader<T> extends StatelessWidget {
         //不动列区域
         TableNameRowWidget<T>(
           controller,
-          columns: fixedColumns,
+          columns: pinnedColumns,
           rowHeight: headerHeight,
           nameAlignment: nameAlignment,
         ),
