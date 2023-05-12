@@ -17,6 +17,7 @@ class _NormalListState extends State<NormalList> {
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
+    refreshData();
   }
 
   @override
@@ -25,7 +26,7 @@ class _NormalListState extends State<NormalList> {
     super.dispose();
   }
 
-  Future refreshData() async {
+  void refreshData() {
     final Random random = Random.secure();
     controller.value = List<TableDataBean>.generate(
       random.nextInt(20) + 20,
@@ -41,50 +42,108 @@ class _NormalListState extends State<NormalList> {
 
   @override
   Widget build(BuildContext context) {
-    refreshData();
-    final FlexibleColumn<TableDataBean> id = FlexibleColumn(
-      'id',
-      fixedWidth: 60,
-      nameBuilder: (context, fixedSize) => const Text('id列'),
-      infoBuilder: (context, data, fixedSize) => Text(data.id.toString()),
-    );
-    final FlexibleColumn<TableDataBean> title = FlexibleColumn(
-      'title',
-      fixedWidth: 100,
-      nameBuilder: (context, fixedSize) => const Text('title列'),
-      infoBuilder: (context, data, fixedSize) => Text(data.title),
-    );
-    final FlexibleColumn<TableDataBean> value1 = FlexibleColumn(
-      'value1',
-      fixedWidth: 200,
-      nameBuilder: (context, fixedSize) => const Text('value1列'),
-      infoBuilder: (context, data, fixedSize) => Text(data.value1),
-    );
-    final FlexibleColumn<TableDataBean> value2 = FlexibleColumn(
-      'value2',
-      fixedWidth: 100,
-      nameBuilder: (context, fixedSize) => const Text('value2列'),
-      infoBuilder: (context, data, fixedSize) => Text(data.value2.toString()),
-    );
-    final FlexibleColumn<TableDataBean> value3 = FlexibleColumn(
-      'value3',
-      fixedWidth: 160,
-      nameBuilder: (context, fixedSize) => const Text('value3列'),
-      infoBuilder: (context, data, fixedSize) => Text(data.value3.toStringAsFixed(4)),
-    );
-    return FlexibleScrollableTableView<TableDataBean>(
-      controller: controller,
-      nameRowHeight: 60,
-      infoRowHeight: 50,
-      pinnedColumns: {
-        id,
-        title,
-      },
-      scrollableColumns: {
-        value1,
-        value2,
-        value3,
-      },
+    final Set<FlexibleColumn<TableDataBean>> pinnedColumns = {
+      FlexibleColumn(
+        'title',
+        fixedWidth: 120,
+        nameBuilder: (context, fixedSize) => const Text('title列'),
+        infoBuilder: (context, fixedSize, data) => Text(data.title),
+        onColumnNamePressed: (context, column) {
+          debugPrint('点击了title列名');
+          return true;
+        },
+      ),
+      SelectableColumn(
+        'selectable',
+        fixedWidth: 48,
+        nameBuilder: (context, fixedSize) => SelectableColumnName(
+          controller,
+          builder: (context, selected, onChanged) => Checkbox(
+            value: selected,
+            onChanged: onChanged,
+          ),
+        ),
+        infoBuilder: (context, fixedSize, data) => SelectableColumnInfo(
+          controller,
+          data: data,
+          builder: (context, selected, onChanged) => Checkbox(
+            value: selected,
+            onChanged: onChanged,
+          ),
+        ),
+      ),
+    };
+    final Set<FlexibleColumn<TableDataBean>> scrollableColumns = {
+      FlexibleColumn(
+        'value1',
+        fixedWidth: 150,
+        nameBuilder: (context, fixedSize) => const Text('value1列'),
+        infoBuilder: (context, fixedSize, data) => Text(data.value1),
+      ),
+      FlexibleColumn(
+        'value2',
+        fixedWidth: 100,
+        nameBuilder: (context, fixedSize) => const Text('value2列'),
+        infoBuilder: (context, fixedSize, data) => Text(data.value2.toString()),
+        comparator: (a, b) => a.value2.compareTo(b.value2),
+        onColumnInfoPressed: (context, column, data) {
+          debugPrint('点击了value2列信息：${data.value2}');
+        },
+      ),
+      FlexibleColumn(
+        'value3',
+        fixedWidth: 130,
+        nameBuilder: (context, fixedSize) => const Text('value3列'),
+        infoBuilder: (context, fixedSize, data) => Text(data.value3.toStringAsFixed(4)),
+        comparator: (a, b) => a.value3.compareTo(b.value3),
+        onColumnNamePressed: (context, column) {
+          debugPrint('点击了value3列名');
+          return false;
+        },
+      ),
+    };
+    return Column(
+      children: [
+        Row(children: [
+          IconButton(
+            onPressed: refreshData,
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+          Expanded(
+            child: ValueListenableBuilder<bool>(
+              valueListenable: controller.selectable,
+              builder: (context, value, child) => CheckboxListTile(
+                value: value,
+                title: const Text('切换可选与不可选状态'),
+                onChanged: (newValue) {
+                  if (newValue != null) {
+                    controller.switchSelectable(newValue);
+                  }
+                },
+              ),
+            ),
+          ),
+        ]),
+        Material(
+          elevation: 2,
+          child: TableViewHeader(
+            controller,
+            pinnedColumns: pinnedColumns,
+            scrollableColumns: scrollableColumns,
+            headerHeight: 50,
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: TableViewContent(
+              controller,
+              pinnedColumns: pinnedColumns,
+              scrollableColumns: scrollableColumns,
+              infoRowHeight: 60,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

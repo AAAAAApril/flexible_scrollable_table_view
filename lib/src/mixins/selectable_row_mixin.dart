@@ -20,14 +20,27 @@ mixin SelectableRowMixin<T> on ChangeNotifier {
   }
 
   ///可以被选择的数据
-  @protected
   List<T> get selectableValue;
 
   //====================================================================================================================
 
   ///切换可选择状态
-  void switchSelectable({required bool selectable}) {
+  void switchSelectable(bool selectable) {
     _selectable.value = selectable;
+  }
+
+  ///切换某一行的选中状态
+  void switchRowSelectState(T rowData) {
+    if (isRowSelected(rowData)) {
+      unselectRow(rowData);
+    } else {
+      selectRow(rowData);
+    }
+  }
+
+  ///该数据对应的那一行是否被选中
+  bool isRowSelected(T rowData) {
+    return _selectedValue.value.contains(rowData);
   }
 
   ///选中某一行

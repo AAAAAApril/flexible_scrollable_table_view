@@ -23,10 +23,10 @@ class FlexibleColumn<T> {
   final double fixedWidth;
 
   ///列名组件
-  final Widget Function(BuildContext context, Size fixedSize) nameBuilder;
+  final TableColumnNameBuilder nameBuilder;
 
   ///列信息组件
-  final Widget Function(BuildContext context, T data, Size fixedSize) infoBuilder;
+  final TableColumnInfoBuilder<T> infoBuilder;
 
   ///列名组件在容器内的对齐方式
   final AlignmentGeometry nameAlignment;

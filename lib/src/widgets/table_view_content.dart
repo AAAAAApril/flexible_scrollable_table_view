@@ -1,6 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'table_info_row_widget.dart';
 
@@ -13,6 +13,7 @@ class TableViewContent<T> extends StatelessWidget {
     required this.scrollableColumns,
     required this.infoRowHeight,
     this.infoAlignment,
+    this.physics,
   }) : super(key: key);
 
   final FlexibleTableController<T> controller;
@@ -29,12 +30,15 @@ class TableViewContent<T> extends StatelessWidget {
   ///列信息组件在容器内的对齐方式
   final AlignmentGeometry? infoAlignment;
 
+  final ScrollPhysics? physics;
+
   @override
   Widget build(BuildContext context) {
     //可动列信息区域
     final Widget scrollableColumnInfoArea = SingleChildScrollView(
       controller: controller.dataAreaScrollController,
       scrollDirection: Axis.horizontal,
+      physics: physics,
       child: TableInfoRowWidget<T>(
         controller,
         columns: scrollableColumns,

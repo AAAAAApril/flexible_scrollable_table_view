@@ -1,6 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'table_name_row_widget.dart';
 
@@ -11,8 +11,9 @@ class TableViewHeader<T> extends StatelessWidget {
     Key? key,
     required this.pinnedColumns,
     required this.scrollableColumns,
-    this.nameAlignment,
     required this.headerHeight,
+    this.nameAlignment,
+    this.physics,
   }) : super(key: key);
 
   final FlexibleTableController<T> controller;
@@ -29,12 +30,15 @@ class TableViewHeader<T> extends StatelessWidget {
   ///表头部高度
   final double headerHeight;
 
+  final ScrollPhysics? physics;
+
   @override
   Widget build(BuildContext context) {
     //可动列名区域
     final Widget scrollableNames = SingleChildScrollView(
       controller: controller.nameRowScrollController,
       scrollDirection: Axis.horizontal,
+      physics: physics,
       child: TableNameRowWidget<T>(
         controller,
         columns: scrollableColumns,

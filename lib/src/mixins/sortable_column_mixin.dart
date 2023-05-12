@@ -31,7 +31,6 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
   List<T> get sortedValue => _sortedValue;
 
   ///需要被排序的数据
-  @protected
   List<T> get sortableValue;
 
   //====================================================================================================================
@@ -64,6 +63,13 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
     _sortingType.value = currentSortType;
     _sortingColumn.value = currentSortType == FlexibleColumnSortType.normal ? null : sortingColumn;
     //重新排序
+    sortData();
+  }
+
+  ///重置排序状态
+  void resetSortState() {
+    _sortingColumn.value = null;
+    _sortingType.value = FlexibleColumnSortType.normal;
     sortData();
   }
 

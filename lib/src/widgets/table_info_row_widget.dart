@@ -1,7 +1,7 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 ///表信息行组件
 class TableInfoRowWidget<T> extends StatelessWidget {

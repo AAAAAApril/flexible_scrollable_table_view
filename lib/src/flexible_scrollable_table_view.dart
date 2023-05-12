@@ -1,5 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'flexible_column.dart';
 import 'widgets/table_view_content.dart';
@@ -12,6 +12,8 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
     required this.nameRowHeight,
     required this.infoRowHeight,
     this.verticalScrollable = true,
+    this.verticalPhysics,
+    this.horizontalPhysics,
     required this.pinnedColumns,
     required this.scrollableColumns,
   })  : assert(scrollableColumns.length > 0, 'At least one scrollable column is needed.'),
@@ -35,6 +37,9 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
   ///是否可以纵向滑动
   final bool verticalScrollable;
 
+  final ScrollPhysics? verticalPhysics;
+  final ScrollPhysics? horizontalPhysics;
+
   @override
   Widget build(BuildContext context) {
     final Widget header = TableViewHeader<T>(
@@ -42,12 +47,14 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
       pinnedColumns: pinnedColumns,
       scrollableColumns: scrollableColumns,
       headerHeight: nameRowHeight,
+      physics: horizontalPhysics,
     );
     final Widget content = TableViewContent<T>(
       controller,
       pinnedColumns: pinnedColumns,
       scrollableColumns: scrollableColumns,
       infoRowHeight: infoRowHeight,
+      physics: horizontalPhysics,
     );
 
     if (verticalScrollable) {
@@ -56,6 +63,7 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
           header,
           Expanded(
             child: SingleChildScrollView(
+              physics: verticalPhysics,
               child: content,
             ),
           ),

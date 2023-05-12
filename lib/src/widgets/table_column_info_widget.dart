@@ -1,7 +1,9 @@
+import 'package:flexible_scrollable_table_view/src/custom/selectable_column.dart';
+import 'package:flexible_scrollable_table_view/src/custom/selectable_column_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/functions.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 ///列信息组件
 class TableColumnInfoWidget<T> extends StatelessWidget {
@@ -36,21 +38,25 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
         alignment: infoAlignment ?? column.infoAlignment,
         child: column.infoBuilder.call(
           context,
-          data,
           Size(column.fixedWidth, height),
+          data,
         ),
       ),
     );
+    if (column is SelectableColumn<T>) {
+      return SelectableColumnWrapper<T>(
+        controller,
+        child: child,
+      );
+    }
     final TableColumnInfoPressedCallback<T>? pressedCallback = column.onColumnInfoPressed;
     if (pressedCallback != null) {
-      child = Builder(
-        builder: (context) => GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            pressedCallback.call(context, column, data);
-          },
-          child: child,
-        ),
+      child = GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          pressedCallback.call(context, column, data);
+        },
+        child: child,
       );
     }
     return child;

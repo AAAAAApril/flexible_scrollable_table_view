@@ -1,7 +1,9 @@
+import 'package:flexible_scrollable_table_view/src/custom/selectable_column.dart';
+import 'package:flexible_scrollable_table_view/src/custom/selectable_column_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/functions.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 ///列名组件
 class TableColumnNameWidget<T> extends StatelessWidget {
@@ -37,24 +39,28 @@ class TableColumnNameWidget<T> extends StatelessWidget {
         ),
       ),
     );
+    if (column is SelectableColumn<T>) {
+      return SelectableColumnWrapper<T>(
+        controller,
+        child: child,
+      );
+    }
     final TableColumnNamePressedCallback<T>? pressedCallback = column.onColumnNamePressed;
     final Comparator<T>? comparator = column.comparator;
     if (pressedCallback != null || comparator != null) {
-      child = Builder(
-        builder: (context) => GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            if (pressedCallback != null) {
-              if (pressedCallback.call(context, column)) {
-                return;
-              }
+      child = GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          if (pressedCallback != null) {
+            if (pressedCallback.call(context, column)) {
+              return;
             }
-            if (comparator != null) {
-              controller.sortByColumn(column);
-            }
-          },
-          child: child,
-        ),
+          }
+          if (comparator != null) {
+            controller.sortByColumn(column);
+          }
+        },
+        child: child,
       );
     }
     return child;
