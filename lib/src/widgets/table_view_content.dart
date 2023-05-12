@@ -14,7 +14,8 @@ class TableViewContent<T> extends StatelessWidget {
     required this.infoRowHeight,
     this.infoAlignment,
     this.physics,
-  }) : super(key: key);
+  })  : assert(scrollableColumns.length > 0, 'At least one scrollable column is needed.'),
+        super(key: key);
 
   final FlexibleTableController<T> controller;
 
