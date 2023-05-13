@@ -1,6 +1,9 @@
 library flexible_scrollable_table_view;
 
-export 'src/custom/decoration/table_decorations.dart';
+export 'src/custom/decoration/flexible_decoration_controller.dart';
+export 'src/custom/decoration/table_content_decoration.dart';
+export 'src/custom/decoration/table_header_decoration.dart';
+export 'src/custom/decoration/table_row_decoration.dart';
 
 export 'src/custom/selectable/selectable_column.dart';
 export 'src/custom/selectable/selectable_column_info.dart';

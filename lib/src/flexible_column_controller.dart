@@ -7,7 +7,7 @@ class FlexibleColumnController<T> {
     required this.headerRowHeight,
     this.infoRowHeight,
     this.infoRowHeightBuilder,
-  }) : assert(infoRowHeight != null || infoRowHeightBuilder != null);
+  }) : assert(infoRowHeight != null || infoRowHeightBuilder != null, '要么指定固定高度，要么根据回调确定高度');
 
   ///表头行高度
   final double headerRowHeight;
@@ -40,5 +40,25 @@ class FlexibleColumnController<T> {
   ///添加一些可动的列
   void addScrollableColumns(Set<FlexibleColumn<T>> columns) {
     scrollableColumns.addAll(columns);
+  }
+
+  ///移除一个不动列
+  void removePinnedColumn(FlexibleColumn<T> column) {
+    pinnedColumns.remove(column);
+  }
+
+  ///移除一些不动列
+  void removePinnedColumns(Set<FlexibleColumn<T>> columns) {
+    pinnedColumns.removeAll(columns);
+  }
+
+  ///移除一个可动列
+  void removeScrollableColumn(FlexibleColumn<T> column) {
+    scrollableColumns.remove(column);
+  }
+
+  ///移除一些可动列
+  void removeScrollableColumns(Set<FlexibleColumn<T>> columns) {
+    scrollableColumns.removeAll(columns);
   }
 }

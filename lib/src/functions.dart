@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
 import 'package:flutter/widgets.dart';
 
 import 'flexible_column.dart';
@@ -26,6 +27,13 @@ typedef TableHeaderDecorationBuilder<T> = Widget Function(
   BuildContext context,
   FlexibleColumn<T> column,
   Size fixedSize,
+);
+
+///表行装饰构造器
+typedef TableRowDecorationBuilder<T> = Widget Function(
+  BuildContext context,
+  double fixedHeight,
+  T data,
 );
 
 ///表信息装饰构造器
