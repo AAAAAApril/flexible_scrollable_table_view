@@ -12,7 +12,6 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     required this.data,
     required this.column,
     required this.height,
-    required this.infoAlignment,
   }) : super(key: key);
 
   final FlexibleTableController<T> controller;
@@ -22,9 +21,6 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
   ///列配置
   final FlexibleColumn<T> column;
 
-  ///列信息组件在容器内的对齐方式
-  final AlignmentGeometry? infoAlignment;
-
   ///行高
   final double height;
 
@@ -33,10 +29,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: Align(
-        alignment: infoAlignment ?? column.infoAlignment,
-        child: column.infoBuilder.call(context, fixedSize, data),
-      ),
+      child: column.infoBuilder.call(context, fixedSize, data),
     );
     //可选信息
     if (column is SelectableColumn<T>) {
@@ -47,10 +40,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: Align(
-              alignment: infoAlignment ?? thisColumn.unSelectableInfoAlignment,
-              child: thisColumn.unSelectableInfo?.call(context, unSelectableSize, data),
-            ),
+            child: thisColumn.unSelectableInfo?.call(context, unSelectableSize, data),
           );
         },
         child: child,

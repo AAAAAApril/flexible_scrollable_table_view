@@ -10,15 +10,11 @@ class TableNameRowWidget<T> extends StatelessWidget {
     this.controller, {
     Key? key,
     required this.columns,
-    required this.nameAlignment,
     required this.rowHeight,
   }) : super(key: key);
 
   final FlexibleTableController<T> controller;
   final Set<FlexibleColumn<T>> columns;
-
-  ///列名组件在容器内的对齐方式
-  final AlignmentGeometry? nameAlignment;
   final double rowHeight;
 
   @override
@@ -30,7 +26,6 @@ class TableNameRowWidget<T> extends StatelessWidget {
             (e) => TableColumnNameWidget<T>(
               controller,
               column: e,
-              nameAlignment: nameAlignment,
               height: rowHeight,
             ),
           )

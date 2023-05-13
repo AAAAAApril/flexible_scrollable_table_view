@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column_controller.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
@@ -9,26 +9,12 @@ class TableViewHeader<T> extends StatelessWidget {
   const TableViewHeader(
     this.controller, {
     Key? key,
-    required this.pinnedColumns,
-    required this.scrollableColumns,
-    required this.headerHeight,
-    this.nameAlignment,
+    required this.columnController,
     this.physics,
   }) : super(key: key);
 
   final FlexibleTableController<T> controller;
-
-  ///不能左右滑动的列（会堆积在左侧）
-  final Set<FlexibleColumn<T>> pinnedColumns;
-
-  ///可以左右滑动的列
-  final Set<FlexibleColumn<T>> scrollableColumns;
-
-  ///列名组件在容器内的对齐方式
-  final AlignmentGeometry? nameAlignment;
-
-  ///表头部高度
-  final double headerHeight;
+  final FlexibleColumnController<T> columnController;
 
   final ScrollPhysics? physics;
 
@@ -41,12 +27,11 @@ class TableViewHeader<T> extends StatelessWidget {
       physics: physics,
       child: TableNameRowWidget<T>(
         controller,
-        columns: scrollableColumns,
-        rowHeight: headerHeight,
-        nameAlignment: nameAlignment,
+        columns: columnController.scrollableColumns,
+        rowHeight: columnController.headerRowHeight,
       ),
     );
-    if (pinnedColumns.isEmpty) {
+    if (columnController.pinnedColumns.isEmpty) {
       return scrollableNames;
     }
     return Row(
@@ -54,9 +39,8 @@ class TableViewHeader<T> extends StatelessWidget {
         //不动列区域
         TableNameRowWidget<T>(
           controller,
-          columns: pinnedColumns,
-          rowHeight: headerHeight,
-          nameAlignment: nameAlignment,
+          columns: columnController.pinnedColumns,
+          rowHeight: columnController.headerRowHeight,
         ),
         Expanded(child: scrollableNames),
       ],

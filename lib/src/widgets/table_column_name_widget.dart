@@ -10,7 +10,6 @@ class TableColumnNameWidget<T> extends StatelessWidget {
     this.controller, {
     Key? key,
     required this.column,
-    this.nameAlignment,
     required this.height,
   }) : super(key: key);
 
@@ -18,9 +17,6 @@ class TableColumnNameWidget<T> extends StatelessWidget {
 
   ///列配置
   final FlexibleColumn<T> column;
-
-  ///列名组件在容器内的对齐方式
-  final AlignmentGeometry? nameAlignment;
 
   ///行高
   final double height;
@@ -30,10 +26,7 @@ class TableColumnNameWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: Align(
-        alignment: nameAlignment ?? column.nameAlignment,
-        child: column.nameBuilder.call(context, fixedSize),
-      ),
+      child: column.nameBuilder.call(context, fixedSize),
     );
     //可选名
     if (column is SelectableColumn<T>) {
@@ -44,10 +37,7 @@ class TableColumnNameWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: Align(
-              alignment: nameAlignment ?? thisColumn.unSelectableNameAlignment,
-              child: thisColumn.unSelectableName?.call(context, unSelectableSize),
-            ),
+            child: thisColumn.unSelectableName?.call(context, unSelectableSize),
           );
         },
         child: child,

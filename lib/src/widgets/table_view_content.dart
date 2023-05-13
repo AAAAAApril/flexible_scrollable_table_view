@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column_controller.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
@@ -8,28 +8,13 @@ import 'table_info_row_widget.dart';
 class TableViewContent<T> extends StatelessWidget {
   const TableViewContent(
     this.controller, {
-    Key? key,
-    required this.pinnedColumns,
-    required this.scrollableColumns,
-    required this.infoRowHeight,
-    this.infoAlignment,
+    super.key,
+    required this.columnController,
     this.physics,
-  })  : assert(scrollableColumns.length > 0, 'At least one scrollable column is needed.'),
-        super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
-
-  ///不能左右滑动的列（会堆积在左侧）
-  final Set<FlexibleColumn<T>> pinnedColumns;
-
-  ///可以左右滑动的列
-  final Set<FlexibleColumn<T>> scrollableColumns;
-
-  ///表信息行高度
-  final double infoRowHeight;
-
-  ///列信息组件在容器内的对齐方式
-  final AlignmentGeometry? infoAlignment;
+  final FlexibleColumnController<T> columnController;
 
   final ScrollPhysics? physics;
 
@@ -42,12 +27,11 @@ class TableViewContent<T> extends StatelessWidget {
       physics: physics,
       child: TableInfoRowWidget<T>(
         controller,
-        columns: scrollableColumns,
-        rowHeight: infoRowHeight,
-        infoAlignment: infoAlignment,
+        columnController: columnController,
+        columns: columnController.scrollableColumns,
       ),
     );
-    if (pinnedColumns.isEmpty) {
+    if (columnController.pinnedColumns.isEmpty) {
       return scrollableColumnInfoArea;
     }
     return Row(
@@ -55,13 +39,10 @@ class TableViewContent<T> extends StatelessWidget {
         //不动列信息区域
         TableInfoRowWidget<T>(
           controller,
-          columns: pinnedColumns,
-          rowHeight: infoRowHeight,
-          infoAlignment: infoAlignment,
+          columnController: columnController,
+          columns: columnController.pinnedColumns,
         ),
-        Expanded(
-          child: scrollableColumnInfoArea,
-        ),
+        Expanded(child: scrollableColumnInfoArea),
       ],
     );
   }

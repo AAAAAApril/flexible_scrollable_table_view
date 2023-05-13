@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
@@ -28,12 +29,7 @@ class MyApp extends StatelessWidget {
           length: pages.length,
           child: Column(
             children: [
-              ColoredBox(
-                color: Colors.blue,
-                child: TabBar(
-                  tabs: pages.keys.map<Widget>((e) => Tab(text: e)).toList(),
-                ),
-              ),
+              TabBar(tabs: pages.keys.map<Widget>((e) => Tab(text: e)).toList()),
               Expanded(
                 child: TabBarView(
                   children: pages.values.toList(),

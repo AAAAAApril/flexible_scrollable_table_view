@@ -1,4 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column_controller.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
 import 'package:flutter/widgets.dart';
@@ -8,18 +9,14 @@ class TableInfoRowWidget<T> extends StatelessWidget {
   const TableInfoRowWidget(
     this.controller, {
     Key? key,
+    required this.columnController,
     required this.columns,
-    required this.rowHeight,
-    this.infoAlignment,
   })  : assert(columns.length > 0, 'At least one scrollable column is needed.'),
         super(key: key);
 
   final FlexibleTableController<T> controller;
+  final FlexibleColumnController<T> columnController;
   final Set<FlexibleColumn<T>> columns;
-  final double rowHeight;
-
-  ///列信息组件在容器内的对齐方式
-  final AlignmentGeometry? infoAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +34,8 @@ class TableInfoRowWidget<T> extends StatelessWidget {
                         controller,
                         data: data,
                         column: currentColumn,
-                        height: rowHeight,
-                        infoAlignment: infoAlignment,
+                        height: columnController.infoRowHeightBuilder?.call(context, data) ??
+                            columnController.infoRowHeight!,
                       ),
                     )
                     .toList(growable: false),

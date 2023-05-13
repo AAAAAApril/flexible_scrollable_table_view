@@ -12,38 +12,16 @@ class NormalList extends StatefulWidget {
 
 class _NormalListState extends State<NormalList> {
   late FlexibleTableController<TableDataBean> controller;
+  final FlexibleColumnController<TableDataBean> columnController = FlexibleColumnController<TableDataBean>(
+    headerRowHeight: 50,
+    infoRowHeight: 60,
+  );
 
   @override
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
-    refreshData();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void refreshData() {
-    final Random random = Random.secure();
-    controller.value = List<TableDataBean>.generate(
-      // random.nextInt(20) + 20,
-      20,
-      (index) => TableDataBean(
-        id: index,
-        title: '数据标题$index',
-        value1: 'String值$index',
-        value2: random.nextInt(1000),
-        value3: random.nextDouble() * 100,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final Set<FlexibleColumn<TableDataBean>> pinnedColumns = {
+    columnController.addPinnedColumns({
       FlexibleColumn(
         'title',
         fixedWidth: 120,
@@ -82,8 +60,8 @@ class _NormalListState extends State<NormalList> {
           child: const ColoredBox(color: Colors.red),
         ),
       ),
-    };
-    final Set<FlexibleColumn<TableDataBean>> scrollableColumns = {
+    });
+    columnController.addScrollableColumns({
       FlexibleColumn(
         'value1',
         fixedWidth: 150,
@@ -111,7 +89,33 @@ class _NormalListState extends State<NormalList> {
           return false;
         },
       ),
-    };
+    });
+    refreshData();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void refreshData() {
+    final Random random = Random.secure();
+    controller.value = List<TableDataBean>.generate(
+      // random.nextInt(20) + 20,
+      20,
+      (index) => TableDataBean(
+        id: index,
+        title: '数据标题$index',
+        value1: 'String值$index',
+        value2: random.nextInt(1000),
+        value3: random.nextDouble() * 100,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Row(children: [
@@ -138,18 +142,14 @@ class _NormalListState extends State<NormalList> {
           elevation: 2,
           child: TableViewHeader(
             controller,
-            pinnedColumns: pinnedColumns,
-            scrollableColumns: scrollableColumns,
-            headerHeight: 50,
+            columnController: columnController,
           ),
         ),
         Expanded(
           child: SingleChildScrollView(
             child: TableViewContent(
               controller,
-              pinnedColumns: pinnedColumns,
-              scrollableColumns: scrollableColumns,
-              infoRowHeight: 60,
+              columnController: columnController,
             ),
           ),
         ),

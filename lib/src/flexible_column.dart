@@ -1,5 +1,3 @@
-import 'package:flutter/widgets.dart';
-
 import 'functions.dart';
 
 ///列信息配置类
@@ -9,8 +7,6 @@ class FlexibleColumn<T> {
     required this.fixedWidth,
     required this.nameBuilder,
     required this.infoBuilder,
-    this.nameAlignment = Alignment.center,
-    this.infoAlignment = Alignment.center,
     this.onColumnNamePressed,
     this.onColumnInfoPressed,
     this.comparator,
@@ -27,12 +23,6 @@ class FlexibleColumn<T> {
 
   ///列信息组件
   final TableColumnInfoBuilder<T> infoBuilder;
-
-  ///列名组件在容器内的对齐方式
-  final AlignmentGeometry nameAlignment;
-
-  ///列信息组件在容器内的对齐方式
-  final AlignmentGeometry infoAlignment;
 
   ///点击了列名
   final TableColumnNamePressedCallback<T>? onColumnNamePressed;
