@@ -8,10 +8,10 @@ import 'table_column_header_widget.dart';
 class TableHeaderRowWidget<T> extends StatelessWidget {
   const TableHeaderRowWidget(
     this.controller, {
-    Key? key,
+    super.key,
     required this.columns,
     required this.rowHeight,
-  }) : super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
   final Set<FlexibleColumn<T>> columns;

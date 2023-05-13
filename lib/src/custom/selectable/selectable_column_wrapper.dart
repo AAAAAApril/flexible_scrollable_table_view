@@ -4,10 +4,10 @@ import 'package:flutter/widgets.dart';
 class SelectableColumnWrapper<T> extends StatelessWidget {
   const SelectableColumnWrapper(
     this.controller, {
-    Key? key,
+    super.key,
     required this.unSelectableBuilder,
     required this.child,
-  }) : super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
   final WidgetBuilder unSelectableBuilder;

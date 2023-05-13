@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 class SelectableColumnInfo<T> extends StatefulWidget {
   const SelectableColumnInfo(
     this.controller, {
-    Key? key,
+    super.key,
     required this.data,
     required this.builder,
-  }) : super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
   final T data;

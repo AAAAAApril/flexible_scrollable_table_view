@@ -8,11 +8,11 @@ import 'package:flutter/widgets.dart';
 class TableColumnInfoWidget<T> extends StatelessWidget {
   const TableColumnInfoWidget(
     this.controller, {
-    Key? key,
+    super.key,
     required this.data,
     required this.column,
     required this.height,
-  }) : super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
 

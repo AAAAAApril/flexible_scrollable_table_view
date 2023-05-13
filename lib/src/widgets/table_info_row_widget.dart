@@ -8,11 +8,10 @@ import 'package:flutter/widgets.dart';
 class TableInfoRowWidget<T> extends StatelessWidget {
   const TableInfoRowWidget(
     this.controller, {
-    Key? key,
+    super.key,
     required this.columnController,
     required this.columns,
-  })  : assert(columns.length > 0, 'At least one scrollable column is needed.'),
-        super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
   final FlexibleColumnController<T> columnController;
@@ -20,17 +19,17 @@ class TableInfoRowWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: columns
-          .map<Widget>(
-            (currentColumn) => ValueListenableBuilder<List<T>>(
-              valueListenable: controller,
-              builder: (context, value, child) => Column(
+    return ValueListenableBuilder<List<T>>(
+      valueListenable: controller,
+      builder: (context, value, child) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: value
+            .map<Widget>(
+              (data) => Row(
                 mainAxisSize: MainAxisSize.min,
-                children: value
+                children: columns
                     .map<Widget>(
-                      (data) => TableColumnInfoWidget<T>(
+                      (currentColumn) => TableColumnInfoWidget<T>(
                         controller,
                         data: data,
                         column: currentColumn,
@@ -40,9 +39,9 @@ class TableInfoRowWidget<T> extends StatelessWidget {
                     )
                     .toList(growable: false),
               ),
-            ),
-          )
-          .toList(growable: false),
+            )
+            .toList(growable: false),
+      ),
     );
   }
 }

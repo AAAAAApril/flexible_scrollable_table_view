@@ -8,10 +8,10 @@ import 'table_header_row_widget.dart';
 class TableViewHeader<T> extends StatelessWidget {
   const TableViewHeader(
     this.controller, {
-    Key? key,
+    super.key,
     required this.columnController,
     this.physics,
-  }) : super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
   final FlexibleColumnController<T> columnController;

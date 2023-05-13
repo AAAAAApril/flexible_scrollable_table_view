@@ -5,9 +5,9 @@ import 'package:flutter/widgets.dart';
 class SelectableColumnHeader<T> extends StatefulWidget {
   const SelectableColumnHeader(
     this.controller, {
-    Key? key,
+    super.key,
     required this.builder,
-  }) : super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
   final Widget Function(

@@ -8,10 +8,10 @@ import 'package:flutter/widgets.dart';
 class TableColumnHeaderWidget<T> extends StatelessWidget {
   const TableColumnHeaderWidget(
     this.controller, {
-    Key? key,
+    super.key,
     required this.column,
     required this.height,
-  }) : super(key: key);
+  });
 
   final FlexibleTableController<T> controller;
 
