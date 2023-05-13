@@ -29,7 +29,8 @@ class _NormalListState extends State<NormalList> {
   void refreshData() {
     final Random random = Random.secure();
     controller.value = List<TableDataBean>.generate(
-      random.nextInt(20) + 20,
+      // random.nextInt(20) + 20,
+      20,
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',
@@ -56,6 +57,7 @@ class _NormalListState extends State<NormalList> {
       SelectableColumn(
         'selectable',
         fixedWidth: 48,
+        unSelectableWidth: 32,
         nameBuilder: (context, fixedSize) => SelectableColumnName(
           controller,
           builder: (context, selected, onChanged) => Checkbox(
@@ -71,6 +73,8 @@ class _NormalListState extends State<NormalList> {
             onChanged: onChanged,
           ),
         ),
+        unSelectableName: (context, fixedSize) => const ColoredBox(color: Colors.purple),
+        unSelectableInfo: (context, fixedSize, data) => const ColoredBox(color: Colors.red),
       ),
     };
     final Set<FlexibleColumn<TableDataBean>> scrollableColumns = {

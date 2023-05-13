@@ -1,8 +1,7 @@
-import 'package:flexible_scrollable_table_view/src/custom/selectable_column.dart';
-import 'package:flexible_scrollable_table_view/src/custom/selectable_column_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column.dart';
+import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/functions.dart';
 import 'package:flutter/widgets.dart';
 
 ///列名组件
@@ -28,40 +27,46 @@ class TableColumnNameWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = SizedBox(
-      width: column.fixedWidth,
-      height: height,
+    final Size fixedSize = Size(column.fixedWidth, height);
+    Widget child = SizedBox.fromSize(
+      size: fixedSize,
       child: Align(
         alignment: nameAlignment ?? column.nameAlignment,
-        child: column.nameBuilder.call(
-          context,
-          Size(column.fixedWidth, height),
-        ),
+        child: column.nameBuilder.call(context, fixedSize),
       ),
     );
+    //可选名
     if (column is SelectableColumn<T>) {
-      return SelectableColumnWrapper<T>(
+      child = SelectableColumnWrapper<T>(
         controller,
-        child: child,
-      );
-    }
-    final TableColumnNamePressedCallback<T>? pressedCallback = column.onColumnNamePressed;
-    final Comparator<T>? comparator = column.comparator;
-    if (pressedCallback != null || comparator != null) {
-      child = GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          if (pressedCallback != null) {
-            if (pressedCallback.call(context, column)) {
-              return;
-            }
-          }
-          if (comparator != null) {
-            controller.sortByColumn(column);
-          }
+        unSelectableBuilder: (context) {
+          final SelectableColumn<T> thisColumn = column as SelectableColumn<T>;
+          final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
+          return SizedBox.fromSize(
+            size: unSelectableSize,
+            child: Align(
+              alignment: nameAlignment ?? thisColumn.unSelectableNameAlignment,
+              child: thisColumn.unSelectableName?.call(context, unSelectableSize),
+            ),
+          );
         },
         child: child,
       );
+    }
+    //不可选名
+    else {
+      if (column.onColumnNamePressed != null || column.comparator != null) {
+        child = GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            if (column.onColumnNamePressed?.call(context, column) == true) {
+              return;
+            }
+            controller.sortByColumn(column);
+          },
+          child: child,
+        );
+      }
     }
     return child;
   }

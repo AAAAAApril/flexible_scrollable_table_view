@@ -1,8 +1,8 @@
 library flexible_scrollable_table_view;
 
-export 'src/custom/selectable_column.dart';
-export 'src/custom/selectable_column_info.dart';
-export 'src/custom/selectable_column_name.dart';
+export 'src/custom/selectable/selectable_column.dart';
+export 'src/custom/selectable/selectable_column_info.dart';
+export 'src/custom/selectable/selectable_column_name.dart';
 
 export 'src/mixins/scroll_synchronization_mixin.dart';
 export 'src/mixins/selectable_row_mixin.dart';

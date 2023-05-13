@@ -5,10 +5,12 @@ class SelectableColumnWrapper<T> extends StatelessWidget {
   const SelectableColumnWrapper(
     this.controller, {
     Key? key,
+    required this.unSelectableBuilder,
     required this.child,
   }) : super(key: key);
 
   final FlexibleTableController<T> controller;
+  final WidgetBuilder unSelectableBuilder;
   final Widget child;
 
   @override
@@ -20,7 +22,7 @@ class SelectableColumnWrapper<T> extends StatelessWidget {
           return child!;
         }
         //当选择不可用时，不显示
-        return const SizedBox.shrink();
+        return unSelectableBuilder.call(context);
       },
       child: child,
     );

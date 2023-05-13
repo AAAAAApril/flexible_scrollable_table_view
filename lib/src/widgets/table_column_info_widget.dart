@@ -1,8 +1,7 @@
-import 'package:flexible_scrollable_table_view/src/custom/selectable_column.dart';
-import 'package:flexible_scrollable_table_view/src/custom/selectable_column_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column.dart';
+import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/functions.dart';
 import 'package:flutter/widgets.dart';
 
 ///列信息组件
@@ -31,33 +30,43 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = SizedBox(
-      width: column.fixedWidth,
-      height: height,
+    final Size fixedSize = Size(column.fixedWidth, height);
+    Widget child = SizedBox.fromSize(
+      size: fixedSize,
       child: Align(
         alignment: infoAlignment ?? column.infoAlignment,
-        child: column.infoBuilder.call(
-          context,
-          Size(column.fixedWidth, height),
-          data,
-        ),
+        child: column.infoBuilder.call(context, fixedSize, data),
       ),
     );
+    //可选信息
     if (column is SelectableColumn<T>) {
-      return SelectableColumnWrapper<T>(
+      child = SelectableColumnWrapper<T>(
         controller,
-        child: child,
-      );
-    }
-    final TableColumnInfoPressedCallback<T>? pressedCallback = column.onColumnInfoPressed;
-    if (pressedCallback != null) {
-      child = GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          pressedCallback.call(context, column, data);
+        unSelectableBuilder: (context) {
+          final SelectableColumn<T> thisColumn = column as SelectableColumn<T>;
+          final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
+          return SizedBox.fromSize(
+            size: unSelectableSize,
+            child: Align(
+              alignment: infoAlignment ?? thisColumn.unSelectableInfoAlignment,
+              child: thisColumn.unSelectableInfo?.call(context, unSelectableSize, data),
+            ),
+          );
         },
         child: child,
       );
+    }
+    //不可选信息
+    else {
+      if (column.onColumnInfoPressed != null) {
+        child = GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            column.onColumnInfoPressed?.call(context, column, data);
+          },
+          child: child,
+        );
+      }
     }
     return child;
   }
