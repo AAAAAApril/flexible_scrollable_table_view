@@ -73,8 +73,14 @@ class _NormalListState extends State<NormalList> {
             onChanged: onChanged,
           ),
         ),
-        unSelectableName: (context, fixedSize) => const ColoredBox(color: Colors.purple),
-        unSelectableInfo: (context, fixedSize, data) => const ColoredBox(color: Colors.red),
+        unSelectableName: (context, fixedSize) => SizedBox.fromSize(
+          size: fixedSize,
+          child: const ColoredBox(color: Colors.purple),
+        ),
+        unSelectableInfo: (context, fixedSize, data) => SizedBox.fromSize(
+          size: fixedSize,
+          child: const ColoredBox(color: Colors.red),
+        ),
       ),
     };
     final Set<FlexibleColumn<TableDataBean>> scrollableColumns = {
