@@ -6,9 +6,9 @@ import 'widgets/table_view_content.dart';
 import 'widgets/table_view_header.dart';
 
 class FlexibleScrollableTableView<T> extends StatelessWidget {
-  const FlexibleScrollableTableView({
+  const FlexibleScrollableTableView(
+    this.controller, {
     Key? key,
-    required this.controller,
     required this.nameRowHeight,
     required this.infoRowHeight,
     this.verticalScrollable = true,
