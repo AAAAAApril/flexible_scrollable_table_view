@@ -2,17 +2,17 @@ library flexible_scrollable_table_view;
 
 export 'src/custom/selectable/selectable_column.dart';
 export 'src/custom/selectable/selectable_column_info.dart';
-export 'src/custom/selectable/selectable_column_name.dart';
+export 'src/custom/selectable/selectable_column_header.dart';
 
 export 'src/mixins/scroll_synchronization_mixin.dart';
 export 'src/mixins/selectable_row_mixin.dart';
 export 'src/mixins/sortable_column_mixin.dart';
 
 export 'src/widgets/table_column_info_widget.dart';
-export 'src/widgets/table_column_name_widget.dart';
+export 'src/widgets/table_column_header_widget.dart';
 
 export 'src/widgets/table_info_row_widget.dart';
-export 'src/widgets/table_name_row_widget.dart';
+export 'src/widgets/table_header_row_widget.dart';
 
 export 'src/widgets/table_view_content.dart';
 export 'src/widgets/table_view_header.dart';

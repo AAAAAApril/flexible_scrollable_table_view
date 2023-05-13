@@ -2,7 +2,7 @@ import 'package:flexible_scrollable_table_view/src/flexible_column_controller.da
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
-import 'table_name_row_widget.dart';
+import 'table_header_row_widget.dart';
 
 ///表头部
 class TableViewHeader<T> extends StatelessWidget {
@@ -20,29 +20,29 @@ class TableViewHeader<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //可动列名区域
-    final Widget scrollableNames = SingleChildScrollView(
-      controller: controller.nameRowScrollController,
+    //可动列头区域
+    final Widget scrollableColumns = SingleChildScrollView(
+      controller: controller.headerRowScrollController,
       scrollDirection: Axis.horizontal,
       physics: physics,
-      child: TableNameRowWidget<T>(
+      child: TableHeaderRowWidget<T>(
         controller,
         columns: columnController.scrollableColumns,
         rowHeight: columnController.headerRowHeight,
       ),
     );
     if (columnController.pinnedColumns.isEmpty) {
-      return scrollableNames;
+      return scrollableColumns;
     }
     return Row(
       children: [
         //不动列区域
-        TableNameRowWidget<T>(
+        TableHeaderRowWidget<T>(
           controller,
           columns: columnController.pinnedColumns,
           rowHeight: columnController.headerRowHeight,
         ),
-        Expanded(child: scrollableNames),
+        Expanded(child: scrollableColumns),
       ],
     );
   }

@@ -4,9 +4,9 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
-///列名组件
-class TableColumnNameWidget<T> extends StatelessWidget {
-  const TableColumnNameWidget(
+///列头组件
+class TableColumnHeaderWidget<T> extends StatelessWidget {
+  const TableColumnHeaderWidget(
     this.controller, {
     Key? key,
     required this.column,
@@ -26,9 +26,9 @@ class TableColumnNameWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: column.nameBuilder.call(context, fixedSize),
+      child: column.headerBuilder.call(context, fixedSize),
     );
-    //可选名
+    //可选列
     if (column is SelectableColumn<T>) {
       child = SelectableColumnWrapper<T>(
         controller,
@@ -37,19 +37,19 @@ class TableColumnNameWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: thisColumn.unSelectableName?.call(context, unSelectableSize),
+            child: thisColumn.unSelectableHeader?.call(context, unSelectableSize),
           );
         },
         child: child,
       );
     }
-    //不可选名
+    //不可选列
     else {
-      if (column.onColumnNamePressed != null || column.comparator != null) {
+      if (column.onColumnHeaderPressed != null || column.comparator != null) {
         child = GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            if (column.onColumnNamePressed?.call(context, column) == true) {
+            if (column.onColumnHeaderPressed?.call(context, column) == true) {
               return;
             }
             controller.sortByColumn(column);

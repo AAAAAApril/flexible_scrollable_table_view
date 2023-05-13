@@ -5,9 +5,9 @@ class FlexibleColumn<T> {
   const FlexibleColumn(
     this.id, {
     required this.fixedWidth,
-    required this.nameBuilder,
+    required this.headerBuilder,
     required this.infoBuilder,
-    this.onColumnNamePressed,
+    this.onColumnHeaderPressed,
     this.onColumnInfoPressed,
     this.comparator,
   });
@@ -18,14 +18,14 @@ class FlexibleColumn<T> {
   ///该列的宽度
   final double fixedWidth;
 
-  ///列名组件
-  final TableColumnNameBuilder nameBuilder;
+  ///列头组件
+  final TableColumnHeaderBuilder headerBuilder;
 
   ///列信息组件
   final TableColumnInfoBuilder<T> infoBuilder;
 
-  ///点击了列名
-  final TableColumnNamePressedCallback<T>? onColumnNamePressed;
+  ///点击了列头
+  final TableColumnHeaderPressedCallback<T>? onColumnHeaderPressed;
 
   ///点击了列信息
   final TableColumnInfoPressedCallback<T>? onColumnInfoPressed;

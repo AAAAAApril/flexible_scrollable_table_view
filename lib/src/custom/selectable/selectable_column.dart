@@ -7,17 +7,17 @@ class SelectableColumn<T> extends FlexibleColumn<T> {
     super.id, {
     required super.fixedWidth,
     this.unSelectableWidth = 0,
-    required super.nameBuilder,
+    required super.headerBuilder,
     required super.infoBuilder,
-    this.unSelectableName,
+    this.unSelectableHeader,
     this.unSelectableInfo,
   });
 
   ///非可选状态时的固定宽度
   final double unSelectableWidth;
 
-  ///非可选状态时的列名组件
-  final TableColumnNameBuilder? unSelectableName;
+  ///非可选状态时的列头组件
+  final TableColumnHeaderBuilder? unSelectableHeader;
 
   ///非可选状态时的列信息组件
   final TableColumnInfoBuilder<T>? unSelectableInfo;

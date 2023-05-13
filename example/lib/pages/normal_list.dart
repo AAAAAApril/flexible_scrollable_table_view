@@ -25,10 +25,10 @@ class _NormalListState extends State<NormalList> {
       FlexibleColumn(
         'title',
         fixedWidth: 120,
-        nameBuilder: (context, fixedSize) => const Text('title列'),
+        headerBuilder: (context, fixedSize) => const Text('title列'),
         infoBuilder: (context, fixedSize, data) => Text(data.title),
-        onColumnNamePressed: (context, column) {
-          debugPrint('点击了title列名');
+        onColumnHeaderPressed: (context, column) {
+          debugPrint('点击了title列头');
           return true;
         },
       ),
@@ -36,7 +36,7 @@ class _NormalListState extends State<NormalList> {
         'selectable',
         fixedWidth: 48,
         unSelectableWidth: 32,
-        nameBuilder: (context, fixedSize) => SelectableColumnName(
+        headerBuilder: (context, fixedSize) => SelectableColumnHeader(
           controller,
           builder: (context, selected, onChanged) => Checkbox(
             value: selected,
@@ -51,7 +51,7 @@ class _NormalListState extends State<NormalList> {
             onChanged: onChanged,
           ),
         ),
-        unSelectableName: (context, fixedSize) => SizedBox.fromSize(
+        unSelectableHeader: (context, fixedSize) => SizedBox.fromSize(
           size: fixedSize,
           child: const ColoredBox(color: Colors.purple),
         ),
@@ -65,13 +65,13 @@ class _NormalListState extends State<NormalList> {
       FlexibleColumn(
         'value1',
         fixedWidth: 150,
-        nameBuilder: (context, fixedSize) => const Text('value1列'),
+        headerBuilder: (context, fixedSize) => const Text('value1列'),
         infoBuilder: (context, fixedSize, data) => Text(data.value1),
       ),
       FlexibleColumn(
         'value2',
         fixedWidth: 100,
-        nameBuilder: (context, fixedSize) => const Text('value2列'),
+        headerBuilder: (context, fixedSize) => const Text('value2列'),
         infoBuilder: (context, fixedSize, data) => Text(data.value2.toString()),
         comparator: (a, b) => a.value2.compareTo(b.value2),
         onColumnInfoPressed: (context, column, data) {
@@ -81,11 +81,11 @@ class _NormalListState extends State<NormalList> {
       FlexibleColumn(
         'value3',
         fixedWidth: 130,
-        nameBuilder: (context, fixedSize) => const Text('value3列'),
+        headerBuilder: (context, fixedSize) => const Text('value3列'),
         infoBuilder: (context, fixedSize, data) => Text(data.value3.toStringAsFixed(4)),
         comparator: (a, b) => a.value3.compareTo(b.value3),
-        onColumnNamePressed: (context, column) {
-          debugPrint('点击了value3列名');
+        onColumnHeaderPressed: (context, column) {
+          debugPrint('点击了value3列头');
           return false;
         },
       ),

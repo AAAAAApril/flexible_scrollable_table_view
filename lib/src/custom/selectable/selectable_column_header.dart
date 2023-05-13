@@ -1,9 +1,9 @@
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
-///可选列 列名 包装组件
-class SelectableColumnName<T> extends StatefulWidget {
-  const SelectableColumnName(
+///可选列 列头 包装组件
+class SelectableColumnHeader<T> extends StatefulWidget {
+  const SelectableColumnHeader(
     this.controller, {
     Key? key,
     required this.builder,
@@ -17,10 +17,10 @@ class SelectableColumnName<T> extends StatefulWidget {
   ) builder;
 
   @override
-  State<SelectableColumnName<T>> createState() => _SelectableColumnNameState<T>();
+  State<SelectableColumnHeader<T>> createState() => _SelectableColumnHeaderState<T>();
 }
 
-class _SelectableColumnNameState<T> extends State<SelectableColumnName<T>> {
+class _SelectableColumnHeaderState<T> extends State<SelectableColumnHeader<T>> {
   late ValueNotifier<bool> selected;
 
   @override

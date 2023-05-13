@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 import 'flexible_column.dart';
 
-///列名组件构建器
-typedef TableColumnNameBuilder = Widget Function(
+///列头组件构建器
+typedef TableColumnHeaderBuilder = Widget Function(
   BuildContext context,
   Size fixedSize,
 );
@@ -21,9 +21,9 @@ typedef TableInfoRowHeightBuilder<T> = double Function(
   T data,
 );
 
-///列名点击事件
-///@return [bool] 是否已处理完毕，列名点击事件会先于排序事件执行，如果点击事件返回 true，则不会执行排序操作。
-typedef TableColumnNamePressedCallback<T> = bool Function(
+///列头点击事件
+///@return [bool] 是否已处理完毕，列头点击事件会先于排序事件执行，如果点击事件返回 true，则不会执行排序操作。
+typedef TableColumnHeaderPressedCallback<T> = bool Function(
   BuildContext context,
   FlexibleColumn<T> column,
 );

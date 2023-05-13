@@ -2,11 +2,11 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
-import 'table_column_name_widget.dart';
+import 'table_column_header_widget.dart';
 
-///表的列名行
-class TableNameRowWidget<T> extends StatelessWidget {
-  const TableNameRowWidget(
+///表的列头行
+class TableHeaderRowWidget<T> extends StatelessWidget {
+  const TableHeaderRowWidget(
     this.controller, {
     Key? key,
     required this.columns,
@@ -23,7 +23,7 @@ class TableNameRowWidget<T> extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: columns
           .map<Widget>(
-            (e) => TableColumnNameWidget<T>(
+            (e) => TableColumnHeaderWidget<T>(
               controller,
               column: e,
               height: rowHeight,

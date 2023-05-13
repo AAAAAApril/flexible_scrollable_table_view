@@ -3,42 +3,44 @@ import 'package:flutter/widgets.dart';
 mixin ScrollSynchronizationMixin on ChangeNotifier {
   @override
   void dispose() {
-    nameRowScrollController.dispose();
-    dataAreaScrollController.dispose();
+    headerRowScrollController.dispose();
+    contentAreaScrollController.dispose();
     super.dispose();
   }
 
-  ///列名行横向滚动控制器
-  final ScrollController nameRowScrollController = ScrollController();
+  ///列头行横向滚动控制器
+  final ScrollController headerRowScrollController = ScrollController();
 
-  ///数据区域横向滚动控制器
-  final ScrollController dataAreaScrollController = ScrollController();
+  ///内容区域横向滚动控制器
+  final ScrollController contentAreaScrollController = ScrollController();
 
   ///开始同步
   void startSync() {
-    nameRowScrollController.addListener(onNameRowScrollUpdated);
-    dataAreaScrollController.addListener(onDataRowScrollUpdated);
+    headerRowScrollController.addListener(onHeaderRowScrollUpdated);
+    contentAreaScrollController.addListener(onContentAreaScrollUpdated);
   }
 
   ///停止同步
   void stopSync() {
-    dataAreaScrollController.removeListener(onDataRowScrollUpdated);
-    nameRowScrollController.removeListener(onNameRowScrollUpdated);
+    contentAreaScrollController.removeListener(onContentAreaScrollUpdated);
+    headerRowScrollController.removeListener(onHeaderRowScrollUpdated);
   }
 
-  ///列名行滚动更新
+  ///列头行滚动更新
   @protected
-  void onNameRowScrollUpdated() {
-    if (nameRowScrollController.offset != dataAreaScrollController.offset && dataAreaScrollController.hasClients) {
-      dataAreaScrollController.jumpTo(nameRowScrollController.offset);
+  void onHeaderRowScrollUpdated() {
+    if (headerRowScrollController.offset != contentAreaScrollController.offset &&
+        contentAreaScrollController.hasClients) {
+      contentAreaScrollController.jumpTo(headerRowScrollController.offset);
     }
   }
 
-  ///数据区域滚动更新
+  ///内容区域滚动更新
   @protected
-  void onDataRowScrollUpdated() {
-    if (nameRowScrollController.offset != dataAreaScrollController.offset && nameRowScrollController.hasClients) {
-      nameRowScrollController.jumpTo(dataAreaScrollController.offset);
+  void onContentAreaScrollUpdated() {
+    if (headerRowScrollController.offset != contentAreaScrollController.offset &&
+        headerRowScrollController.hasClients) {
+      headerRowScrollController.jumpTo(contentAreaScrollController.offset);
     }
   }
 }
