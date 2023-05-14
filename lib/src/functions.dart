@@ -46,3 +46,14 @@ typedef TableColumnInfoPressedCallback<T> = void Function(
   FlexibleColumn<T> column,
   T data,
 );
+
+extension FlexibleColumnExt<T> on Iterable<FlexibleColumn<T>> {
+  bool get containsSelectableColumns {
+    try {
+      firstWhere((element) => element is SelectableColumn<T>);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+}

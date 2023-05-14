@@ -18,7 +18,7 @@ export 'src/widgets/table_view_content.dart';
 export 'src/widgets/table_view_header.dart';
 
 export 'src/flexible_column.dart';
-export 'src/flexible_column_controller.dart';
+export 'src/flexible_column_configurations.dart';
 export 'src/flexible_column_sort_type.dart';
 export 'src/flexible_scrollable_table_view.dart';
 export 'src/flexible_table_controller.dart';

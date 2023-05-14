@@ -1,7 +1,7 @@
-import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/functions.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,17 +10,16 @@ class TableInfoRowWidget<T> extends StatelessWidget {
   const TableInfoRowWidget(
     this.controller, {
     super.key,
-    required this.columnController,
+    required this.columnConfigurations,
     required this.columns,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnController<T> columnController;
+  final FlexibleColumnConfigurations<T> columnConfigurations;
   final Set<FlexibleColumn<T>> columns;
 
   Widget createRow(BuildContext context, int index, T data) {
-    final double fixedHeight =
-        columnController.infoRowHeightBuilder?.call(context, data) ?? columnController.infoRowHeight!;
+    final double fixedHeight = columnConfigurations.fixedInfoRowHeight(context, data);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: columns
@@ -39,24 +38,27 @@ class TableInfoRowWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: controller.selectable,
-      builder: (context, selectable, child) => SizedBox(
-        width: columns.fold<double>(0, (previousValue, element) {
-          double currentWidth = element.fixedWidth;
-          if (element is SelectableColumn<T>) {
-            currentWidth = selectable ? element.fixedWidth : element.unSelectableWidth;
-          }
-          return previousValue + currentWidth;
-        }),
-        child: child,
-      ),
-      child: ValueListenableBuilder<List<T>>(
-        valueListenable: controller,
-        builder: (context, value, child) => Column(mainAxisSize: MainAxisSize.min, children: [
-          for (int index = 0; index < value.length; index++) createRow(context, index, value[index]),
-        ]),
-      ),
+    Widget child = ValueListenableBuilder<List<T>>(
+      valueListenable: controller,
+      builder: (context, value, child) => Column(mainAxisSize: MainAxisSize.min, children: [
+        for (int index = 0; index < value.length; index++) createRow(context, index, value[index]),
+      ]),
     );
+    if (columns.containsSelectableColumns) {
+      child = ValueListenableBuilder<bool>(
+        valueListenable: controller.selectable,
+        builder: (context, selectable, child) => SizedBox(
+          width: columnConfigurations.computeColumnsWith(columns, selectable),
+          child: child,
+        ),
+        child: child,
+      );
+    } else {
+      child = SizedBox(
+        width: columnConfigurations.computeColumnsWith(columns, false),
+        child: child,
+      );
+    }
+    return child;
   }
 }

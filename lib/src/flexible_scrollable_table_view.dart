@@ -1,5 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/custom/decoration/flexible_table_decoration.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/functions.dart';
 import 'package:flutter/widgets.dart';
@@ -11,7 +11,7 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
   const FlexibleScrollableTableView(
     this.controller, {
     super.key,
-    required this.columnController,
+    required this.columnConfigurations,
     this.foregroundRowDecoration,
     this.backgroundRowDecoration,
     this.verticalScrollable = true,
@@ -22,8 +22,8 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
   ///控制器
   final FlexibleTableController<T> controller;
 
-  ///列控制器
-  final FlexibleColumnController<T> columnController;
+  ///列配置
+  final FlexibleColumnConfigurations<T> columnConfigurations;
 
   ///行装饰器（前景）
   final TableInfoRowDecorationBuilder<T>? foregroundRowDecoration;
@@ -41,12 +41,12 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget header = TableViewHeader<T>(
       controller,
-      columnController: columnController,
+      columnConfigurations: columnConfigurations,
       physics: horizontalPhysics,
     );
     Widget content = TableViewContent<T>(
       controller,
-      columnController: columnController,
+      columnConfigurations: columnConfigurations,
       physics: horizontalPhysics,
     );
     if (foregroundRowDecoration != null || backgroundRowDecoration != null) {
@@ -54,14 +54,14 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
         if (backgroundRowDecoration != null)
           FlexibleTableContentDecoration<T>(
             controller,
-            columnController: columnController,
+            columnConfigurations: columnConfigurations,
             rowDecorationBuilder: backgroundRowDecoration!,
           ),
         content,
         if (foregroundRowDecoration != null)
           FlexibleTableContentDecoration<T>(
             controller,
-            columnController: columnController,
+            columnConfigurations: columnConfigurations,
             rowDecorationBuilder: foregroundRowDecoration!,
           ),
       ]);

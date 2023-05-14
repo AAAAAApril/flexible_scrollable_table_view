@@ -1,5 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/functions.dart';
 import 'package:flutter/widgets.dart';
@@ -9,33 +8,33 @@ class FlexibleTableContentDecoration<T> extends StatelessWidget {
   const FlexibleTableContentDecoration(
     this.controller, {
     super.key,
-    required this.columnController,
+    required this.columnConfigurations,
     required this.rowDecorationBuilder,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnController<T> columnController;
+  final FlexibleColumnConfigurations<T> columnConfigurations;
 
   ///行装饰器
   final TableInfoRowDecorationBuilder<T> rowDecorationBuilder;
 
   @override
   Widget build(BuildContext context) {
-    final Set<FlexibleColumn<T>> columns = Set.of(columnController.pinnedColumns)
-      ..addAll(columnController.scrollableColumns);
-    return SizedBox(
-      width: columns.fold<double>(0, (previousValue, element) => previousValue + element.fixedWidth),
-      child: ValueListenableBuilder<List<T>>(
-        valueListenable: controller,
-        builder: (context, value, child) => Column(mainAxisSize: MainAxisSize.min, children: [
-          for (int index = 0; index < value.length; index++)
-            TableRowDecoration<T>(
-              columnController,
-              dataIndex: index,
-              data: value[index],
-              decorationBuilder: rowDecorationBuilder,
-            ),
-        ]),
+    return LayoutBuilder(
+      builder: (p0, p1) => SizedBox(
+        width: p1.maxWidth,
+        child: ValueListenableBuilder<List<T>>(
+          valueListenable: controller,
+          builder: (context, value, child) => Column(mainAxisSize: MainAxisSize.min, children: [
+            for (int index = 0; index < value.length; index++)
+              TableRowDecoration<T>(
+                columnConfigurations,
+                dataIndex: index,
+                data: value[index],
+                decorationBuilder: rowDecorationBuilder,
+              ),
+          ]),
+        ),
       ),
     );
   }
@@ -44,14 +43,14 @@ class FlexibleTableContentDecoration<T> extends StatelessWidget {
 ///表行装饰
 class TableRowDecoration<T> extends StatelessWidget {
   const TableRowDecoration(
-    this.columnController, {
+    this.columnConfigurations, {
     super.key,
     required this.dataIndex,
     required this.data,
     required this.decorationBuilder,
   });
 
-  final FlexibleColumnController<T> columnController;
+  final FlexibleColumnConfigurations<T> columnConfigurations;
   final int dataIndex;
   final T data;
 
@@ -60,8 +59,7 @@ class TableRowDecoration<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double fixedHeight =
-        columnController.infoRowHeightBuilder?.call(context, data) ?? columnController.infoRowHeight!;
+    final double fixedHeight = columnConfigurations.fixedInfoRowHeight(context, data);
     return SizedBox(
       height: fixedHeight,
       child: decorationBuilder.call(context, fixedHeight, dataIndex, data),

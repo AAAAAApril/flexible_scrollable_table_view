@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
@@ -9,12 +9,12 @@ class TableViewHeader<T> extends StatelessWidget {
   const TableViewHeader(
     this.controller, {
     super.key,
-    required this.columnController,
+    required this.columnConfigurations,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnController<T> columnController;
+  final FlexibleColumnConfigurations<T> columnConfigurations;
   final ScrollPhysics? physics;
 
   @override
@@ -28,19 +28,19 @@ class TableViewHeader<T> extends StatelessWidget {
       primary: false,
       child: TableHeaderRowWidget<T>(
         controller,
-        columns: columnController.scrollableColumns,
-        rowHeight: columnController.headerRowHeight,
+        columns: columnConfigurations.scrollableColumns,
+        rowHeight: columnConfigurations.headerRowHeight,
       ),
     );
-    if (columnController.pinnedColumns.isEmpty) {
+    if (columnConfigurations.pinnedColumns.isEmpty) {
       return scrollableColumns;
     }
     return Row(children: [
       //不动列区域
       TableHeaderRowWidget<T>(
         controller,
-        columns: columnController.pinnedColumns,
-        rowHeight: columnController.headerRowHeight,
+        columns: columnConfigurations.pinnedColumns,
+        rowHeight: columnConfigurations.headerRowHeight,
       ),
       Flexible(child: scrollableColumns),
     ]);
