@@ -1,11 +1,9 @@
 import 'package:flutter/widgets.dart';
 
-mixin ScrollSynchronizationMixin on ChangeNotifier {
-  @override
+mixin ScrollSynchronizationMixin {
   void dispose() {
     headerRowScrollController.dispose();
     contentAreaScrollController.dispose();
-    super.dispose();
   }
 
   ///列头行横向滚动控制器

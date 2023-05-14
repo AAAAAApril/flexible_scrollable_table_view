@@ -12,7 +12,9 @@ typedef TableColumnHeaderBuilder = Widget Function(
 ///列信息组件构建器
 typedef TableColumnInfoBuilder<T> = Widget Function(
   BuildContext context,
+  FlexibleColumn<T> column,
   Size fixedSize,
+  int dataIndex,
   T data,
 );
 
@@ -22,25 +24,11 @@ typedef TableInfoRowHeightBuilder<T> = double Function(
   T data,
 );
 
-///表头装饰构造器
-typedef TableHeaderDecorationBuilder<T> = Widget Function(
-  BuildContext context,
-  FlexibleColumn<T> column,
-  Size fixedSize,
-);
-
-///表行装饰构造器
-typedef TableRowDecorationBuilder<T> = Widget Function(
+///表内容行装饰构造器
+typedef TableContentRowDecorationBuilder<T> = Widget Function(
   BuildContext context,
   double fixedHeight,
-  T data,
-);
-
-///表信息装饰构造器
-typedef TableInfoDecorationBuilder<T> = Widget Function(
-  BuildContext context,
-  FlexibleColumn<T> column,
-  Size fixedSize,
+  int dataIndex,
   T data,
 );
 

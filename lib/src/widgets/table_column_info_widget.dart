@@ -9,6 +9,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
   const TableColumnInfoWidget(
     this.controller, {
     super.key,
+    required this.dataIndex,
     required this.data,
     required this.column,
     required this.height,
@@ -16,6 +17,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
 
   final FlexibleTableController<T> controller;
 
+  final int dataIndex;
   final T data;
 
   ///列配置
@@ -29,7 +31,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: column.infoBuilder.call(context, fixedSize, data),
+      child: column.infoBuilder.call(context, column, fixedSize, dataIndex, data),
     );
     //可选信息
     if (column is SelectableColumn<T>) {
@@ -40,7 +42,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: thisColumn.unSelectableInfo?.call(context, unSelectableSize, data),
+            child: thisColumn.unSelectableInfo?.call(context, column, unSelectableSize, dataIndex, data),
           );
         },
         child: child,

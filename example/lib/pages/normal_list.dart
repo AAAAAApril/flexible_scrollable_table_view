@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:example/widgets/selectable_column_header.dart';
+import 'package:example/widgets/selectable_column_info.dart';
 import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +28,7 @@ class _NormalListState extends State<NormalList> {
         'title',
         fixedWidth: 120,
         headerBuilder: (context, fixedSize) => const Text('title列'),
-        infoBuilder: (context, fixedSize, data) => Text(data.title),
+        infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.title),
         onColumnHeaderPressed: (context, column) {
           debugPrint('点击了title列头');
           return true;
@@ -43,7 +45,7 @@ class _NormalListState extends State<NormalList> {
             onChanged: onChanged,
           ),
         ),
-        infoBuilder: (context, fixedSize, data) => SelectableColumnInfo(
+        infoBuilder: (context, column, fixedSize, dataIndex, data) => SelectableColumnInfo(
           controller,
           data: data,
           builder: (context, selected, onChanged) => Checkbox(
@@ -55,7 +57,7 @@ class _NormalListState extends State<NormalList> {
           size: fixedSize,
           child: const ColoredBox(color: Colors.purple),
         ),
-        unSelectableInfo: (context, fixedSize, data) => SizedBox.fromSize(
+        unSelectableInfo: (context, column, fixedSize, dataIndex, data) => SizedBox.fromSize(
           size: fixedSize,
           child: const ColoredBox(color: Colors.red),
         ),
@@ -66,13 +68,13 @@ class _NormalListState extends State<NormalList> {
         'value1',
         fixedWidth: 150,
         headerBuilder: (context, fixedSize) => const Text('value1列'),
-        infoBuilder: (context, fixedSize, data) => Text(data.value1),
+        infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.value1),
       ),
       FlexibleColumn(
         'value2',
         fixedWidth: 100,
         headerBuilder: (context, fixedSize) => const Text('value2列'),
-        infoBuilder: (context, fixedSize, data) => Text(data.value2.toString()),
+        infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.value2.toString()),
         comparator: (a, b) => a.value2.compareTo(b.value2),
         onColumnInfoPressed: (context, column, data) {
           debugPrint('点击了value2列信息：${data.value2}');
@@ -82,7 +84,7 @@ class _NormalListState extends State<NormalList> {
         'value3',
         fixedWidth: 130,
         headerBuilder: (context, fixedSize) => const Text('value3列'),
-        infoBuilder: (context, fixedSize, data) => Text(data.value3.toStringAsFixed(4)),
+        infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.value3.toStringAsFixed(4)),
         comparator: (a, b) => a.value3.compareTo(b.value3),
         onColumnHeaderPressed: (context, column) {
           debugPrint('点击了value3列头');
@@ -147,10 +149,33 @@ class _NormalListState extends State<NormalList> {
         ),
         Expanded(
           child: SingleChildScrollView(
-            child: TableViewContent(
-              controller,
-              columnController: columnController,
-            ),
+            child: Stack(children: [
+              FlexibleTableContentDecoration(
+                controller,
+                columnController: columnController,
+                rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ColoredBox(
+                  color: dataIndex.isOdd ? Colors.grey.shade300 : Colors.grey.shade400,
+                  child: const SizedBox.expand(),
+                ),
+              ),
+              TableViewContent(
+                controller,
+                columnController: columnController,
+              ),
+              FlexibleTableContentDecoration(
+                controller,
+                columnController: columnController,
+                rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ValueListenableBuilder<bool>(
+                  valueListenable: controller.selectable,
+                  builder: (context, selectable, child) => GestureDetector(
+                    behavior: selectable ? HitTestBehavior.deferToChild : HitTestBehavior.translucent,
+                    onTap: () {
+                      debugPrint('>>>>>>>>>>> 点击了表的前景装饰行 $dataIndex');
+                    },
+                  ),
+                ),
+              ),
+            ]),
           ),
         ),
       ],

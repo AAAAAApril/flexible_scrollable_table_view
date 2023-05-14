@@ -15,7 +15,6 @@ class TableViewContent<T> extends StatelessWidget {
 
   final FlexibleTableController<T> controller;
   final FlexibleColumnController<T> columnController;
-
   final ScrollPhysics? physics;
 
   @override
@@ -25,6 +24,8 @@ class TableViewContent<T> extends StatelessWidget {
       controller: controller.contentAreaScrollController,
       scrollDirection: Axis.horizontal,
       physics: physics,
+      padding: EdgeInsets.zero,
+      primary: false,
       child: TableInfoRowWidget<T>(
         controller,
         columnController: columnController,
@@ -34,16 +35,14 @@ class TableViewContent<T> extends StatelessWidget {
     if (columnController.pinnedColumns.isEmpty) {
       return scrollableColumnInfoArea;
     }
-    return Row(
-      children: [
-        //不动列信息区域
-        TableInfoRowWidget<T>(
-          controller,
-          columnController: columnController,
-          columns: columnController.pinnedColumns,
-        ),
-        Expanded(child: scrollableColumnInfoArea),
-      ],
-    );
+    return Row(children: [
+      //不动列信息区域
+      TableInfoRowWidget<T>(
+        controller,
+        columnController: columnController,
+        columns: columnController.pinnedColumns,
+      ),
+      Flexible(child: scrollableColumnInfoArea),
+    ]);
   }
 }

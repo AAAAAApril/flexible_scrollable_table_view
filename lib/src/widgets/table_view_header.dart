@@ -15,7 +15,6 @@ class TableViewHeader<T> extends StatelessWidget {
 
   final FlexibleTableController<T> controller;
   final FlexibleColumnController<T> columnController;
-
   final ScrollPhysics? physics;
 
   @override
@@ -25,6 +24,8 @@ class TableViewHeader<T> extends StatelessWidget {
       controller: controller.headerRowScrollController,
       scrollDirection: Axis.horizontal,
       physics: physics,
+      padding: EdgeInsets.zero,
+      primary: false,
       child: TableHeaderRowWidget<T>(
         controller,
         columns: columnController.scrollableColumns,
@@ -34,16 +35,14 @@ class TableViewHeader<T> extends StatelessWidget {
     if (columnController.pinnedColumns.isEmpty) {
       return scrollableColumns;
     }
-    return Row(
-      children: [
-        //不动列区域
-        TableHeaderRowWidget<T>(
-          controller,
-          columns: columnController.pinnedColumns,
-          rowHeight: columnController.headerRowHeight,
-        ),
-        Expanded(child: scrollableColumns),
-      ],
-    );
+    return Row(children: [
+      //不动列区域
+      TableHeaderRowWidget<T>(
+        controller,
+        columns: columnController.pinnedColumns,
+        rowHeight: columnController.headerRowHeight,
+      ),
+      Flexible(child: scrollableColumns),
+    ]);
   }
 }

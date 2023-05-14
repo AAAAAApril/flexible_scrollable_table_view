@@ -1,17 +1,15 @@
-import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
 import 'package:flutter/widgets.dart';
 
-///可选列 列信息 包装组件
-class SelectableColumnInfo<T> extends StatefulWidget {
-  const SelectableColumnInfo(
+///可选列 列头 包装组件
+class SelectableColumnHeader<T> extends StatefulWidget {
+  const SelectableColumnHeader(
     this.controller, {
     super.key,
-    required this.data,
     required this.builder,
   });
 
   final FlexibleTableController<T> controller;
-  final T data;
   final Widget Function(
     BuildContext context,
     bool selected,
@@ -19,50 +17,44 @@ class SelectableColumnInfo<T> extends StatefulWidget {
   ) builder;
 
   @override
-  State<SelectableColumnInfo<T>> createState() => _SelectableColumnInfoState<T>();
+  State<SelectableColumnHeader<T>> createState() => _SelectableColumnHeaderState<T>();
 }
 
-class _SelectableColumnInfoState<T> extends State<SelectableColumnInfo<T>> {
+class _SelectableColumnHeaderState<T> extends State<SelectableColumnHeader<T>> {
   late ValueNotifier<bool> selected;
 
   @override
   void initState() {
     super.initState();
     selected = ValueNotifier<bool>(false);
+    widget.controller.addListener(onValueChanged);
     widget.controller.selectedValue.addListener(onValueChanged);
     onValueChanged();
   }
 
   @override
-  void didUpdateWidget(covariant SelectableColumnInfo<T> oldWidget) {
-    if (oldWidget.data != widget.data) {
-      onValueChanged();
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void dispose() {
     widget.controller.selectedValue.removeListener(onValueChanged);
+    widget.controller.removeListener(onValueChanged);
     selected.dispose();
     super.dispose();
   }
 
   void onValueChanged() {
-    selected.value = widget.controller.isRowSelected(widget.data);
+    selected.value = widget.controller.selectedValue.value.length >= widget.controller.selectableValue.length;
   }
 
   void onSelectedValueChanged(bool? newValue) {
     if (newValue == null || selected.value == newValue) {
       return;
     }
-    //选中当前行
+    //选中全部
     if (newValue) {
-      widget.controller.selectRow(widget.data);
+      widget.controller.selectAllRows();
     }
-    //取消选中当前行
+    //取消选中全部
     else {
-      widget.controller.unselectRow(widget.data);
+      widget.controller.unselectAllRows();
     }
   }
 
