@@ -104,8 +104,7 @@ class _NormalListState extends State<NormalList> {
   void refreshData() {
     final Random random = Random.secure();
     controller.value = List<TableDataBean>.generate(
-      // random.nextInt(20) + 20,
-      20,
+      random.nextInt(20) + 20,
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',
@@ -150,6 +149,7 @@ class _NormalListState extends State<NormalList> {
         Expanded(
           child: SingleChildScrollView(
             child: Stack(children: [
+              ///背景装饰
               FlexibleTableContentDecoration(
                 controller,
                 columnController: columnController,
@@ -158,10 +158,14 @@ class _NormalListState extends State<NormalList> {
                   child: const SizedBox.expand(),
                 ),
               ),
+
+              ///表内容
               TableViewContent(
                 controller,
                 columnController: columnController,
               ),
+
+              ///前景装饰
               FlexibleTableContentDecoration(
                 controller,
                 columnController: columnController,
