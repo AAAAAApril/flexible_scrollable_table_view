@@ -19,7 +19,7 @@ class FlexibleColumn<T> {
   final double fixedWidth;
 
   ///列头组件
-  final TableColumnHeaderBuilder headerBuilder;
+  final TableColumnHeaderBuilder<T> headerBuilder;
 
   ///列信息组件
   final TableColumnInfoBuilder<T> infoBuilder;

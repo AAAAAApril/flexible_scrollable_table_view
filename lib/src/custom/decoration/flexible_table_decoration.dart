@@ -17,7 +17,7 @@ class FlexibleTableContentDecoration<T> extends StatelessWidget {
   final FlexibleColumnController<T> columnController;
 
   ///行装饰器
-  final TableContentRowDecorationBuilder<T> rowDecorationBuilder;
+  final TableInfoRowDecorationBuilder<T> rowDecorationBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class TableRowDecoration<T> extends StatelessWidget {
   final T data;
 
   ///行装饰器
-  final TableContentRowDecorationBuilder<T> decorationBuilder;
+  final TableInfoRowDecorationBuilder<T> decorationBuilder;
 
   @override
   Widget build(BuildContext context) {

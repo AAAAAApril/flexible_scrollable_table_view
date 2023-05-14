@@ -4,8 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'flexible_column.dart';
 
 ///列头组件构建器
-typedef TableColumnHeaderBuilder = Widget Function(
+typedef TableColumnHeaderBuilder<T> = Widget Function(
   BuildContext context,
+  FlexibleColumn<T> column,
   Size fixedSize,
 );
 
@@ -24,8 +25,8 @@ typedef TableInfoRowHeightBuilder<T> = double Function(
   T data,
 );
 
-///表内容行装饰构造器
-typedef TableContentRowDecorationBuilder<T> = Widget Function(
+///表信息行装饰构造器
+typedef TableInfoRowDecorationBuilder<T> = Widget Function(
   BuildContext context,
   double fixedHeight,
   int dataIndex,

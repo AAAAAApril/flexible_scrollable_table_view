@@ -26,10 +26,10 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
   final FlexibleColumnController<T> columnController;
 
   ///行装饰器（前景）
-  final TableContentRowDecorationBuilder<T>? foregroundRowDecoration;
+  final TableInfoRowDecorationBuilder<T>? foregroundRowDecoration;
 
   ///行装饰器（背景）
-  final TableContentRowDecorationBuilder<T>? backgroundRowDecoration;
+  final TableInfoRowDecorationBuilder<T>? backgroundRowDecoration;
 
   ///是否可以纵向滑动
   final bool verticalScrollable;
