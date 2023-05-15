@@ -1,6 +1,6 @@
-import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/functions.dart';
+import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///表列控制器
@@ -11,7 +11,10 @@ class FlexibleColumnConfigurations<T> {
     this.infoRowHeightBuilder,
     required this.pinnedColumns,
     required this.scrollableColumns,
-  }) : assert(infoRowHeight != null || infoRowHeightBuilder != null, '要么指定固定高度，要么根据回调确定高度');
+  }) : assert(
+          (infoRowHeight != null && infoRowHeight >= 0) || infoRowHeightBuilder != null,
+          '要么固定高度，要么根据回调确定高度',
+        );
 
   ///表头行高度
   final double headerRowHeight;

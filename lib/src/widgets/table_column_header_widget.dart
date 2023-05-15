@@ -1,7 +1,7 @@
-import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column.dart';
-import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
+import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_wrapper.dart';
 import 'package:flutter/widgets.dart';
 
 ///列头组件
@@ -26,7 +26,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: column.headerBuilder.call(context, column, fixedSize),
+      child: column.buildHeader(controller, context, fixedSize),
     );
     //可选列
     if (column is SelectableColumn<T>) {
@@ -37,26 +37,11 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: thisColumn.unSelectableHeader?.call(context, column, unSelectableSize),
+            child: thisColumn.buildUnSelectableHeader(controller, context, unSelectableSize),
           );
         },
         child: child,
       );
-    }
-    //不可选列
-    else {
-      if (column.onColumnHeaderPressed != null || column.comparator != null) {
-        child = GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            if (column.onColumnHeaderPressed?.call(context, column) == true) {
-              return;
-            }
-            controller.sortByColumn(column);
-          },
-          child: child,
-        );
-      }
     }
     return child;
   }

@@ -1,14 +1,11 @@
-import 'functions.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flutter/widgets.dart';
 
 ///列信息配置类
-class FlexibleColumn<T> {
+abstract class FlexibleColumn<T> {
   const FlexibleColumn(
     this.id, {
     required this.fixedWidth,
-    required this.headerBuilder,
-    required this.infoBuilder,
-    this.onColumnHeaderPressed,
-    this.onColumnInfoPressed,
     this.comparator,
   });
 
@@ -18,20 +15,27 @@ class FlexibleColumn<T> {
   ///该列的宽度
   final double fixedWidth;
 
-  ///列头组件
-  final TableColumnHeaderBuilder<T> headerBuilder;
-
-  ///列信息组件
-  final TableColumnInfoBuilder<T> infoBuilder;
-
-  ///点击了列头
-  final TableColumnHeaderPressedCallback<T>? onColumnHeaderPressed;
-
-  ///点击了列信息
-  final TableColumnInfoPressedCallback<T>? onColumnInfoPressed;
-
   ///排序时会使用的回调（为 null 表示该列没有排序功能）
   final Comparator<T>? comparator;
+
+  ///该列是否可比较
+  bool get comparableColumn => comparator != null;
+
+  ///构建表头
+  Widget buildHeader(
+    FlexibleTableController<T> controller,
+    BuildContext context,
+    Size fixedSize,
+  );
+
+  ///构建表信息
+  Widget buildInfo(
+    FlexibleTableController<T> controller,
+    BuildContext context,
+    Size fixedSize,
+    int dataIndex,
+    T data,
+  );
 
   @override
   bool operator ==(Object other) =>

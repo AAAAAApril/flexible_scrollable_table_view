@@ -5,7 +5,16 @@ import 'package:flutter/foundation.dart';
 ///列可排序的功能
 mixin SortableColumnMixin<T> on ChangeNotifier {
   ///切换下一个排序方式
-  FlexibleColumnSortType Function(FlexibleColumnSortType current) get nextSortType;
+  FlexibleColumnSortType nextSortType(FlexibleColumnSortType current) {
+    switch (current) {
+      case FlexibleColumnSortType.normal:
+        return FlexibleColumnSortType.descending;
+      case FlexibleColumnSortType.ascending:
+        return FlexibleColumnSortType.normal;
+      case FlexibleColumnSortType.descending:
+        return FlexibleColumnSortType.ascending;
+    }
+  }
 
   ///当前的排序方式
   final ValueNotifier<FlexibleColumnSortType> _sortingType =
@@ -38,7 +47,7 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
   ///按某一列排序
   void sortByColumn(FlexibleColumn<T> sortingColumn) {
     //该列没有排序功能
-    if (sortingColumn.comparator == null) {
+    if (!sortingColumn.comparableColumn) {
       return;
     }
     final FlexibleColumn<T>? currentColumn = _sortingColumn.value;
@@ -61,6 +70,8 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
       }
     }
     _sortingType.value = currentSortType;
+    //先置空
+    _sortingColumn.value = null;
     _sortingColumn.value = currentSortType == FlexibleColumnSortType.normal ? null : sortingColumn;
     //重新排序
     sortData();

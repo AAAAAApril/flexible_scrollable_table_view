@@ -1,13 +1,13 @@
+import 'package:flexible_scrollable_table_view/src/scrollable/scroll_synchronization_mixin.dart';
 import 'package:flutter/foundation.dart';
 
-import 'flexible_column_sort_type.dart';
-import 'mixins/scroll_synchronization_mixin.dart';
-import 'mixins/selectable_row_mixin.dart';
-import 'mixins/sortable_column_mixin.dart';
+import 'selectable/selectable_row_mixin.dart';
+import 'sortable/sortable_column_mixin.dart';
 
 abstract class FlexibleTableValueListenable<T> extends ValueListenable<T> {
   const FlexibleTableValueListenable() : super();
 
+  ///原始数据
   T get tableValue;
 }
 
@@ -16,9 +16,7 @@ abstract class FlexibleTableValueListenable<T> extends ValueListenable<T> {
 class FlexibleTableController<T> extends ChangeNotifier
     with SortableColumnMixin<T>, SelectableRowMixin<T>, ScrollSynchronizationMixin
     implements FlexibleTableValueListenable<List<T>> {
-  FlexibleTableController({
-    this.nextSortType = FlexibleColumnSortType.nextSortType,
-  }) : super() {
+  FlexibleTableController() : super() {
     startSync();
   }
 
@@ -27,9 +25,6 @@ class FlexibleTableController<T> extends ChangeNotifier
     stopSync();
     super.dispose();
   }
-
-  @override
-  final FlexibleColumnSortType Function(FlexibleColumnSortType current) nextSortType;
 
   ///原始数据
   List<T> _rawValue = <T>[];

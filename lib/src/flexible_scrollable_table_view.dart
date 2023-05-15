@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/custom/decoration/flexible_table_decoration.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decoration.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/functions.dart';

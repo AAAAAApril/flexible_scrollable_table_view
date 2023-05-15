@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:example/widgets/selectable_column_header.dart';
-import 'package:example/widgets/selectable_column_info.dart';
+import 'package:example/columns/normal_column.dart';
+import 'package:example/columns/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
 import 'package:flutter/material.dart';
 
@@ -44,75 +44,50 @@ class _NormalListState extends State<NormalList> {
 
   @override
   Widget build(BuildContext context) {
-    final FlexibleColumnConfigurations columnConfigurations = FlexibleColumnConfigurations(
+    final FlexibleColumnConfigurations<TableDataBean> columnConfigurations = FlexibleColumnConfigurations(
       headerRowHeight: 40,
       infoRowHeight: 50,
       pinnedColumns: {
-        FlexibleColumn(
+        NormalColumn(
           'title',
           fixedWidth: 120,
-          headerBuilder: (context, column, fixedSize) => const Text('title列'),
-          infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.title),
-          onColumnHeaderPressed: (context, column) {
+          headerText: 'title列',
+          infoText: (data) => data.title,
+          onHeaderPressed: () {
             debugPrint('点击了title列头');
-            return true;
           },
         ),
-        SelectableColumn(
+        const CustomSelectableColumn(
           'selectable',
           fixedWidth: 48,
           unSelectableWidth: 32,
-          headerBuilder: (context, column, fixedSize) => SelectableColumnHeader(
-            controller,
-            builder: (context, selected, onChanged) => Checkbox(
-              value: selected,
-              onChanged: onChanged,
-            ),
-          ),
-          infoBuilder: (context, column, fixedSize, dataIndex, data) => SelectableColumnInfo(
-            controller,
-            data: data,
-            builder: (context, selected, onChanged) => Checkbox(
-              value: selected,
-              onChanged: onChanged,
-            ),
-          ),
-          unSelectableHeader: (context, column, fixedSize) => SizedBox.fromSize(
-            size: fixedSize,
-            child: const ColoredBox(color: Colors.purple),
-          ),
-          unSelectableInfo: (context, column, fixedSize, dataIndex, data) => SizedBox.fromSize(
-            size: fixedSize,
-            child: const ColoredBox(color: Colors.red),
-          ),
         ),
       },
       scrollableColumns: {
-        FlexibleColumn(
+        NormalColumn(
           'value1',
           fixedWidth: 150,
-          headerBuilder: (context, column, fixedSize) => const Text('value1列'),
-          infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.value1),
+          headerText: 'value1列',
+          infoText: (data) => data.value1,
         ),
-        FlexibleColumn(
+        NormalColumn(
           'value2',
           fixedWidth: 100,
-          headerBuilder: (context, column, fixedSize) => const Text('value2列'),
-          infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.value2.toString()),
+          headerText: 'value2列',
+          infoText: (data) => data.value2.toString(),
           comparator: (a, b) => a.value2.compareTo(b.value2),
-          onColumnInfoPressed: (context, column, data) {
+          onInfoPressed: (data) {
             debugPrint('点击了value2列信息：${data.value2}');
           },
         ),
-        FlexibleColumn(
+        NormalColumn(
           'value3',
           fixedWidth: 130,
-          headerBuilder: (context, column, fixedSize) => const Text('value3列'),
-          infoBuilder: (context, column, fixedSize, dataIndex, data) => Text(data.value3.toStringAsFixed(4)),
+          headerText: 'value3列',
+          infoText: (data) => data.value3.toStringAsFixed(4),
           comparator: (a, b) => a.value3.compareTo(b.value3),
-          onColumnHeaderPressed: (context, column) {
+          onHeaderPressed: () {
             debugPrint('点击了value3列头');
-            return false;
           },
         ),
       },

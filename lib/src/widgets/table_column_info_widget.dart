@@ -1,7 +1,7 @@
-import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column.dart';
-import 'package:flexible_scrollable_table_view/src/custom/selectable/selectable_column_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
+import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_wrapper.dart';
 import 'package:flutter/widgets.dart';
 
 ///列信息组件
@@ -31,9 +31,9 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: column.infoBuilder.call(context, column, fixedSize, dataIndex, data),
+      child: column.buildInfo(controller, context, fixedSize, dataIndex, data),
     );
-    //可选信息
+    //可选列
     if (column is SelectableColumn<T>) {
       child = SelectableColumnWrapper<T>(
         controller,
@@ -42,23 +42,11 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: thisColumn.unSelectableInfo?.call(context, column, unSelectableSize, dataIndex, data),
+            child: thisColumn.buildUnSelectableInfo(controller, context, unSelectableSize, dataIndex, data),
           );
         },
         child: child,
       );
-    }
-    //不可选信息
-    else {
-      if (column.onColumnInfoPressed != null) {
-        child = GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            column.onColumnInfoPressed?.call(context, column, data);
-          },
-          child: child,
-        );
-      }
     }
     return child;
   }
