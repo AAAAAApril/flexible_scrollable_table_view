@@ -17,3 +17,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+
+# 发布插件命令
+# flutter packages pub publish --server=https://pub.dartlang.org
