@@ -1,5 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/scroll_behavior.dart';
 import 'package:flutter/widgets.dart';
 
 import 'table_header_row_widget.dart';
@@ -25,18 +26,27 @@ class TableViewHeader<T> extends StatelessWidget {
       );
 
   //可动列头区域
-  Widget scrollableColumns() => SingleChildScrollView(
-        controller: controller.headerRowScrollController,
-        scrollDirection: Axis.horizontal,
-        physics: physics,
-        padding: EdgeInsets.zero,
-        primary: false,
-        child: TableHeaderRowWidget<T>(
-          controller,
-          columns: columnConfigurations.scrollableColumns,
-          rowHeight: columnConfigurations.headerRowHeight,
-        ),
+  Widget scrollableColumns() {
+    Widget child = SingleChildScrollView(
+      controller: controller.headerRowScrollController,
+      scrollDirection: Axis.horizontal,
+      physics: physics,
+      padding: EdgeInsets.zero,
+      primary: false,
+      child: TableHeaderRowWidget<T>(
+        controller,
+        columns: columnConfigurations.scrollableColumns,
+        rowHeight: columnConfigurations.headerRowHeight,
+      ),
+    );
+    if (controller.noHorizontalScrollBehavior) {
+      child = ScrollConfiguration(
+        behavior: NoOverscrollScrollBehavior(),
+        child: child,
       );
+    }
+    return child;
+  }
 
   @override
   Widget build(BuildContext context) {

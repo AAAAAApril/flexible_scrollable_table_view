@@ -6,6 +6,12 @@ mixin ScrollSynchronizationMixin {
     contentAreaScrollController.dispose();
   }
 
+  ///是否没有纵向滚动效果
+  bool noVerticalScrollBehavior = false;
+
+  ///是否没有横向滚动效果
+  bool noHorizontalScrollBehavior = false;
+
   ///列头行横向滚动控制器
   final ScrollController headerRowScrollController = ScrollController();
 

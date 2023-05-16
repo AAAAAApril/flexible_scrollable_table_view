@@ -18,7 +18,9 @@ class _NormalListState extends State<NormalList> {
   @override
   void initState() {
     super.initState();
-    controller = FlexibleTableController<TableDataBean>();
+    controller = FlexibleTableController<TableDataBean>()
+      ..noHorizontalScrollBehavior = true
+      ..noVerticalScrollBehavior = true;
     refreshData();
   }
 
@@ -122,39 +124,42 @@ class _NormalListState extends State<NormalList> {
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Stack(children: [
-              ///背景装饰
-              FlexibleTableContentDecoration(
-                controller,
-                columnConfigurations: columnConfigurations,
-                rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ColoredBox(
-                  color: dataIndex.isOdd ? Colors.grey.shade300 : Colors.grey.shade400,
-                  child: const SizedBox.expand(),
-                ),
-              ),
-
-              ///表内容
-              TableViewContent(
-                controller,
-                columnConfigurations: columnConfigurations,
-              ),
-
-              ///前景装饰
-              FlexibleTableContentDecoration(
-                controller,
-                columnConfigurations: columnConfigurations,
-                rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ValueListenableBuilder<bool>(
-                  valueListenable: controller.selectable,
-                  builder: (context, selectable, child) => GestureDetector(
-                    behavior: selectable ? HitTestBehavior.deferToChild : HitTestBehavior.translucent,
-                    onTap: () {
-                      debugPrint('>>>>>>>>>>> 点击了表的前景装饰行 $dataIndex');
-                    },
+          child: ScrollConfiguration(
+            behavior: NoOverscrollScrollBehavior(),
+            child: SingleChildScrollView(
+              child: Stack(children: [
+                ///背景装饰
+                FlexibleTableContentDecoration(
+                  controller,
+                  columnConfigurations: columnConfigurations,
+                  rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ColoredBox(
+                    color: dataIndex.isOdd ? Colors.grey.shade300 : Colors.grey.shade400,
+                    child: const SizedBox.expand(),
                   ),
                 ),
-              ),
-            ]),
+
+                ///表内容
+                TableViewContent(
+                  controller,
+                  columnConfigurations: columnConfigurations,
+                ),
+
+                ///前景装饰
+                FlexibleTableContentDecoration(
+                  controller,
+                  columnConfigurations: columnConfigurations,
+                  rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ValueListenableBuilder<bool>(
+                    valueListenable: controller.selectable,
+                    builder: (context, selectable, child) => GestureDetector(
+                      behavior: selectable ? HitTestBehavior.deferToChild : HitTestBehavior.translucent,
+                      onTap: () {
+                        debugPrint('>>>>>>>>>>> 点击了表的前景装饰行 $dataIndex');
+                      },
+                    ),
+                  ),
+                ),
+              ]),
+            ),
           ),
         ),
       ],

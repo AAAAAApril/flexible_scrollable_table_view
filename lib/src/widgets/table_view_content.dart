@@ -1,5 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/scroll_behavior.dart';
 import 'package:flutter/widgets.dart';
 
 import 'table_info_row_widget.dart';
@@ -25,18 +26,27 @@ class TableViewContent<T> extends StatelessWidget {
       );
 
   //可动列信息区域
-  Widget scrollableColumnInfoArea() => SingleChildScrollView(
-        controller: controller.contentAreaScrollController,
-        scrollDirection: Axis.horizontal,
-        physics: physics,
-        padding: EdgeInsets.zero,
-        primary: false,
-        child: TableInfoRowWidget<T>(
-          controller,
-          columnConfigurations: columnConfigurations,
-          columns: columnConfigurations.scrollableColumns,
-        ),
+  Widget scrollableColumnInfoArea() {
+    Widget child = SingleChildScrollView(
+      controller: controller.contentAreaScrollController,
+      scrollDirection: Axis.horizontal,
+      physics: physics,
+      padding: EdgeInsets.zero,
+      primary: false,
+      child: TableInfoRowWidget<T>(
+        controller,
+        columnConfigurations: columnConfigurations,
+        columns: columnConfigurations.scrollableColumns,
+      ),
+    );
+    if (controller.noHorizontalScrollBehavior) {
+      child = ScrollConfiguration(
+        behavior: NoOverscrollScrollBehavior(),
+        child: child,
       );
+    }
+    return child;
+  }
 
   @override
   Widget build(BuildContext context) {

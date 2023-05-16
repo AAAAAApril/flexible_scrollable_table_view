@@ -2,6 +2,7 @@ import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_dec
 import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/functions.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/scroll_behavior.dart';
 import 'package:flutter/widgets.dart';
 
 import 'widgets/table_view_content.dart';
@@ -67,15 +68,21 @@ class FlexibleScrollableTableView<T> extends StatelessWidget {
       ]);
     }
     if (verticalScrollable) {
+      Widget child = SingleChildScrollView(
+        physics: verticalPhysics,
+        scrollDirection: Axis.vertical,
+        child: content,
+      );
+      if (controller.noVerticalScrollBehavior) {
+        child = ScrollConfiguration(
+          behavior: NoOverscrollScrollBehavior(),
+          child: child,
+        );
+      }
       return Column(
         children: [
           header,
-          Expanded(
-            child: SingleChildScrollView(
-              physics: verticalPhysics,
-              child: content,
-            ),
-          ),
+          Expanded(child: child),
         ],
       );
     } else {

@@ -2,6 +2,7 @@ library flexible_scrollable_table_view;
 
 export 'src/decoration/flexible_table_decoration.dart';
 
+export 'src/scrollable/scroll_behavior.dart';
 export 'src/scrollable/scroll_synchronization_mixin.dart';
 
 export 'src/selectable/selectable_column.dart';
