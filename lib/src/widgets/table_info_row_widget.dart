@@ -1,7 +1,7 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
+import 'package:flexible_scrollable_table_view/src/functions.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
 import 'package:flutter/widgets.dart';
 
@@ -60,16 +60,5 @@ class TableInfoRowWidget<T> extends StatelessWidget {
       );
     }
     return child;
-  }
-}
-
-extension<T> on Iterable<FlexibleColumn<T>> {
-  bool get containsSelectableColumns {
-    try {
-      firstWhere((element) => element is SelectableColumn<T>);
-      return true;
-    } catch (_) {
-      return false;
-    }
   }
 }

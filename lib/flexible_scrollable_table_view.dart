@@ -2,6 +2,10 @@ library flexible_scrollable_table_view;
 
 export 'src/decoration/flexible_table_decoration.dart';
 
+export 'src/list_view/table_view_content_area.dart';
+export 'src/list_view/table_view_header_row.dart';
+export 'src/list_view/table_view_info_row.dart';
+
 export 'src/scrollable/scroll_behavior.dart';
 export 'src/scrollable/scroll_synchronization_mixin.dart';
 

@@ -28,7 +28,7 @@ class TableViewContent<T> extends StatelessWidget {
   //可动列信息区域
   Widget scrollableColumnInfoArea() {
     Widget child = SingleChildScrollView(
-      controller: controller.contentAreaScrollController,
+      // controller: controller.contentAreaScrollController,
       scrollDirection: Axis.horizontal,
       physics: physics,
       padding: EdgeInsets.zero,
