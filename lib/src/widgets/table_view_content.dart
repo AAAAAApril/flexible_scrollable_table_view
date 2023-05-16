@@ -17,32 +17,46 @@ class TableViewContent<T> extends StatelessWidget {
   final FlexibleColumnConfigurations<T> columnConfigurations;
   final ScrollPhysics? physics;
 
-  @override
-  Widget build(BuildContext context) {
-    //可动列信息区域
-    final Widget scrollableColumnInfoArea = SingleChildScrollView(
-      controller: controller.contentAreaScrollController,
-      scrollDirection: Axis.horizontal,
-      physics: physics,
-      padding: EdgeInsets.zero,
-      primary: false,
-      child: TableInfoRowWidget<T>(
-        controller,
-        columnConfigurations: columnConfigurations,
-        columns: columnConfigurations.scrollableColumns,
-      ),
-    );
-    if (columnConfigurations.pinnedColumns.isEmpty) {
-      return scrollableColumnInfoArea;
-    }
-    return Row(children: [
-      //不动列信息区域
-      TableInfoRowWidget<T>(
+  //不动列信息区域
+  Widget pinnedColumns() => TableInfoRowWidget<T>(
         controller,
         columnConfigurations: columnConfigurations,
         columns: columnConfigurations.pinnedColumns,
-      ),
-      Flexible(child: scrollableColumnInfoArea),
-    ]);
+      );
+
+  //可动列信息区域
+  Widget scrollableColumnInfoArea() => SingleChildScrollView(
+        controller: controller.contentAreaScrollController,
+        scrollDirection: Axis.horizontal,
+        physics: physics,
+        padding: EdgeInsets.zero,
+        primary: false,
+        child: TableInfoRowWidget<T>(
+          controller,
+          columnConfigurations: columnConfigurations,
+          columns: columnConfigurations.scrollableColumns,
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    //两个都有
+    if (columnConfigurations.pinnedColumns.isNotEmpty && columnConfigurations.scrollableColumns.isNotEmpty) {
+      return Row(children: [
+        pinnedColumns(),
+        Flexible(child: scrollableColumnInfoArea()),
+      ]);
+    }
+    //其中一个没有
+    else {
+      //不动的没有
+      if (columnConfigurations.pinnedColumns.isEmpty) {
+        return scrollableColumnInfoArea();
+      }
+      //只有不动的
+      else {
+        return pinnedColumns();
+      }
+    }
   }
 }
