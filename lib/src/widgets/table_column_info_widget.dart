@@ -21,7 +21,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
   final T data;
 
   ///列配置
-  final FlexibleColumn<T> column;
+  final AbsFlexibleColumn<T> column;
 
   ///行高
   final double height;
@@ -31,7 +31,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: column.buildInfo(controller, context, fixedSize, dataIndex, data),
+      child: column.buildInfo(controller, dataIndex, data),
     );
     //可选列
     if (column is SelectableColumn<T>) {
@@ -42,7 +42,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: thisColumn.buildUnSelectableInfo(controller, context, unSelectableSize, dataIndex, data),
+            child: thisColumn.buildUnSelectableInfo(controller, dataIndex, data),
           );
         },
         child: child,

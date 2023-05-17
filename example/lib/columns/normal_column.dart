@@ -2,7 +2,7 @@ import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.da
 import 'package:flutter/widgets.dart';
 
 ///普通列
-class NormalColumn<T> extends FlexibleColumn<T> {
+class NormalColumn<T> extends AbsFlexibleColumn<T> {
   const NormalColumn(
     super.id, {
     required super.fixedWidth,

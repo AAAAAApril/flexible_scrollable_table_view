@@ -1,6 +1,16 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column_sort_type.dart';
 import 'package:flutter/foundation.dart';
+
+enum FlexibleColumnSortType {
+  ///默认
+  normal,
+
+  ///升序
+  ascending,
+
+  ///降序
+  descending;
+}
 
 ///列可排序的功能
 mixin SortableColumnMixin<T> on ChangeNotifier {
@@ -23,9 +33,9 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
   ValueListenable<FlexibleColumnSortType> get sortingType => _sortingType;
 
   ///触发排序的列
-  final ValueNotifier<FlexibleColumn<T>?> _sortingColumn = ValueNotifier<FlexibleColumn<T>?>(null);
+  final ValueNotifier<AbsFlexibleColumn<T>?> _sortingColumn = ValueNotifier<AbsFlexibleColumn<T>?>(null);
 
-  ValueListenable<FlexibleColumn<T>?> get sortingColumn => _sortingColumn;
+  ValueListenable<AbsFlexibleColumn<T>?> get sortingColumn => _sortingColumn;
 
   @override
   void dispose() {
@@ -45,12 +55,12 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
   //====================================================================================================================
 
   ///按某一列排序
-  void sortByColumn(FlexibleColumn<T> sortingColumn) {
+  void sortByColumn(AbsFlexibleColumn<T> sortingColumn) {
     //该列没有排序功能
     if (!sortingColumn.comparableColumn) {
       return;
     }
-    final FlexibleColumn<T>? currentColumn = _sortingColumn.value;
+    final AbsFlexibleColumn<T>? currentColumn = _sortingColumn.value;
     FlexibleColumnSortType currentSortType = _sortingType.value;
     //重复点击了列头
     if (currentColumn == null || currentColumn == sortingColumn) {

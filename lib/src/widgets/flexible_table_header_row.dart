@@ -1,47 +1,49 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/scrollable/scroll_behavior.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_header_widget.dart';
 import 'package:flutter/widgets.dart';
 
 ///表头行
-class TableViewHeaderRow<T> extends StatelessWidget {
-  const TableViewHeaderRow(
+class FlexibleTableHeaderRow<T> extends StatelessWidget {
+  const FlexibleTableHeaderRow(
     this.controller, {
     super.key,
-    required this.columnConfigurations,
+    required this.configurations,
+    this.physics,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnConfigurations<T> columnConfigurations;
+  final FlexibleTableConfigurations<T> configurations;
+  final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
     Widget child;
-    if (columnConfigurations.pinnedColumns.isNotEmpty && columnConfigurations.scrollableColumns.isNotEmpty) {
+    if (configurations.pinnedColumns.isNotEmpty && configurations.scrollableColumns.isNotEmpty) {
       child = Row(children: [
         PinnedTableHeaderRow<T>(
           controller,
-          columnConfigurations: columnConfigurations,
+          configurations: configurations,
         ),
         Expanded(
           child: ScrollableTableHeaderRow<T>(
             controller,
-            columnConfigurations: columnConfigurations,
+            configurations: configurations,
+            physics: physics,
           ),
         ),
       ]);
     } else {
-      if (columnConfigurations.pinnedColumns.isEmpty) {
+      if (configurations.pinnedColumns.isEmpty) {
         child = ScrollableTableHeaderRow<T>(
           controller,
-          columnConfigurations: columnConfigurations,
+          configurations: configurations,
+          physics: physics,
         );
       } else {
         child = PinnedTableHeaderRow<T>(
           controller,
-          columnConfigurations: columnConfigurations,
+          configurations: configurations,
         );
       }
     }
@@ -54,22 +56,22 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
   const PinnedTableHeaderRow(
     this.controller, {
     super.key,
-    required this.columnConfigurations,
+    required this.configurations,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnConfigurations<T> columnConfigurations;
+  final FlexibleTableConfigurations<T> configurations;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: columnConfigurations.pinnedColumns
+      children: configurations.pinnedColumns
           .map<Widget>(
             (e) => TableColumnHeaderWidget<T>(
               controller,
               column: e,
-              height: columnConfigurations.headerRowHeight,
+              height: configurations.headerRowHeight,
             ),
           )
           .toList(growable: false),
@@ -82,40 +84,33 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
   const ScrollableTableHeaderRow(
     this.controller, {
     super.key,
-    required this.columnConfigurations,
+    required this.configurations,
+    this.physics,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnConfigurations<T> columnConfigurations;
+  final FlexibleTableConfigurations<T> configurations;
+  final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (p0, p1) {
-        final List<FlexibleColumn<T>> columns = columnConfigurations.scrollableColumns.toList();
-        Widget child = ListView.builder(
+      builder: (p0, p1) => SizedBox.fromSize(
+        size: Size(p1.maxWidth, configurations.headerRowHeight),
+        child: ListView.builder(
           controller: controller.headerRowScrollController,
-          itemCount: columns.length,
+          itemCount: configurations.scrollableColumnList.length,
           scrollDirection: Axis.horizontal,
           primary: false,
           padding: EdgeInsets.zero,
+          physics: physics,
           itemBuilder: (context, index) => TableColumnHeaderWidget<T>(
             controller,
-            column: columns[index],
-            height: columnConfigurations.headerRowHeight,
+            column: configurations.scrollableColumnList[index],
+            height: configurations.headerRowHeight,
           ),
-        );
-        if (controller.noHorizontalScrollBehavior) {
-          child = ScrollConfiguration(
-            behavior: const NoOverscrollScrollBehavior(),
-            child: child,
-          );
-        }
-        return SizedBox.fromSize(
-          size: Size(p1.maxWidth, columnConfigurations.headerRowHeight),
-          child: child,
-        );
-      },
+        ),
+      ),
     );
   }
 }

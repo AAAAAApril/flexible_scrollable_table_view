@@ -1,17 +1,19 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decoration.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/scrollable/scroll_behavior.dart';
 import 'package:flutter/widgets.dart';
 
-import 'table_view_info_row.dart';
+import 'flexible_table_info_row.dart';
 
 ///表内容区域
-class TableViewContentArea<T> extends StatelessWidget {
-  const TableViewContentArea(
+class FlexibleTableContent<T> extends StatelessWidget {
+  const FlexibleTableContent(
     this.controller, {
     super.key,
-    required this.columnConfigurations,
-    this.scrollController,
+    required this.configurations,
+    this.foregroundRowDecoration,
+    this.backgroundRowDecoration,
+    this.verticalScrollController,
     this.shrinkWrap = false,
     this.primary,
     this.physics,
@@ -20,8 +22,10 @@ class TableViewContentArea<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnConfigurations<T> columnConfigurations;
-  final ScrollController? scrollController;
+  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableRowDecoration<T>? foregroundRowDecoration;
+  final AbsFlexibleTableRowDecoration<T>? backgroundRowDecoration;
+  final ScrollController? verticalScrollController;
   final bool shrinkWrap;
   final bool? primary;
   final ScrollPhysics? physics;
@@ -31,13 +35,13 @@ class TableViewContentArea<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double? itemExtent;
-    if (columnConfigurations.infoRowHeightBuilder == null) {
-      itemExtent = columnConfigurations.infoRowHeight;
+    if (configurations.infoRowHeightBuilder == null) {
+      itemExtent = configurations.infoRowHeight;
     }
     Widget child = ValueListenableBuilder<List<T>>(
       valueListenable: controller,
       builder: (context, value, child) => ListView.builder(
-        controller: scrollController,
+        controller: verticalScrollController,
         itemCount: value.length + (footer != null ? 1 : 0),
         shrinkWrap: shrinkWrap,
         primary: primary,
@@ -49,21 +53,17 @@ class TableViewContentArea<T> extends StatelessWidget {
           if (index == value.length) {
             return footer;
           }
-          return TableViewInfoRow<T>(
+          return FlexibleTableInfoRow<T>(
             controller,
-            columnConfigurations: columnConfigurations,
+            configurations: configurations,
             dataIndex: index,
             data: value[index],
+            foregroundDecoration: foregroundRowDecoration,
+            backgroundDecoration: backgroundRowDecoration,
           );
         },
       ),
     );
-    if (controller.noVerticalScrollBehavior) {
-      child = ScrollConfiguration(
-        behavior: const NoOverscrollScrollBehavior(),
-        child: child,
-      );
-    }
     if (disableVerticalScroll) {
       return child;
     }

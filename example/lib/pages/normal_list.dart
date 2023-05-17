@@ -47,7 +47,7 @@ class _NormalListState extends State<NormalList> {
 
   @override
   Widget build(BuildContext context) {
-    final FlexibleColumnConfigurations<TableDataBean> columnConfigurations = FlexibleColumnConfigurations(
+    final FlexibleTableConfigurations<TableDataBean> configurations = FlexibleTableConfigurations(
       headerRowHeight: 40,
       infoRowHeight: 50,
       pinnedColumns: {
@@ -121,11 +121,11 @@ class _NormalListState extends State<NormalList> {
           elevation: 2,
           // child: TableViewHeader(
           //   controller,
-          //   columnConfigurations: columnConfigurations,
+          //   configurations: configurations,
           // ),
-          child: TableViewHeaderRow<TableDataBean>(
+          child: FlexibleTableHeaderRow<TableDataBean>(
             controller,
-            columnConfigurations: columnConfigurations,
+            configurations: configurations,
           ),
         ),
         Expanded(
@@ -136,7 +136,7 @@ class _NormalListState extends State<NormalList> {
           //       ///背景装饰
           //       FlexibleTableContentDecoration(
           //         controller,
-          //         columnConfigurations: columnConfigurations,
+          //         configurations: configurations,
           //         rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ColoredBox(
           //           color: dataIndex.isOdd ? Colors.grey.shade300 : Colors.grey.shade400,
           //           child: const SizedBox.expand(),
@@ -146,13 +146,13 @@ class _NormalListState extends State<NormalList> {
           //       ///表内容
           //       TableViewContent(
           //         controller,
-          //         columnConfigurations: columnConfigurations,
+          //         configurations: configurations,
           //       ),
           //
           //       ///前景装饰
           //       FlexibleTableContentDecoration(
           //         controller,
-          //         columnConfigurations: columnConfigurations,
+          //         configurations: configurations,
           //         rowDecorationBuilder: (context, fixedHeight, dataIndex, data) => ValueListenableBuilder<bool>(
           //           valueListenable: controller.selectable,
           //           builder: (context, selectable, child) => GestureDetector(
@@ -166,9 +166,9 @@ class _NormalListState extends State<NormalList> {
           //     ]),
           //   ),
           // ),
-          child: TableViewContentArea<TableDataBean>(
+          child: FlexibleTableContent<TableDataBean>(
             controller,
-            columnConfigurations: columnConfigurations,
+            configurations: configurations,
           ),
         ),
       ],

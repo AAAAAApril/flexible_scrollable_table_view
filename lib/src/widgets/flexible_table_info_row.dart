@@ -1,34 +1,38 @@
+import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decoration.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column_configurations.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/scrollable/scroll_behavior.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
 import 'package:flutter/widgets.dart';
 
 ///表信息行
-class TableViewInfoRow<T> extends StatelessWidget {
-  const TableViewInfoRow(
+class FlexibleTableInfoRow<T> extends StatelessWidget {
+  const FlexibleTableInfoRow(
     this.controller, {
     super.key,
-    required this.columnConfigurations,
+    required this.configurations,
     required this.dataIndex,
     required this.data,
+    this.foregroundDecoration,
+    this.backgroundDecoration,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnConfigurations<T> columnConfigurations;
+  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableRowDecoration<T>? foregroundDecoration;
+  final AbsFlexibleTableRowDecoration<T>? backgroundDecoration;
   final int dataIndex;
   final T data;
 
   @override
   Widget build(BuildContext context) {
-    final double height = columnConfigurations.fixedInfoRowHeight(context, data);
+    final double height = configurations.fixedInfoRowHeight(context, data);
     Widget child;
-    if (columnConfigurations.pinnedColumns.isNotEmpty && columnConfigurations.scrollableColumns.isNotEmpty) {
+    if (configurations.pinnedColumns.isNotEmpty && configurations.scrollableColumns.isNotEmpty) {
       child = Row(children: [
         PinnedTableInfoRow<T>(
           controller,
-          columnConfigurations: columnConfigurations,
+          configurations: configurations,
           dataIndex: dataIndex,
           data: data,
           height: height,
@@ -36,7 +40,7 @@ class TableViewInfoRow<T> extends StatelessWidget {
         Expanded(
           child: ScrollableTableInfoRow<T>(
             controller,
-            columnConfigurations: columnConfigurations,
+            configurations: configurations,
             dataIndex: dataIndex,
             data: data,
             height: height,
@@ -44,10 +48,10 @@ class TableViewInfoRow<T> extends StatelessWidget {
         ),
       ]);
     } else {
-      if (columnConfigurations.pinnedColumns.isEmpty) {
+      if (configurations.pinnedColumns.isEmpty) {
         child = ScrollableTableInfoRow<T>(
           controller,
-          columnConfigurations: columnConfigurations,
+          configurations: configurations,
           dataIndex: dataIndex,
           data: data,
           height: height,
@@ -55,14 +59,40 @@ class TableViewInfoRow<T> extends StatelessWidget {
       } else {
         child = PinnedTableInfoRow<T>(
           controller,
-          columnConfigurations: columnConfigurations,
+          configurations: configurations,
           dataIndex: dataIndex,
           data: data,
           height: height,
         );
       }
     }
-    return child;
+    if (foregroundDecoration == null && backgroundDecoration == null) {
+      return child;
+    }
+    return Stack(children: [
+      //背景行
+      if (backgroundDecoration != null)
+        Positioned.fill(
+          child: backgroundDecoration!.buildRowDecoration(
+            controller,
+            configurations,
+            dataIndex,
+            data,
+          ),
+        ),
+      //内容行
+      child,
+      //前景行
+      if (foregroundDecoration != null)
+        Positioned.fill(
+          child: foregroundDecoration!.buildRowDecoration(
+            controller,
+            configurations,
+            dataIndex,
+            data,
+          ),
+        ),
+    ]);
   }
 }
 
@@ -71,14 +101,14 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
   const PinnedTableInfoRow(
     this.controller, {
     super.key,
-    required this.columnConfigurations,
+    required this.configurations,
     required this.dataIndex,
     required this.data,
     required this.height,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnConfigurations<T> columnConfigurations;
+  final FlexibleTableConfigurations<T> configurations;
   final int dataIndex;
   final T data;
   final double height;
@@ -87,7 +117,7 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: columnConfigurations.pinnedColumns
+      children: configurations.pinnedColumns
           .map<Widget>(
             (e) => TableColumnInfoWidget<T>(
               controller,
@@ -107,14 +137,14 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
   const ScrollableTableInfoRow(
     this.controller, {
     super.key,
-    required this.columnConfigurations,
+    required this.configurations,
     required this.dataIndex,
     required this.data,
     required this.height,
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleColumnConfigurations<T> columnConfigurations;
+  final FlexibleTableConfigurations<T> configurations;
   final int dataIndex;
   final T data;
   final double height;
@@ -122,25 +152,16 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (p0, p1) {
-        Widget child = ScrollableTabInfoRowWrapper<T>(
+      builder: (p0, p1) => SizedBox.fromSize(
+        size: Size(p1.maxWidth, height),
+        child: ScrollableTabInfoRowWrapper<T>(
           controller,
-          columns: columnConfigurations.scrollableColumns.toList(),
+          columns: configurations.scrollableColumnList,
           dataIndex: dataIndex,
           data: data,
           height: height,
-        );
-        if (controller.noHorizontalScrollBehavior) {
-          child = ScrollConfiguration(
-            behavior: const NoOverscrollScrollBehavior(),
-            child: child,
-          );
-        }
-        return SizedBox.fromSize(
-          size: Size(p1.maxWidth, height),
-          child: child,
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -155,17 +176,17 @@ class ScrollableTabInfoRowWrapper<T> extends StatefulWidget {
     required this.height,
   }) : super(key: key);
 
-  final List<FlexibleColumn<T>> columns;
+  final List<AbsFlexibleColumn<T>> columns;
   final FlexibleTableController<T> controller;
   final int dataIndex;
   final T data;
   final double height;
 
   @override
-  State<ScrollableTabInfoRowWrapper> createState() => _ScrollableTabInfoRowWrapperState();
+  State<ScrollableTabInfoRowWrapper<T>> createState() => _ScrollableTabInfoRowWrapperState<T>();
 }
 
-class _ScrollableTabInfoRowWrapperState extends State<ScrollableTabInfoRowWrapper> {
+class _ScrollableTabInfoRowWrapperState<T> extends State<ScrollableTabInfoRowWrapper<T>> {
   late ScrollController scrollController;
 
   @override
@@ -175,7 +196,7 @@ class _ScrollableTabInfoRowWrapperState extends State<ScrollableTabInfoRowWrappe
   }
 
   @override
-  void didUpdateWidget(covariant ScrollableTabInfoRowWrapper oldWidget) {
+  void didUpdateWidget(covariant ScrollableTabInfoRowWrapper<T> oldWidget) {
     if (oldWidget.data != widget.data) {
       unInit();
       init();
@@ -224,7 +245,7 @@ class _ScrollableTabInfoRowWrapperState extends State<ScrollableTabInfoRowWrappe
       scrollDirection: Axis.horizontal,
       primary: false,
       padding: EdgeInsets.zero,
-      itemBuilder: (context, index) => TableColumnInfoWidget(
+      itemBuilder: (context, index) => TableColumnInfoWidget<T>(
         widget.controller,
         dataIndex: widget.dataIndex,
         data: widget.data,
