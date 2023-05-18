@@ -6,8 +6,14 @@ import 'package:flutter/widgets.dart';
 abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
   const AbsSelectableColumn(super.id);
 
+  ///可选状态时的固定宽度
+  double get selectableWidth;
+
   ///非可选状态时的固定宽度
   double get unSelectableWidth;
+
+  @override
+  double get fixedWidth => selectableWidth;
 
   @override
   Widget buildHeader(FlexibleTableController<T> controller) => buildSelectableHeader(controller);
@@ -33,7 +39,7 @@ abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
 class SelectableColumn<T> extends AbsSelectableColumn<T> {
   const SelectableColumn(
     super.id, {
-    required this.fixedWidth,
+    required this.selectableWidth,
     this.unSelectableWidth = 0,
     required this.selectableHeader,
     this.unSelectableHeader,
@@ -42,30 +48,30 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   });
 
   @override
-  final double fixedWidth;
+  final double selectableWidth;
+
   @override
   final double unSelectableWidth;
 
-  final Widget Function(FlexibleTableController<T> controller) selectableHeader;
-  final Widget Function(FlexibleTableController<T> controller)? unSelectableHeader;
-  final Widget Function(FlexibleTableController<T> controller, int dataIndex, T data) selectableInfo;
-  final Widget Function(FlexibleTableController<T> controller, int dataIndex, T data)? unSelectableInfo;
+  final Widget selectableHeader;
+  final Widget? unSelectableHeader;
+  final Widget Function(int dataIndex, T data) selectableInfo;
+  final Widget Function(int dataIndex, T data)? unSelectableInfo;
 
   @override
-  Widget buildSelectableHeader(FlexibleTableController<T> controller) => selectableHeader.call(controller);
+  Widget buildSelectableHeader(FlexibleTableController<T> controller) => selectableHeader;
 
   @override
   Widget buildUnSelectableHeader(FlexibleTableController<T> controller) {
-    return unSelectableHeader?.call(controller) ?? super.buildUnSelectableHeader(controller);
+    return unSelectableHeader ?? super.buildUnSelectableHeader(controller);
   }
 
   @override
   Widget buildSelectableInfo(FlexibleTableController<T> controller, int dataIndex, T data) =>
-      selectableInfo.call(controller, dataIndex, data);
+      selectableInfo.call(dataIndex, data);
 
   @override
   Widget buildUnSelectableInfo(FlexibleTableController<T> controller, int dataIndex, T data) {
-    return unSelectableInfo?.call(controller, dataIndex, data) ??
-        super.buildUnSelectableInfo(controller, dataIndex, data);
+    return unSelectableInfo?.call(dataIndex, data) ?? super.buildUnSelectableInfo(controller, dataIndex, data);
   }
 }

@@ -3,7 +3,32 @@ import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.
 import 'package:flutter/widgets.dart';
 
 ///表配置
-class FlexibleTableConfigurations<T> {
+abstract class AbsFlexibleTableConfigurations<T> {
+  const AbsFlexibleTableConfigurations();
+
+  ///表头行高度
+  double get headerRowHeight;
+
+  ///表信息行高度
+  double? get infoRowHeight;
+
+  double Function(BuildContext context, T data)? get infoRowHeightBuilder;
+
+  ///不能左右滑动的列（会堆积在左侧）
+  Set<AbsFlexibleColumn<T>> get pinnedColumns;
+
+  List<AbsFlexibleColumn<T>> get pinnedColumnList;
+
+  ///可以左右滑动的列
+  Set<AbsFlexibleColumn<T>> get scrollableColumns;
+
+  List<AbsFlexibleColumn<T>> get scrollableColumnList;
+
+  ///信息行的固定高度
+  double fixedInfoRowHeight(BuildContext context, T data);
+}
+
+class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
   FlexibleTableConfigurations({
     required this.headerRowHeight,
     this.infoRowHeight,
@@ -15,19 +40,24 @@ class FlexibleTableConfigurations<T> {
           '要么固定高度，要么根据回调确定高度',
         );
 
-  ///表头行高度
+  @override
   final double headerRowHeight;
 
-  ///表信息行高度
+  @override
   final double? infoRowHeight;
+  @override
   final double Function(BuildContext context, T data)? infoRowHeightBuilder;
 
   ///不能左右滑动的列（会堆积在左侧）
+  @override
   final Set<AbsFlexibleColumn<T>> pinnedColumns;
+  @override
   late final List<AbsFlexibleColumn<T>> pinnedColumnList = pinnedColumns.toList(growable: false);
 
   ///可以左右滑动的列
+  @override
   final Set<AbsFlexibleColumn<T>> scrollableColumns;
+  @override
   late final List<AbsFlexibleColumn<T>> scrollableColumnList = scrollableColumns.toList(growable: false);
 
   ///可选时，固定列的总宽度
@@ -54,7 +84,7 @@ class FlexibleTableConfigurations<T> {
   double _computeColumnsWith(Set<AbsFlexibleColumn<T>> columns, bool selectable) {
     return columns.fold<double>(0, (previousValue, element) {
       double currentWidth = element.fixedWidth;
-      if (!selectable && element is SelectableColumn<T>) {
+      if (!selectable && element is AbsSelectableColumn<T>) {
         currentWidth = element.unSelectableWidth;
       }
       return previousValue + currentWidth;
@@ -62,6 +92,7 @@ class FlexibleTableConfigurations<T> {
   }
 
   ///信息行的固定高度
+  @override
   double fixedInfoRowHeight(BuildContext context, T data) {
     return infoRowHeightBuilder?.call(context, data) ?? infoRowHeight!;
   }

@@ -9,7 +9,7 @@ abstract class AbsFlexibleTableRowDecoration<T> {
   ///构建装饰
   Widget buildRowDecoration(
     FlexibleTableController<T> controller,
-    FlexibleTableConfigurations<T> configurations,
+    AbsFlexibleTableConfigurations<T> configurations,
     int dataIndex,
     T data,
   );
@@ -18,14 +18,14 @@ abstract class AbsFlexibleTableRowDecoration<T> {
 class FlexibleTableRowDecoration<T> extends AbsFlexibleTableRowDecoration<T> {
   const FlexibleTableRowDecoration({
     required this.builder,
-  });
+  }) : super();
 
   final Widget Function(int dataIndex, T data) builder;
 
   @override
   Widget buildRowDecoration(
     FlexibleTableController<T> controller,
-    FlexibleTableConfigurations<T> configurations,
+    AbsFlexibleTableConfigurations<T> configurations,
     int dataIndex,
     T data,
   ) =>

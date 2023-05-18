@@ -17,25 +17,46 @@ class FlexibleTableContent<T> extends StatelessWidget {
     this.shrinkWrap = false,
     this.primary,
     this.physics,
-    this.disableVerticalScroll = false,
+    this.verticalScrollable = true,
     this.footer,
+    this.fixedExtent = true,
   });
 
+  factory FlexibleTableContent.sliver(
+    FlexibleTableController<T> controller, {
+    Key? key,
+    required AbsFlexibleTableConfigurations<T> configurations,
+    AbsFlexibleTableRowDecoration<T>? foregroundRowDecoration,
+    AbsFlexibleTableRowDecoration<T>? backgroundRowDecoration,
+    Widget? footer,
+    bool fixedExtent = true,
+  }) =>
+      _SliverFlexibleTableContent<T>(
+        controller,
+        key: key,
+        configurations: configurations,
+        foregroundRowDecoration: foregroundRowDecoration,
+        backgroundRowDecoration: backgroundRowDecoration,
+        footer: footer,
+        fixedExtent: fixedExtent,
+      );
+
   final FlexibleTableController<T> controller;
-  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableRowDecoration<T>? foregroundRowDecoration;
   final AbsFlexibleTableRowDecoration<T>? backgroundRowDecoration;
   final ScrollController? verticalScrollController;
   final bool shrinkWrap;
   final bool? primary;
   final ScrollPhysics? physics;
-  final bool disableVerticalScroll;
+  final bool verticalScrollable;
   final Widget? footer;
+  final bool fixedExtent;
 
   @override
   Widget build(BuildContext context) {
     double? itemExtent;
-    if (configurations.infoRowHeightBuilder == null) {
+    if (fixedExtent && footer == null && configurations.infoRowHeightBuilder == null) {
       itemExtent = configurations.infoRowHeight;
     }
     Widget child = ValueListenableBuilder<List<T>>(
@@ -48,7 +69,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
         padding: EdgeInsets.zero,
         scrollDirection: Axis.vertical,
         itemExtent: itemExtent,
-        physics: physics,
+        physics: !verticalScrollable ? const NeverScrollableScrollPhysics() : physics,
         itemBuilder: (context, index) {
           if (index == value.length) {
             return footer;
@@ -64,7 +85,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
         },
       ),
     );
-    if (disableVerticalScroll) {
+    if (!verticalScrollable) {
       return child;
     }
     return LayoutBuilder(
@@ -72,6 +93,54 @@ class FlexibleTableContent<T> extends StatelessWidget {
         size: Size(p1.maxWidth, p1.maxHeight),
         child: child,
       ),
+    );
+  }
+}
+
+class _SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
+  const _SliverFlexibleTableContent(
+    super.controller, {
+    super.key,
+    required super.configurations,
+    super.foregroundRowDecoration,
+    super.backgroundRowDecoration,
+    super.footer,
+    super.fixedExtent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double? itemExtent;
+    if (fixedExtent && footer == null && configurations.infoRowHeightBuilder == null) {
+      itemExtent = configurations.infoRowHeight;
+    }
+    return ValueListenableBuilder<List<T>>(
+      valueListenable: controller,
+      builder: (context, value, child) {
+        final SliverChildDelegate delegate = SliverChildBuilderDelegate(
+          (context, index) {
+            if (index == value.length) {
+              return footer;
+            }
+            return FlexibleTableInfoRow<T>(
+              controller,
+              configurations: configurations,
+              dataIndex: index,
+              data: value[index],
+              foregroundDecoration: foregroundRowDecoration,
+              backgroundDecoration: backgroundRowDecoration,
+            );
+          },
+          childCount: value.length + (footer != null ? 1 : 0),
+        );
+        if (itemExtent == null) {
+          return SliverList(delegate: delegate);
+        }
+        return SliverFixedExtentList(
+          delegate: delegate,
+          itemExtent: itemExtent,
+        );
+      },
     );
   }
 }

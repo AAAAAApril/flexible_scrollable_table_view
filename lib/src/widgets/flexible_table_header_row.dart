@@ -13,7 +13,7 @@ class FlexibleTableHeaderRow<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableConfigurations<T> configurations;
   final ScrollPhysics? physics;
 
   @override
@@ -60,7 +60,7 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableConfigurations<T> configurations;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,7 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableConfigurations<T> configurations;
   final ScrollPhysics? physics;
 
   @override

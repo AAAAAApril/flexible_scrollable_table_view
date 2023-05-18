@@ -18,7 +18,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableRowDecoration<T>? foregroundDecoration;
   final AbsFlexibleTableRowDecoration<T>? backgroundDecoration;
   final int dataIndex;
@@ -66,6 +66,10 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
         );
       }
     }
+    child = SizedBox.fromSize(
+      size: Size(double.infinity, height),
+      child: child,
+    );
     if (foregroundDecoration == null && backgroundDecoration == null) {
       return child;
     }
@@ -108,7 +112,7 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableConfigurations<T> configurations;
   final int dataIndex;
   final T data;
   final double height;
@@ -144,7 +148,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
-  final FlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableConfigurations<T> configurations;
   final int dataIndex;
   final T data;
   final double height;

@@ -42,13 +42,12 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   @override
   final double fixedWidth;
 
-  final Widget Function(FlexibleTableController<T> controller) header;
-  final Widget Function(FlexibleTableController<T> controller, int dataIndex, T data) info;
+  final Widget header;
+  final Widget Function(int dataIndex, T data) info;
 
   @override
-  Widget buildHeader(FlexibleTableController<T> controller) => header.call(controller);
+  Widget buildHeader(FlexibleTableController<T> controller) => header;
 
   @override
-  Widget buildInfo(FlexibleTableController<T> controller, int dataIndex, T data) =>
-      info.call(controller, dataIndex, data);
+  Widget buildInfo(FlexibleTableController<T> controller, int dataIndex, T data) => info.call(dataIndex, data);
 }

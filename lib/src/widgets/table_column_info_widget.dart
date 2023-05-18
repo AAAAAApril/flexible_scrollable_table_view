@@ -34,11 +34,11 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
       child: column.buildInfo(controller, dataIndex, data),
     );
     //可选列
-    if (column is SelectableColumn<T>) {
+    if (column is AbsSelectableColumn<T>) {
       child = SelectableColumnWrapper<T>(
         controller,
         unSelectableBuilder: (context) {
-          final SelectableColumn<T> thisColumn = column as SelectableColumn<T>;
+          final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
