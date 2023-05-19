@@ -1,3 +1,7 @@
+## 2.1.0
+
+* Dart SDK version from '>=2.18.5 <3.0.0' to '>=2.18.5 <4.0.0'. 
+
 ## 2.0.0
 
 * All scrollable area built by ListView. Now you can load many data or many columns but without performance issues.
