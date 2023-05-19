@@ -26,7 +26,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: column.buildHeader(controller),
+      child: height <= 0 ? null : column.buildHeader(controller),
     );
     //可选列
     if (column is AbsSelectableColumn<T>) {
@@ -37,7 +37,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: thisColumn.buildUnSelectableHeader(controller),
+            child: height <= 0 ? null : thisColumn.buildUnSelectableHeader(controller),
           );
         },
         child: child,

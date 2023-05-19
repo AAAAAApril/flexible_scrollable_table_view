@@ -9,11 +9,13 @@ class FlexibleTableHeaderRow<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
+    this.primary,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
+  final bool? primary;
   final ScrollPhysics? physics;
 
   @override
@@ -29,6 +31,7 @@ class FlexibleTableHeaderRow<T> extends StatelessWidget {
           child: ScrollableTableHeaderRow<T>(
             controller,
             configurations: configurations,
+            primary: primary,
             physics: physics,
           ),
         ),
@@ -38,6 +41,7 @@ class FlexibleTableHeaderRow<T> extends StatelessWidget {
         child = ScrollableTableHeaderRow<T>(
           controller,
           configurations: configurations,
+          primary: primary,
           physics: physics,
         );
       } else {
@@ -85,11 +89,13 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
+    this.primary,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
+  final bool? primary;
   final ScrollPhysics? physics;
 
   @override
@@ -101,7 +107,7 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
           controller: controller.headerRowScrollController,
           itemCount: configurations.scrollableColumnList.length,
           scrollDirection: Axis.horizontal,
-          primary: false,
+          primary: primary,
           padding: EdgeInsets.zero,
           physics: physics,
           itemBuilder: (context, index) => TableColumnHeaderWidget<T>(

@@ -33,8 +33,8 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
     required this.headerRowHeight,
     this.infoRowHeight,
     this.infoRowHeightBuilder,
-    required this.pinnedColumns,
-    required this.scrollableColumns,
+    this.pinnedColumns = const <AbsFlexibleColumn<T>>{},
+    this.scrollableColumns = const <AbsFlexibleColumn<T>>{},
   }) : assert(
           (infoRowHeight != null && infoRowHeight >= 0) || infoRowHeightBuilder != null,
           '要么固定高度，要么根据回调确定高度',

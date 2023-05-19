@@ -5,7 +5,7 @@ homepage: 'https://github.com/AAAAAApril/flexible_scrollable_table_view'
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
-  flutter: ">=1.17.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:

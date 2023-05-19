@@ -72,7 +72,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
         physics: !verticalScrollable ? const NeverScrollableScrollPhysics() : physics,
         itemBuilder: (context, index) {
           if (index == value.length) {
-            return footer;
+            return footer!;
           }
           return FlexibleTableInfoRow<T>(
             controller,
@@ -120,7 +120,7 @@ class _SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
         final SliverChildDelegate delegate = SliverChildBuilderDelegate(
           (context, index) {
             if (index == value.length) {
-              return footer;
+              return footer!;
             }
             return FlexibleTableInfoRow<T>(
               controller,
