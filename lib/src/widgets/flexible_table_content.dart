@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decoration.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
@@ -11,8 +11,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
-    this.foregroundRowDecoration,
-    this.backgroundRowDecoration,
+    this.decorations,
     this.verticalScrollController,
     this.shrinkWrap = false,
     this.primary,
@@ -26,8 +25,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     FlexibleTableController<T> controller, {
     Key? key,
     required AbsFlexibleTableConfigurations<T> configurations,
-    AbsFlexibleTableRowDecoration<T>? foregroundRowDecoration,
-    AbsFlexibleTableRowDecoration<T>? backgroundRowDecoration,
+    AbsFlexibleTableDecorations<T>? decorations,
     Widget? footer,
     bool fixedExtent = true,
   }) =>
@@ -35,16 +33,14 @@ class FlexibleTableContent<T> extends StatelessWidget {
         controller,
         key: key,
         configurations: configurations,
-        foregroundRowDecoration: foregroundRowDecoration,
-        backgroundRowDecoration: backgroundRowDecoration,
+        decorations: decorations,
         footer: footer,
         fixedExtent: fixedExtent,
       );
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleTableRowDecoration<T>? foregroundRowDecoration;
-  final AbsFlexibleTableRowDecoration<T>? backgroundRowDecoration;
+  final AbsFlexibleTableDecorations<T>? decorations;
   final ScrollController? verticalScrollController;
   final bool shrinkWrap;
   final bool? primary;
@@ -79,8 +75,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
             configurations: configurations,
             dataIndex: index,
             data: value[index],
-            foregroundDecoration: foregroundRowDecoration,
-            backgroundDecoration: backgroundRowDecoration,
+            decorations: decorations,
           );
         },
       ),
@@ -102,8 +97,7 @@ class _SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
     super.controller, {
     super.key,
     required super.configurations,
-    super.foregroundRowDecoration,
-    super.backgroundRowDecoration,
+    super.decorations,
     super.footer,
     super.fixedExtent,
   });
@@ -127,8 +121,7 @@ class _SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
               configurations: configurations,
               dataIndex: index,
               data: value[index],
-              foregroundDecoration: foregroundRowDecoration,
-              backgroundDecoration: backgroundRowDecoration,
+              decorations: decorations,
             );
           },
           childCount: value.length + (footer != null ? 1 : 0),

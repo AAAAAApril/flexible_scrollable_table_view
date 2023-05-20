@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decoration.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
@@ -13,14 +13,12 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
     required this.configurations,
     required this.dataIndex,
     required this.data,
-    this.foregroundDecoration,
-    this.backgroundDecoration,
+    this.decorations,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleTableRowDecoration<T>? foregroundDecoration;
-  final AbsFlexibleTableRowDecoration<T>? backgroundDecoration;
+  final AbsFlexibleTableDecorations<T>? decorations;
   final int dataIndex;
   final T data;
 
@@ -70,32 +68,29 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
       size: Size(double.infinity, height),
       child: child,
     );
-    if (foregroundDecoration == null && backgroundDecoration == null) {
+
+    final Widget? foreground = decorations?.buildForegroundRowDecoration(
+      controller,
+      configurations,
+      dataIndex,
+      data,
+    );
+    final Widget? background = decorations?.buildBackgroundRowDecoration(
+      controller,
+      configurations,
+      dataIndex,
+      data,
+    );
+    if (foreground == null && background == null) {
       return child;
     }
     return Stack(children: [
       //背景行
-      if (backgroundDecoration != null)
-        Positioned.fill(
-          child: backgroundDecoration!.buildRowDecoration(
-            controller,
-            configurations,
-            dataIndex,
-            data,
-          ),
-        ),
+      if (background != null) Positioned.fill(child: background),
       //内容行
       child,
       //前景行
-      if (foregroundDecoration != null)
-        Positioned.fill(
-          child: foregroundDecoration!.buildRowDecoration(
-            controller,
-            configurations,
-            dataIndex,
-            data,
-          ),
-        ),
+      if (foreground != null) Positioned.fill(child: foreground),
     ]);
   }
 }
@@ -160,7 +155,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
         size: Size(p1.maxWidth, height),
         child: ScrollableTabInfoRowWrapper<T>(
           controller,
-          columns: configurations.scrollableColumnList,
+          columns: configurations.scrollableColumns,
           dataIndex: dataIndex,
           data: data,
           height: height,
@@ -171,14 +166,15 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
 }
 
 class ScrollableTabInfoRowWrapper<T> extends StatefulWidget {
-  const ScrollableTabInfoRowWrapper(
+  ScrollableTabInfoRowWrapper(
     this.controller, {
     Key? key,
-    required this.columns,
+    required Set<AbsFlexibleColumn<T>> columns,
     required this.dataIndex,
     required this.data,
     required this.height,
-  }) : super(key: key);
+  })  : columns = columns.toList(growable: false),
+        super(key: key);
 
   final List<AbsFlexibleColumn<T>> columns;
   final FlexibleTableController<T> controller;

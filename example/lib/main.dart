@@ -44,30 +44,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-///数据实体
-class TableDataBean {
-  const TableDataBean({
-    required this.id,
-    required this.title,
-    required this.value1,
-    required this.value2,
-    required this.value3,
-  });
-
-  final int id;
-  final String title;
-  final String value1;
-  final int value2;
-  final double value3;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is TableDataBean && runtimeType == other.runtimeType && id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
-}
-
 ///普通列
 class NormalColumn<T> extends AbsFlexibleColumn<T> {
   const NormalColumn(
@@ -292,7 +268,7 @@ class _NormalListState extends State<NormalList> {
         ]),
         Material(
           elevation: 2,
-          child: FlexibleTableHeaderRow<TableDataBean>(
+          child: FlexibleTableHeader<TableDataBean>(
             controller,
             configurations: configurations,
           ),
@@ -301,14 +277,13 @@ class _NormalListState extends State<NormalList> {
           child: FlexibleTableContent<TableDataBean>(
             controller,
             configurations: configurations,
-            backgroundRowDecoration: FlexibleTableRowDecoration(
-              builder: (dataIndex, data) => ColoredBox(
+            decorations: FlexibleTableDecorations(
+              backgroundRow: (dataIndex, data) => ColoredBox(
                 color: dataIndex.isOdd ? Colors.grey.shade200 : Colors.grey.shade300,
                 child: const SizedBox.expand(),
               ),
-            ),
-            foregroundRowDecoration: FlexibleTableRowDecoration(
-              builder: (dataIndex, data) => GestureDetector(
+              foregroundRow: (dataIndex, data) => GestureDetector(
+                behavior: HitTestBehavior.deferToChild,
                 onTap: () {
                   debugPrint('点击了前景装饰行:$dataIndex');
                 },
@@ -357,11 +332,6 @@ class _InSliverListState extends State<InSliverList> {
             debugPrint('点击了title列头');
           },
         ),
-        const CustomSelectableColumn(
-          'selectable',
-          selectableWidth: 48,
-          unSelectableWidth: 32,
-        ),
       },
       scrollableColumns: {
         NormalColumn(
@@ -369,6 +339,11 @@ class _InSliverListState extends State<InSliverList> {
           fixedWidth: 150,
           headerText: 'value1列',
           infoText: (data) => data.value1,
+        ),
+        const CustomSelectableColumn(
+          'selectable',
+          selectableWidth: 48,
+          unSelectableWidth: 32,
         ),
         NormalColumn(
           'value2',
@@ -426,7 +401,7 @@ class _InSliverListState extends State<InSliverList> {
           ),
         ),
         SliverToBoxAdapter(
-          child: FlexibleTableHeaderRow<TableDataBean>(
+          child: FlexibleTableHeader<TableDataBean>(
             controller,
             configurations: configurations,
           ),
@@ -450,8 +425,8 @@ class _InSliverListState extends State<InSliverList> {
           sliver: FlexibleTableContent<TableDataBean>.sliver(
             controller,
             configurations: configurations,
-            backgroundRowDecoration: FlexibleTableRowDecoration(
-              builder: (dataIndex, data) => ColoredBox(
+            decorations: FlexibleTableDecorations(
+              backgroundRow: (dataIndex, data) => ColoredBox(
                 color: dataIndex.isOdd ? Colors.grey.shade100 : Colors.grey.shade200,
                 child: InkWell(
                   onTap: () {
@@ -483,4 +458,28 @@ class _InSliverListState extends State<InSliverList> {
       ],
     );
   }
+}
+
+///数据实体
+class TableDataBean {
+  const TableDataBean({
+    required this.id,
+    required this.title,
+    required this.value1,
+    required this.value2,
+    required this.value3,
+  });
+
+  final int id;
+  final String title;
+  final String value1;
+  final int value2;
+  final double value3;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is TableDataBean && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

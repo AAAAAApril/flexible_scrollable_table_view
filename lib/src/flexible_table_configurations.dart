@@ -17,12 +17,8 @@ abstract class AbsFlexibleTableConfigurations<T> {
   ///不能左右滑动的列（会堆积在左侧）
   Set<AbsFlexibleColumn<T>> get pinnedColumns;
 
-  List<AbsFlexibleColumn<T>> get pinnedColumnList;
-
   ///可以左右滑动的列
   Set<AbsFlexibleColumn<T>> get scrollableColumns;
-
-  List<AbsFlexibleColumn<T>> get scrollableColumnList;
 
   ///信息行的固定高度
   double fixedInfoRowHeight(BuildContext context, T data);
@@ -33,12 +29,14 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
     required this.headerRowHeight,
     this.infoRowHeight,
     this.infoRowHeightBuilder,
-    this.pinnedColumns = const <AbsFlexibleColumn<T>>{},
-    this.scrollableColumns = const <AbsFlexibleColumn<T>>{},
-  }) : assert(
+    Set<AbsFlexibleColumn<T>>? pinnedColumns,
+    Set<AbsFlexibleColumn<T>>? scrollableColumns,
+  })  : assert(
           (infoRowHeight != null && infoRowHeight >= 0) || infoRowHeightBuilder != null,
           '要么固定高度，要么根据回调确定高度',
-        );
+        ),
+        pinnedColumns = pinnedColumns ?? <AbsFlexibleColumn<T>>{},
+        scrollableColumns = scrollableColumns ?? <AbsFlexibleColumn<T>>{};
 
   @override
   final double headerRowHeight;
@@ -51,14 +49,10 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
   ///不能左右滑动的列（会堆积在左侧）
   @override
   final Set<AbsFlexibleColumn<T>> pinnedColumns;
-  @override
-  late final List<AbsFlexibleColumn<T>> pinnedColumnList = pinnedColumns.toList(growable: false);
 
   ///可以左右滑动的列
   @override
   final Set<AbsFlexibleColumn<T>> scrollableColumns;
-  @override
-  late final List<AbsFlexibleColumn<T>> scrollableColumnList = scrollableColumns.toList(growable: false);
 
   ///可选时，固定列的总宽度
   late final double _selectableAllPinnedColumnsWidth = _computeColumnsWith(pinnedColumns, true);

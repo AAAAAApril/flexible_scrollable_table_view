@@ -1,11 +1,12 @@
+import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_header_widget.dart';
 import 'package:flutter/widgets.dart';
 
-///表头行
-class FlexibleTableHeaderRow<T> extends StatelessWidget {
-  const FlexibleTableHeaderRow(
+///表头（行）
+class FlexibleTableHeader<T> extends StatelessWidget {
+  const FlexibleTableHeader(
     this.controller, {
     super.key,
     required this.configurations,
@@ -100,19 +101,20 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<AbsFlexibleColumn<T>> scrollableColumns = configurations.scrollableColumns.toList(growable: false);
     return LayoutBuilder(
       builder: (p0, p1) => SizedBox.fromSize(
         size: Size(p1.maxWidth, configurations.headerRowHeight),
         child: ListView.builder(
           controller: controller.headerRowScrollController,
-          itemCount: configurations.scrollableColumnList.length,
+          itemCount: scrollableColumns.length,
           scrollDirection: Axis.horizontal,
           primary: primary,
           padding: EdgeInsets.zero,
           physics: physics,
           itemBuilder: (context, index) => TableColumnHeaderWidget<T>(
             controller,
-            column: configurations.scrollableColumnList[index],
+            column: scrollableColumns[index],
             height: configurations.headerRowHeight,
           ),
         ),
