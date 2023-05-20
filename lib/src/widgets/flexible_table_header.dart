@@ -38,17 +38,17 @@ class FlexibleTableHeader<T> extends StatelessWidget {
         ),
       ]);
     } else {
-      if (configurations.pinnedColumns.isEmpty) {
+      if (configurations.scrollableColumns.isEmpty) {
+        child = PinnedTableHeaderRow<T>(
+          controller,
+          configurations: configurations,
+        );
+      } else {
         child = ScrollableTableHeaderRow<T>(
           controller,
           configurations: configurations,
           primary: primary,
           physics: physics,
-        );
-      } else {
-        child = PinnedTableHeaderRow<T>(
-          controller,
-          configurations: configurations,
         );
       }
     }

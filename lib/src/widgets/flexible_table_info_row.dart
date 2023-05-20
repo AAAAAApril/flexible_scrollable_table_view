@@ -46,8 +46,8 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
         ),
       ]);
     } else {
-      if (configurations.pinnedColumns.isEmpty) {
-        child = ScrollableTableInfoRow<T>(
+      if (configurations.scrollableColumns.isEmpty) {
+        child = PinnedTableInfoRow<T>(
           controller,
           configurations: configurations,
           dataIndex: dataIndex,
@@ -55,7 +55,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
           height: height,
         );
       } else {
-        child = PinnedTableInfoRow<T>(
+        child = ScrollableTableInfoRow<T>(
           controller,
           configurations: configurations,
           dataIndex: dataIndex,
