@@ -4,5 +4,5 @@ See example project.
 
 ## Example
 
-<image src="example/img.png" width="108" height="234"><image/>
-<image src="example/img_1.png" width="108" height="234"><image/>
+![selecting](https://github.com/AAAAAApril/flexible_scrollable_table_view/blob/pub/example/img_1.png?raw=true)
+![not selectable](https://github.com/AAAAAApril/flexible_scrollable_table_view/blob/pub/example/img.png?raw=true)
