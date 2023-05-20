@@ -83,7 +83,15 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
         child: child,
       );
     }
-    return child;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 0.5,
+          color: Colors.grey,
+        ),
+      ),
+      child: child,
+    );
   }
 
   @override
@@ -100,7 +108,15 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
         child: child,
       );
     }
-    return child;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 0.5,
+          color: Colors.blue,
+        ),
+      ),
+      child: child,
+    );
   }
 }
 
@@ -120,11 +136,20 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
 
   @override
   Widget buildSelectableHeader(FlexibleTableController<T> controller) {
-    return SelectableColumnHeader<T>(
-      controller,
-      builder: (context, selected, onChanged, child) => Checkbox(
-        value: selected,
-        onChanged: onChanged,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          width: 1,
+          color: Colors.blue,
+        ),
+      ),
+      child: SelectableColumnHeader<T>(
+        controller,
+        builder: (context, selected, onChanged, child) => Checkbox(
+          value: selected,
+          onChanged: onChanged,
+        ),
       ),
     );
   }
@@ -138,20 +163,29 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
 
   @override
   Widget buildSelectableInfo(FlexibleTableController<T> controller, int dataIndex, T data) {
-    return SelectableColumnInfo<T>(
-      controller,
-      data: data,
-      builder: (context, selected, onChanged, child) => Checkbox(
-        value: selected,
-        onChanged: onChanged,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          width: 1,
+          color: Colors.red,
+        ),
+      ),
+      child: SelectableColumnInfo<T>(
+        controller,
+        data: data,
+        builder: (context, selected, onChanged, child) => Checkbox(
+          value: selected,
+          onChanged: onChanged,
+        ),
       ),
     );
   }
 
   @override
   Widget buildUnSelectableInfo(FlexibleTableController<T> controller, int dataIndex, T data) {
-    return const SizedBox.expand(
-      child: ColoredBox(color: Colors.red),
+    return SizedBox.expand(
+      child: ColoredBox(color: dataIndex.isOdd ? Colors.red : Colors.yellow),
     );
   }
 }

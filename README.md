@@ -4,4 +4,5 @@ See example project.
 
 ## Example
 
-<video src="2_1684586356.mp4" width="1080px" height="2340px" controls></video>
+<image src="example/img.png" width="1080" height="2340"><image/>
+<image src="example/img_1.png" width="1080" height="2340"><image/>
