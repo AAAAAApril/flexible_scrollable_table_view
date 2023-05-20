@@ -1,6 +1,11 @@
+## 2.2.1
+
+* Add example screenshot.
+
+
 ## 2.2.0
 
-* add `AbsFlexibleTableDecorations` and remove `AbsFlexibleTableRowDecoration`.
+* Add `AbsFlexibleTableDecorations` and remove `AbsFlexibleTableRowDecoration`.
 
 
 ## 2.1.1
