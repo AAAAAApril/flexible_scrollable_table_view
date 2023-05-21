@@ -47,5 +47,6 @@ class FlexibleTableDecorations<T> extends AbsFlexibleTableDecorations<T> {
     AbsFlexibleTableConfigurations<T> configurations,
     int dataIndex,
     T data,
-  ) =>foregroundRow?.call(dataIndex,data);
+  ) =>
+      foregroundRow?.call(dataIndex, data);
 }

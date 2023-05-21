@@ -1,6 +1,6 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/table_scrollable_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_header_widget.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,46 +10,35 @@ class FlexibleTableHeader<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
-    this.primary,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final bool? primary;
   final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
-    Widget child;
+    final Widget pinned = PinnedTableHeaderRow<T>(
+      controller,
+      configurations: configurations,
+    );
+    final Widget scrollable = ScrollableTableHeaderRow<T>(
+      controller,
+      configurations: configurations,
+      physics: physics,
+    );
+    final Widget child;
     if (configurations.pinnedColumns.isNotEmpty && configurations.scrollableColumns.isNotEmpty) {
       child = Row(children: [
-        PinnedTableHeaderRow<T>(
-          controller,
-          configurations: configurations,
-        ),
-        Expanded(
-          child: ScrollableTableHeaderRow<T>(
-            controller,
-            configurations: configurations,
-            primary: primary,
-            physics: physics,
-          ),
-        ),
+        pinned,
+        Expanded(child: scrollable),
       ]);
     } else {
       if (configurations.scrollableColumns.isEmpty) {
-        child = PinnedTableHeaderRow<T>(
-          controller,
-          configurations: configurations,
-        );
+        child = pinned;
       } else {
-        child = ScrollableTableHeaderRow<T>(
-          controller,
-          configurations: configurations,
-          primary: primary,
-          physics: physics,
-        );
+        child = scrollable;
       }
     }
     return child;
@@ -90,33 +79,23 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
-    this.primary,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final bool? primary;
   final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
-    final List<AbsFlexibleColumn<T>> scrollableColumns = configurations.scrollableColumns.toList(growable: false);
     return LayoutBuilder(
       builder: (p0, p1) => SizedBox.fromSize(
         size: Size(p1.maxWidth, configurations.headerRowHeight),
-        child: ListView.builder(
-          controller: controller.headerRowScrollController,
-          itemCount: scrollableColumns.length,
-          scrollDirection: Axis.horizontal,
-          primary: primary,
-          padding: EdgeInsets.zero,
+        child: TableHeaderScrollWrapper<T>(
+          controller,
+          columns: configurations.scrollableColumns.toList(growable: false),
+          height: configurations.headerRowHeight,
           physics: physics,
-          itemBuilder: (context, index) => TableColumnHeaderWidget<T>(
-            controller,
-            column: scrollableColumns[index],
-            height: configurations.headerRowHeight,
-          ),
         ),
       ),
     );

@@ -208,6 +208,7 @@ class _NormalListState extends State<NormalList> {
     configurations = FlexibleTableConfigurations<TableDataBean>(
       headerRowHeight: 40,
       infoRowHeight: 50,
+      infoRowHeightBuilder: (context, dataIndex, data) => dataIndex == 9 ? 80 : null,
       pinnedColumns: {
         NormalColumn(
           'title',
@@ -323,6 +324,14 @@ class _NormalListState extends State<NormalList> {
                 },
               ),
             ),
+            headerFixedHeight: configurations.infoRowHeight,
+            header: OutlinedButton(
+              onPressed: () {
+                debugPrint('点击了列表的Header');
+              },
+              child: const Text('这里是列表的Header，一个OutlinedButton'),
+            ),
+            footerFixedHeight: configurations.infoRowHeight,
             footer: OutlinedButton(
               onPressed: () {
                 debugPrint('点击了列表的Footer');
@@ -352,9 +361,6 @@ class _InSliverListState extends State<InSliverList> {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
     configurations = FlexibleTableConfigurations<TableDataBean>(
-      //如果不想显示表头，可以把表头的高度设置为 0，但是 FlexibleTableHeaderRow<T> 必须要放置到布局内。
-      //并且尽量和 FlexibleTableContent<T> 保持宽度一致。
-      headerRowHeight: 0,
       infoRowHeight: 50,
       pinnedColumns: {
         NormalColumn(
@@ -435,12 +441,6 @@ class _InSliverListState extends State<InSliverList> {
           ),
         ),
         SliverToBoxAdapter(
-          child: FlexibleTableHeader<TableDataBean>(
-            controller,
-            configurations: configurations,
-          ),
-        ),
-        SliverToBoxAdapter(
           child: ValueListenableBuilder<bool>(
             valueListenable: controller.selectable,
             builder: (context, value, child) => CheckboxListTile(
@@ -462,13 +462,15 @@ class _InSliverListState extends State<InSliverList> {
             decorations: FlexibleTableDecorations(
               backgroundRow: (dataIndex, data) => ColoredBox(
                 color: dataIndex.isOdd ? Colors.grey.shade100 : Colors.grey.shade200,
-                child: InkWell(
-                  onTap: () {
-                    debugPrint('点击了Sliver列表的背景装饰:$dataIndex');
-                  },
-                  child: const SizedBox.expand(),
-                ),
+                child: const SizedBox.expand(),
               ),
+            ),
+            headerFixedHeight: configurations.infoRowHeight,
+            header: ElevatedButton(
+              onPressed: () {
+                debugPrint('点击了Header');
+              },
+              child: const Text('这里是Header，一个ElevatedButton'),
             ),
             footer: Column(
               mainAxisSize: MainAxisSize.min,

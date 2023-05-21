@@ -31,7 +31,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     final Size fixedSize = Size(column.fixedWidth, height);
     Widget child = SizedBox.fromSize(
       size: fixedSize,
-      child: column.buildInfo(controller, dataIndex, data),
+      child: height <= 0 ? null : column.buildInfo(controller, dataIndex, data),
     );
     //可选列
     if (column is AbsSelectableColumn<T>) {
@@ -42,7 +42,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
           final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
           return SizedBox.fromSize(
             size: unSelectableSize,
-            child: thisColumn.buildUnSelectableInfo(controller, dataIndex, data),
+            child: height <= 0 ? null : thisColumn.buildUnSelectableInfo(controller, dataIndex, data),
           );
         },
         child: child,

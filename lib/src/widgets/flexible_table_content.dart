@@ -17,8 +17,10 @@ class FlexibleTableContent<T> extends StatelessWidget {
     this.primary,
     this.physics,
     this.verticalScrollable = true,
+    this.header,
+    this.headerFixedHeight,
     this.footer,
-    this.fixedExtent = true,
+    this.footerFixedHeight,
   });
 
   factory FlexibleTableContent.sliver(
@@ -26,40 +28,59 @@ class FlexibleTableContent<T> extends StatelessWidget {
     Key? key,
     required AbsFlexibleTableConfigurations<T> configurations,
     AbsFlexibleTableDecorations<T>? decorations,
+    Widget? header,
+    double? headerFixedHeight,
     Widget? footer,
-    bool fixedExtent = true,
+    double? footerFixedHeight,
   }) =>
       _SliverFlexibleTableContent<T>(
         controller,
         key: key,
         configurations: configurations,
         decorations: decorations,
+        header: header,
+        headerFixedHeight: headerFixedHeight,
         footer: footer,
-        fixedExtent: fixedExtent,
+        footerFixedHeight: footerFixedHeight,
       );
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableDecorations<T>? decorations;
+
   final ScrollController? verticalScrollController;
+
   final bool shrinkWrap;
   final bool? primary;
   final ScrollPhysics? physics;
+
   final bool verticalScrollable;
+
+  final Widget? header;
+  final double? headerFixedHeight;
   final Widget? footer;
-  final bool fixedExtent;
+  final double? footerFixedHeight;
+
+  double? get itemExtent {
+    if (configurations.infoRowHeightBuilder != null) {
+      return null;
+    }
+    if (header != null && headerFixedHeight != configurations.infoRowHeight) {
+      return null;
+    }
+    if (footer != null && footerFixedHeight != configurations.infoRowHeight) {
+      return null;
+    }
+    return configurations.infoRowHeight;
+  }
 
   @override
   Widget build(BuildContext context) {
-    double? itemExtent;
-    if (fixedExtent && footer == null && configurations.infoRowHeightBuilder == null) {
-      itemExtent = configurations.infoRowHeight;
-    }
     Widget child = ValueListenableBuilder<List<T>>(
       valueListenable: controller,
       builder: (context, value, child) => ListView.builder(
         controller: verticalScrollController,
-        itemCount: value.length + (footer != null ? 1 : 0),
+        itemCount: (header != null ? 1 : 0) + value.length + (footer != null ? 1 : 0),
         shrinkWrap: shrinkWrap,
         primary: primary,
         padding: EdgeInsets.zero,
@@ -67,14 +88,18 @@ class FlexibleTableContent<T> extends StatelessWidget {
         itemExtent: itemExtent,
         physics: !verticalScrollable ? const NeverScrollableScrollPhysics() : physics,
         itemBuilder: (context, index) {
-          if (index == value.length) {
+          if (index == 0 && header != null) {
+            return header!;
+          }
+          if (index == value.length + (header != null ? 1 : 0)) {
             return footer!;
           }
+          final int dataIndex = index - (header != null ? 1 : 0);
           return FlexibleTableInfoRow<T>(
             controller,
             configurations: configurations,
-            dataIndex: index,
-            data: value[index],
+            dataIndex: dataIndex,
+            data: value[dataIndex],
             decorations: decorations,
           );
         },
@@ -98,34 +123,37 @@ class _SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
     super.key,
     required super.configurations,
     super.decorations,
+    super.header,
+    super.headerFixedHeight,
     super.footer,
-    super.fixedExtent,
+    super.footerFixedHeight,
   });
 
   @override
   Widget build(BuildContext context) {
-    double? itemExtent;
-    if (fixedExtent && footer == null && configurations.infoRowHeightBuilder == null) {
-      itemExtent = configurations.infoRowHeight;
-    }
     return ValueListenableBuilder<List<T>>(
       valueListenable: controller,
       builder: (context, value, child) {
         final SliverChildDelegate delegate = SliverChildBuilderDelegate(
           (context, index) {
-            if (index == value.length) {
+            if (index == 0 && header != null) {
+              return header!;
+            }
+            if (index == value.length + (header != null ? 1 : 0)) {
               return footer!;
             }
+            final int dataIndex = index - (header != null ? 1 : 0);
             return FlexibleTableInfoRow<T>(
               controller,
               configurations: configurations,
-              dataIndex: index,
-              data: value[index],
+              dataIndex: dataIndex,
+              data: value[dataIndex],
               decorations: decorations,
             );
           },
-          childCount: value.length + (footer != null ? 1 : 0),
+          childCount: (header != null ? 1 : 0) + value.length + (footer != null ? 1 : 0),
         );
+        final double? itemExtent = super.itemExtent;
         if (itemExtent == null) {
           return SliverList(delegate: delegate);
         }

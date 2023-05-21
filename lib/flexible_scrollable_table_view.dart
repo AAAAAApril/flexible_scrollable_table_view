@@ -4,6 +4,7 @@ export 'src/decoration/flexible_table_decorations.dart';
 
 export 'src/scrollable/scroll_behavior.dart';
 export 'src/scrollable/scroll_synchronization_mixin.dart';
+export 'src/scrollable/table_scrollable_wrapper.dart';
 
 export 'src/selectable/selectable_column.dart';
 export 'src/selectable/selectable_column_widgets.dart';

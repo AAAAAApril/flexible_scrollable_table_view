@@ -1,3 +1,9 @@
+## 2.3.0
+
+* Add header.
+* Only the table content area is supported.
+
+
 ## 2.2.1
 
 * Add example screenshot.

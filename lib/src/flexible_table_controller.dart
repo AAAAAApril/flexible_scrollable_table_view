@@ -16,15 +16,7 @@ abstract class FlexibleTableValueListenable<T> extends ValueListenable<T> {
 class FlexibleTableController<T> extends ChangeNotifier
     with SortableColumnMixin<T>, SelectableRowMixin<T>, ScrollSynchronizationMixin
     implements FlexibleTableValueListenable<List<T>> {
-  FlexibleTableController() : super() {
-    startSync();
-  }
-
-  @override
-  void dispose() {
-    stopSync();
-    super.dispose();
-  }
+  FlexibleTableController() : super();
 
   ///原始数据
   List<T> _rawValue = <T>[];
