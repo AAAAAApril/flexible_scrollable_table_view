@@ -237,11 +237,8 @@ class _NormalListState extends State<NormalList> {
       // headerRowHeight: 60,
       infoRowHeight: 50,
       infoRowHeightBuilder: (context, dataIndex, data) {
-        return dataIndex == 9
-            ?
-            80
-            // 50
-            : null;
+        return dataIndex == 9 ? 80 : null;
+        // return null;
       },
       pinnedColumns: {
         NormalColumn(
