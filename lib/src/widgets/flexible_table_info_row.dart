@@ -90,7 +90,6 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
     final Widget scrollable = ScrollableTableInfoRow<T>(
       controller,
       configurations: configurations,
-      animations: animations,
       dataIndex: dataIndex,
       data: data,
       height: rowHeight,
@@ -180,7 +179,6 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
-    this.animations,
     required this.dataIndex,
     required this.data,
     required this.height,
@@ -188,7 +186,6 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleTableAnimations? animations;
   final int dataIndex;
   final T data;
   final double height;
@@ -206,7 +203,6 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
         padding: EdgeInsets.zero,
         itemBuilder: (context, index) => TableColumnInfoWidget<T>(
           controller,
-          animations: animations,
           dataIndex: dataIndex,
           data: data,
           column: columns[index],
