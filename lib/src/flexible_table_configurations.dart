@@ -1,4 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
 ///表配置
@@ -20,7 +21,7 @@ abstract class AbsFlexibleTableConfigurations<T> {
   Set<AbsFlexibleColumn<T>> get scrollableColumns;
 
   ///信息行的固定高度
-  double fixedInfoRowHeight(BuildContext context, int dataIndex, T data);
+  double fixedInfoRowHeight(FlexibleTableController<T> controller, BuildContext context, int dataIndex, T data);
 }
 
 class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
@@ -55,7 +56,7 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
 
   ///信息行的固定高度
   @override
-  double fixedInfoRowHeight(BuildContext context, int dataIndex, T data) {
+  double fixedInfoRowHeight(FlexibleTableController<T> controller, BuildContext context, int dataIndex, T data) {
     return infoRowHeightBuilder?.call(context, dataIndex, data) ?? infoRowHeight!;
   }
 }

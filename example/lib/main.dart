@@ -199,16 +199,50 @@ class NormalList extends StatefulWidget {
 
 class _NormalListState extends State<NormalList> {
   late FlexibleTableController<TableDataBean> controller;
-  late AbsFlexibleTableConfigurations<TableDataBean> configurations;
+  final AbsFlexibleTableAnimations animations = const FlexibleTableAnimations(
+    duration: Duration(seconds: 2),
+  );
 
   @override
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
-    configurations = FlexibleTableConfigurations<TableDataBean>(
+    refreshData();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void refreshData() {
+    final Random random = Random.secure();
+    controller.value = List<TableDataBean>.generate(
+      random.nextInt(40) + 30,
+      (index) => TableDataBean(
+        id: index,
+        title: '数据标题$index',
+        value1: 'String值$index',
+        value2: random.nextInt(1000),
+        value3: random.nextDouble() * 100,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AbsFlexibleTableConfigurations<TableDataBean> configurations = FlexibleTableConfigurations<TableDataBean>(
       headerRowHeight: 40,
+      // headerRowHeight: 60,
       infoRowHeight: 50,
-      infoRowHeightBuilder: (context, dataIndex, data) => dataIndex == 9 ? 80 : null,
+      infoRowHeightBuilder: (context, dataIndex, data) {
+        return dataIndex == 9
+            ?
+            80
+            // 50
+            : null;
+      },
       pinnedColumns: {
         NormalColumn(
           'title',
@@ -254,31 +288,6 @@ class _NormalListState extends State<NormalList> {
         ),
       },
     );
-    refreshData();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void refreshData() {
-    final Random random = Random.secure();
-    controller.value = List<TableDataBean>.generate(
-      random.nextInt(40) + 30,
-      (index) => TableDataBean(
-        id: index,
-        title: '数据标题$index',
-        value1: 'String值$index',
-        value2: random.nextInt(1000),
-        value3: random.nextDouble() * 100,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       children: [
         Row(children: [
@@ -306,12 +315,14 @@ class _NormalListState extends State<NormalList> {
           child: FlexibleTableHeader<TableDataBean>(
             controller,
             configurations: configurations,
+            animations: animations,
           ),
         ),
         Expanded(
           child: FlexibleTableContent<TableDataBean>(
             controller,
             configurations: configurations,
+            animations: animations,
             decorations: FlexibleTableDecorations(
               backgroundRow: (dataIndex, data) => ColoredBox(
                 color: dataIndex.isOdd ? Colors.grey.shade200 : Colors.grey.shade300,
@@ -324,19 +335,21 @@ class _NormalListState extends State<NormalList> {
                 },
               ),
             ),
-            headerFixedHeight: configurations.infoRowHeight,
-            header: OutlinedButton(
-              onPressed: () {
-                debugPrint('点击了列表的Header');
-              },
-              child: const Text('这里是列表的Header，一个OutlinedButton'),
-            ),
-            footerFixedHeight: configurations.infoRowHeight,
-            footer: OutlinedButton(
-              onPressed: () {
-                debugPrint('点击了列表的Footer');
-              },
-              child: const Text('这里是列表的Footer，一个OutlinedButton'),
+            headerFooter: FlexibleHeaderFooter(
+              fixedHeaderHeight: configurations.infoRowHeight,
+              header: OutlinedButton(
+                onPressed: () {
+                  debugPrint('点击了列表的Header');
+                },
+                child: const Text('这里是列表的Header，一个OutlinedButton'),
+              ),
+              fixedFooterHeight: configurations.infoRowHeight,
+              footer: OutlinedButton(
+                onPressed: () {
+                  debugPrint('点击了列表的Footer');
+                },
+                child: const Text('这里是列表的Footer，一个OutlinedButton'),
+              ),
             ),
           ),
         ),
@@ -465,29 +478,32 @@ class _InSliverListState extends State<InSliverList> {
                 child: const SizedBox.expand(),
               ),
             ),
-            headerFixedHeight: configurations.infoRowHeight,
-            header: ElevatedButton(
-              onPressed: () {
-                debugPrint('点击了Header');
-              },
-              child: const Text('这里是Header，一个ElevatedButton'),
-            ),
-            footer: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    debugPrint('点击了Footer');
-                  },
-                  child: const Text('这里是Footer，一个ElevatedButton'),
-                ),
-                const ColoredBox(
-                  color: Colors.yellow,
-                  child: SizedBox.square(
-                    dimension: 200,
+            headerFooter: FlexibleHeaderFooter(
+              fixedHeaderHeight: configurations.infoRowHeight,
+              header: ElevatedButton(
+                onPressed: () {
+                  debugPrint('点击了Header');
+                },
+                child: const Text('这里是Header，一个ElevatedButton'),
+              ),
+              // fixedFooterHeight: configurations.infoRowHeight,
+              footer: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      debugPrint('点击了Footer');
+                    },
+                    child: const Text('这里是Footer，一个ElevatedButton'),
                   ),
-                ),
-              ],
+                  const ColoredBox(
+                    color: Colors.yellow,
+                    child: SizedBox.square(
+                      dimension: 200,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

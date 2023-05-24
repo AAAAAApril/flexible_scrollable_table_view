@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
@@ -9,6 +10,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
   const TableColumnInfoWidget(
     this.controller, {
     super.key,
+    this.animations,
     required this.dataIndex,
     required this.data,
     required this.column,
@@ -16,6 +18,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
   });
 
   final FlexibleTableController<T> controller;
+  final AbsFlexibleTableAnimations? animations;
 
   final int dataIndex;
   final T data;
@@ -28,21 +31,40 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size fixedSize = Size(column.fixedWidth, height);
-    Widget child = SizedBox.fromSize(
-      size: fixedSize,
-      child: height <= 0 ? null : column.buildInfo(controller, dataIndex, data),
+    final BoxConstraints constraints = BoxConstraints.tight(
+      Size(column.fixedWidth, height),
     );
+    Widget? child = height <= 0 ? null : column.buildInfo(controller, dataIndex, data);
+    if (animations != null) {
+      child = animations!.buildConstraintAnimatedWidget(
+        constraints,
+        child,
+      );
+    } else {
+      child = ConstrainedBox(
+        constraints: constraints,
+        child: child,
+      );
+    }
     //可选列
     if (column is AbsSelectableColumn<T>) {
       child = SelectableColumnWrapper<T>(
         controller,
         unSelectableBuilder: (context) {
           final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
-          final Size unSelectableSize = Size(thisColumn.unSelectableWidth, height);
-          return SizedBox.fromSize(
-            size: unSelectableSize,
-            child: height <= 0 ? null : thisColumn.buildUnSelectableInfo(controller, dataIndex, data),
+          Widget? child = height <= 0 ? null : thisColumn.buildUnSelectableInfo(controller, dataIndex, data);
+          final BoxConstraints constraints = BoxConstraints.tight(
+            Size(thisColumn.unSelectableWidth, height),
+          );
+          if (animations != null) {
+            return animations!.buildConstraintAnimatedWidget(
+              constraints,
+              child,
+            );
+          }
+          return ConstrainedBox(
+            constraints: constraints,
+            child: child,
           );
         },
         child: child,
