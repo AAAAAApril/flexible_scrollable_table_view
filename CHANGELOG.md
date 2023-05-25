@@ -1,3 +1,8 @@
+## 2.4.1
+
+* Fix bug.
+* `AbsFlexibleTableConfigurations` is now available when building column Widgets.
+
 ## 2.4.0
 
 * Add `AbsFlexibleTableAnimations` configuration class for config size change animation.

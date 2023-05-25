@@ -116,6 +116,7 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
           .map<Widget>(
             (e) => TableColumnHeaderWidget<T>(
               controller,
+              configurations: configurations,
               animations: animations,
               column: e,
               height: configurations.headerRowHeight,
@@ -153,6 +154,7 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
         physics: physics,
         itemBuilder: (context, index) => TableColumnHeaderWidget<T>(
           controller,
+          configurations: configurations,
           column: columns[index],
           height: configurations.headerRowHeight,
         ),

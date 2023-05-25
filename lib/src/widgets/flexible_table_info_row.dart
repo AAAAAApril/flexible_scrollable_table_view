@@ -38,6 +38,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
       controller,
       configurations: configurations,
       animations: animations,
+      decorations: decorations,
       dataIndex: dataIndex,
       data: data,
       rowHeight: height,
@@ -161,6 +162,7 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
           .map<Widget>(
             (e) => TableColumnInfoWidget<T>(
               controller,
+              configurations: configurations,
               animations: animations,
               dataIndex: dataIndex,
               data: data,
@@ -203,6 +205,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
         padding: EdgeInsets.zero,
         itemBuilder: (context, index) => TableColumnInfoWidget<T>(
           controller,
+          configurations: configurations,
           dataIndex: dataIndex,
           data: data,
           column: columns[index],

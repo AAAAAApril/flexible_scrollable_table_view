@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
@@ -18,10 +19,18 @@ abstract class AbsFlexibleColumn<T> {
   bool get comparableColumn => comparator != null;
 
   ///构建表头
-  Widget buildHeader(FlexibleTableController<T> controller);
+  Widget buildHeader(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+  );
 
   ///构建表信息
-  Widget buildInfo(FlexibleTableController<T> controller, int dataIndex, T data);
+  Widget buildInfo(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+    int dataIndex,
+    T data,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -46,8 +55,18 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   final Widget Function(int dataIndex, T data) info;
 
   @override
-  Widget buildHeader(FlexibleTableController<T> controller) => header;
+  Widget buildHeader(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+  ) =>
+      header;
 
   @override
-  Widget buildInfo(FlexibleTableController<T> controller, int dataIndex, T data) => info.call(dataIndex, data);
+  Widget buildInfo(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+    int dataIndex,
+    T data,
+  ) =>
+      info.call(dataIndex, data);
 }

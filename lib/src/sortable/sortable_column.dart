@@ -1,4 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
@@ -28,8 +29,18 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
   final Widget Function(int dataIndex, T data) info;
 
   @override
-  Widget buildHeader(FlexibleTableController<T> controller) => header;
+  Widget buildHeader(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+  ) =>
+      header;
 
   @override
-  Widget buildInfo(FlexibleTableController<T> controller, int dataIndex, T data) => info.call(dataIndex, data);
+  Widget buildInfo(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+    int dataIndex,
+    T data,
+  ) =>
+      info.call(dataIndex, data);
 }

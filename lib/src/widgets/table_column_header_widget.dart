@@ -1,5 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_wrapper.dart';
@@ -10,12 +11,14 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
   const TableColumnHeaderWidget(
     this.controller, {
     super.key,
+    required this.configurations,
     this.animations,
     required this.column,
     required this.height,
   });
 
   final FlexibleTableController<T> controller;
+  final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableAnimations? animations;
 
   ///列配置
@@ -29,7 +32,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
     final BoxConstraints constraints = BoxConstraints.tight(
       Size(column.fixedWidth, height),
     );
-    Widget? child = height <= 0 ? null : column.buildHeader(controller);
+    Widget? child = height <= 0 ? null : column.buildHeader(controller, configurations);
     if (animations != null) {
       child = animations!.buildConstraintAnimatedWidget(
         constraints,
@@ -47,7 +50,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
         controller,
         unSelectableBuilder: (context) {
           final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
-          final Widget? child = height <= 0 ? null : thisColumn.buildUnSelectableHeader(controller);
+          final Widget? child = height <= 0 ? null : thisColumn.buildUnSelectableHeader(controller, configurations);
           final BoxConstraints constraints = BoxConstraints.tight(
             Size(thisColumn.unSelectableWidth, height),
           );

@@ -67,7 +67,10 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   final Comparator<T>? comparator;
 
   @override
-  Widget buildHeader(FlexibleTableController<T> controller) {
+  Widget buildHeader(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+  ) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(headerText),
@@ -95,7 +98,12 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   }
 
   @override
-  Widget buildInfo(FlexibleTableController<T> controller, int dataIndex, T data) {
+  Widget buildInfo(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+    int dataIndex,
+    T data,
+  ) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(infoText.call(data)),
@@ -135,7 +143,10 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   final double unSelectableWidth;
 
   @override
-  Widget buildSelectableHeader(FlexibleTableController<T> controller) {
+  Widget buildSelectableHeader(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+  ) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -155,14 +166,22 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableHeader(FlexibleTableController<T> controller) {
+  Widget buildUnSelectableHeader(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+  ) {
     return const SizedBox.expand(
       child: ColoredBox(color: Colors.purple),
     );
   }
 
   @override
-  Widget buildSelectableInfo(FlexibleTableController<T> controller, int dataIndex, T data) {
+  Widget buildSelectableInfo(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+    int dataIndex,
+    T data,
+  ) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -183,7 +202,12 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableInfo(FlexibleTableController<T> controller, int dataIndex, T data) {
+  Widget buildUnSelectableInfo(
+    FlexibleTableController<T> controller,
+    AbsFlexibleTableConfigurations<T> configurations,
+    int dataIndex,
+    T data,
+  ) {
     return SizedBox.expand(
       child: ColoredBox(color: dataIndex.isOdd ? Colors.red : Colors.yellow),
     );
