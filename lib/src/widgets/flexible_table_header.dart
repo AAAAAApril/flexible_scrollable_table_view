@@ -1,4 +1,7 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
+import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/table_row_decoration_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
@@ -12,42 +15,37 @@ class FlexibleTableHeader<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
+    this.decorations,
     this.animations,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations? animations;
   final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) {
-        final BoxConstraints fixedConstraints = BoxConstraints.tight(
+      builder: (context, constraints) => TableConstraintAnimationWrapper<T>(
+        controller,
+        constraints: BoxConstraints.tight(
           Size(
             constraints.maxWidth,
             configurations.headerRowHeight,
           ),
-        );
-        final Widget child = _FlexibleTableHeader<T>(
+        ),
+        animations: animations,
+        child: _FlexibleTableHeader<T>(
           controller,
           configurations: configurations,
+          decorations: decorations,
           animations: animations,
           physics: physics,
-        );
-        if (animations != null) {
-          return animations!.buildConstraintAnimatedWidget(
-            fixedConstraints,
-            child,
-          );
-        }
-        return ConstrainedBox(
-          constraints: fixedConstraints,
-          child: child,
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -57,12 +55,14 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
+    this.decorations,
     this.animations,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations? animations;
   final ScrollPhysics? physics;
 
@@ -72,10 +72,12 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
       controller,
       configurations: configurations,
       animations: animations,
+      decorations: decorations,
     );
     final Widget scrollable = ScrollableTableHeaderRow<T>(
       controller,
       configurations: configurations,
+      decorations: decorations,
       physics: physics,
     );
     final Widget child;
@@ -91,7 +93,12 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
         child = scrollable;
       }
     }
-    return child;
+    return TableHeaderRowDecorationWrapper<T>(
+      controller,
+      configurations: configurations,
+      decorations: decorations,
+      child: child,
+    );
   }
 }
 
@@ -102,11 +109,13 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
     super.key,
     required this.configurations,
     this.animations,
+    this.decorations,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableDecorations<T>? decorations;
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +127,7 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
               controller,
               configurations: configurations,
               animations: animations,
+              decorations: decorations,
               column: e,
               height: configurations.headerRowHeight,
             ),
@@ -133,11 +143,13 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
+    this.decorations,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
+  final AbsFlexibleTableDecorations<T>? decorations;
   final ScrollPhysics? physics;
 
   @override
@@ -155,6 +167,7 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
         itemBuilder: (context, index) => TableColumnHeaderWidget<T>(
           controller,
           configurations: configurations,
+          decorations: decorations,
           column: columns[index],
           height: configurations.headerRowHeight,
         ),

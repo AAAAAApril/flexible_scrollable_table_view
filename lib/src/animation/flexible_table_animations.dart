@@ -6,7 +6,10 @@ import 'animated_constraint_box.dart';
 abstract class AbsFlexibleTableAnimations {
   const AbsFlexibleTableAnimations();
 
-  Widget buildConstraintAnimatedWidget(BoxConstraints constraints, Widget? child);
+  Widget buildConstraintAnimatedWidget(
+    BoxConstraints constraints,
+    Widget? child,
+  );
 }
 
 class FlexibleTableAnimations extends AbsFlexibleTableAnimations {

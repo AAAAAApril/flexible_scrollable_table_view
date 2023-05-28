@@ -6,12 +6,12 @@ class SelectableColumnWrapper<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.unSelectableBuilder,
-    required this.child,
+    required this.selectableWidget,
   });
 
   final FlexibleTableController<T> controller;
   final WidgetBuilder unSelectableBuilder;
-  final Widget child;
+  final Widget selectableWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SelectableColumnWrapper<T> extends StatelessWidget {
         //当选择不可用时，不显示
         return unSelectableBuilder.call(context);
       },
-      child: child,
+      child: selectableWidget,
     );
   }
 }

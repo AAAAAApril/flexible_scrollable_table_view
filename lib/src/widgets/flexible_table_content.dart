@@ -31,7 +31,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     AbsFlexibleTableDecorations<T>? decorations,
     AbsFlexibleTableAnimations? animations,
   }) =>
-      _SliverFlexibleTableContent<T>(
+      SliverFlexibleTableContent<T>(
         controller,
         key: key,
         configurations: configurations,
@@ -122,8 +122,8 @@ class FlexibleTableContent<T> extends StatelessWidget {
   }
 }
 
-class _SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
-  const _SliverFlexibleTableContent(
+class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
+  const SliverFlexibleTableContent(
     super.controller, {
     super.key,
     required super.configurations,

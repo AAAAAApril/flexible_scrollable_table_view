@@ -1,4 +1,7 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
+import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
+import 'package:flexible_scrollable_table_view/src/decoration/table_item_decoration_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
@@ -13,6 +16,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
     super.key,
     required this.configurations,
     this.animations,
+    this.decorations,
     required this.column,
     required this.height,
   });
@@ -20,6 +24,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableDecorations<T>? decorations;
 
   ///列配置
   final AbsFlexibleColumn<T> column;
@@ -29,43 +34,44 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BoxConstraints constraints = BoxConstraints.tight(
-      Size(column.fixedWidth, height),
+    Widget child = TableConstraintAnimationWrapper<T>(
+      controller,
+      animations: animations,
+      constraints: BoxConstraints.tight(
+        Size(column.fixedWidth, height),
+      ),
+      child: height <= 0
+          ? null
+          : TableHeaderItemDecorationWrapper<T>(
+              controller,
+              configurations: configurations,
+              decorations: decorations,
+              child: column.buildHeader(controller, configurations),
+            ),
     );
-    Widget? child = height <= 0 ? null : column.buildHeader(controller, configurations);
-    if (animations != null) {
-      child = animations!.buildConstraintAnimatedWidget(
-        constraints,
-        child,
-      );
-    } else {
-      child = ConstrainedBox(
-        constraints: constraints,
-        child: child,
-      );
-    }
     //可选列
     if (column is AbsSelectableColumn<T>) {
       child = SelectableColumnWrapper<T>(
         controller,
+        selectableWidget: child,
         unSelectableBuilder: (context) {
           final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
-          final Widget? child = height <= 0 ? null : thisColumn.buildUnSelectableHeader(controller, configurations);
-          final BoxConstraints constraints = BoxConstraints.tight(
-            Size(thisColumn.unSelectableWidth, height),
-          );
-          if (animations != null) {
-            return animations!.buildConstraintAnimatedWidget(
-              constraints,
-              child,
-            );
-          }
-          return ConstrainedBox(
-            constraints: constraints,
-            child: child,
+          return TableConstraintAnimationWrapper<T>(
+            controller,
+            constraints: BoxConstraints.tight(
+              Size(thisColumn.unSelectableWidth, height),
+            ),
+            animations: animations,
+            child: height <= 0
+                ? null
+                : TableHeaderItemDecorationWrapper<T>(
+                    controller,
+                    configurations: configurations,
+                    decorations: decorations,
+                    child: thisColumn.buildUnSelectableHeader(controller, configurations),
+                  ),
           );
         },
-        child: child,
       );
     }
     return child;
