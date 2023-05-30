@@ -1,3 +1,7 @@
+## 2.4.3
+
+* Fix bug.
+
 ## 2.4.2
 
 * Optimize the code.

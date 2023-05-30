@@ -67,7 +67,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
   }
 
   bool isFooterIndex(List<T> value, int index) {
-    return index == value.length + (hasFooter ? 1 : 0);
+    return index == value.length + (hasHeader ? 1 : 0);
   }
 
   int realDataIndex(int index) {
