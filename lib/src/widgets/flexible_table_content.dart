@@ -29,7 +29,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     required AbsFlexibleTableConfigurations<T> configurations,
     AbsFlexibleHeaderFooter<T>? headerFooter,
     AbsFlexibleTableDecorations<T>? decorations,
-    AbsFlexibleTableAnimations? animations,
+    AbsFlexibleTableAnimations<T>? animations,
   }) =>
       SliverFlexibleTableContent<T>(
         controller,
@@ -44,7 +44,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleHeaderFooter<T>? headerFooter;
   final AbsFlexibleTableDecorations<T>? decorations;
-  final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableAnimations<T>? animations;
 
   final ScrollController? verticalScrollController;
 

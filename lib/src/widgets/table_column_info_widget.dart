@@ -25,7 +25,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableAnimations<T>? animations;
   final AbsFlexibleTableDecorations<T>? decorations;
 
   final int dataIndex;
@@ -39,12 +39,15 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = TableConstraintAnimationWrapper<T>(
+    Widget child = TableInfoItemConstraintAnimationWrapper<T>(
       controller,
       constraints: BoxConstraints.tight(
         Size(column.fixedWidth, height),
       ),
       animations: animations,
+      column: column,
+      dataIndex: dataIndex,
+      data: data,
       child: height <= 0
           ? null
           : TableInfoItemDecorationWrapper<T>(
@@ -63,12 +66,15 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
         selectableWidget: child,
         unSelectableBuilder: (context) {
           final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
-          return TableConstraintAnimationWrapper<T>(
+          return TableInfoItemConstraintAnimationWrapper<T>(
             controller,
             animations: animations,
             constraints: BoxConstraints.tight(
               Size(thisColumn.unSelectableWidth, height),
             ),
+            column: column,
+            dataIndex: dataIndex,
+            data: data,
             child: height <= 0
                 ? null
                 : TableInfoItemDecorationWrapper<T>(

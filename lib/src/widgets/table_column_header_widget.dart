@@ -23,7 +23,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableAnimations<T>? animations;
   final AbsFlexibleTableDecorations<T>? decorations;
 
   ///列配置
@@ -34,8 +34,9 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = TableConstraintAnimationWrapper<T>(
+    Widget child = TableHeaderItemConstraintAnimationWrapper<T>(
       controller,
+      column: column,
       animations: animations,
       constraints: BoxConstraints.tight(
         Size(column.fixedWidth, height),
@@ -56,8 +57,9 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
         selectableWidget: child,
         unSelectableBuilder: (context) {
           final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
-          return TableConstraintAnimationWrapper<T>(
+          return TableHeaderItemConstraintAnimationWrapper<T>(
             controller,
+            column: column,
             constraints: BoxConstraints.tight(
               Size(thisColumn.unSelectableWidth, height),
             ),

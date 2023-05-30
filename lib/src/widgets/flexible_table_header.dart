@@ -1,7 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
-import 'package:flexible_scrollable_table_view/src/decoration/table_row_decoration_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
@@ -23,13 +22,13 @@ class FlexibleTableHeader<T> extends StatelessWidget {
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableDecorations<T>? decorations;
-  final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableAnimations<T>? animations;
   final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) => TableConstraintAnimationWrapper<T>(
+      builder: (context, constraints) => TableHeaderRowConstraintAnimationWrapper<T>(
         controller,
         constraints: BoxConstraints.tight(
           Size(
@@ -63,7 +62,7 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableDecorations<T>? decorations;
-  final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableAnimations<T>? animations;
   final ScrollPhysics? physics;
 
   @override
@@ -93,12 +92,12 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
         child = scrollable;
       }
     }
-    return TableHeaderRowDecorationWrapper<T>(
-      controller,
-      configurations: configurations,
-      decorations: decorations,
-      child: child,
-    );
+    return decorations?.headerRowDecorationBuilder?.call(
+          controller,
+          configurations,
+          child,
+        ) ??
+        child;
   }
 }
 
@@ -114,7 +113,7 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleTableAnimations? animations;
+  final AbsFlexibleTableAnimations<T>? animations;
   final AbsFlexibleTableDecorations<T>? decorations;
 
   @override
