@@ -78,14 +78,10 @@ class FlexibleTableDecorationsWithData<T> extends FlexibleTableDecorations<T> {
       (infoForegroundRowWithData == null && infoBackgroundRowWithData == null)
           ? null
           : (controller, configurations, dataIndex, data, child) => Stack(children: [
-                if (infoForegroundRowWithData != null)
-                  Positioned.fill(
-                    child: infoForegroundRowWithData!.call(dataIndex, data),
-                  ),
-                child,
                 if (infoBackgroundRowWithData != null)
-                  Positioned.fill(
-                    child: infoBackgroundRowWithData!.call(dataIndex, data),
-                  ),
+                  Positioned.fill(child: infoBackgroundRowWithData!.call(dataIndex, data)),
+                child,
+                if (infoForegroundRowWithData != null)
+                  Positioned.fill(child: infoForegroundRowWithData!.call(dataIndex, data)),
               ]);
 }
