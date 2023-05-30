@@ -2,23 +2,24 @@ import 'package:flexible_scrollable_table_view/src/flexible_table_configurations
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
+typedef TableHeaderFooterBuilder<T> = Widget Function(
+  FlexibleTableController<T> controller,
+  AbsFlexibleTableConfigurations<T> configurations,
+);
+
 ///表列表头、尾布局配置
 abstract class AbsFlexibleHeaderFooter<T> {
   const AbsFlexibleHeaderFooter();
 
-  bool get hasHeader;
-
-  bool get hasFooter;
-
   ///返回 null 表示不限制高度
   double? get fixedHeaderHeight;
 
-  Widget? buildHeader(FlexibleTableController<T> controller, AbsFlexibleTableConfigurations<T> configurations);
+  TableHeaderFooterBuilder<T>? get headerBuilder;
 
   ///返回 null 表示不限制高度
   double? get fixedFooterHeight;
 
-  Widget? buildFooter(FlexibleTableController<T> controller, AbsFlexibleTableConfigurations<T> configurations);
+  TableHeaderFooterBuilder<T>? get footerBuilder;
 }
 
 class FlexibleHeaderFooter<T> extends AbsFlexibleHeaderFooter<T> {
@@ -39,18 +40,8 @@ class FlexibleHeaderFooter<T> extends AbsFlexibleHeaderFooter<T> {
   final Widget? footer;
 
   @override
-  bool get hasHeader => header != null;
+  TableHeaderFooterBuilder<T>? get headerBuilder => header == null ? null : (controller, configurations) => header!;
 
   @override
-  bool get hasFooter => footer != null;
-
-  @override
-  Widget? buildHeader(FlexibleTableController<T> controller, AbsFlexibleTableConfigurations<T> configurations) {
-    return header;
-  }
-
-  @override
-  Widget? buildFooter(FlexibleTableController<T> controller, AbsFlexibleTableConfigurations<T> configurations) {
-    return footer;
-  }
+  TableHeaderFooterBuilder<T>? get footerBuilder => footer == null ? null : (controller, configurations) => footer!;
 }
