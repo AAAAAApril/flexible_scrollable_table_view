@@ -424,6 +424,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
         behavior: HitTestBehavior.opaque,
         onTap: () {
           onHeaderPressed?.call();
+          //点击列头排序
           controller.sortByColumn(this);
         },
         child: child,
