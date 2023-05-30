@@ -1,3 +1,9 @@
+## 2.5.0
+
+* Rename `AbsFlexibleHeaderFooter` to `AbsFlexibleTableAdditions`.
+* Support set placeholder widget when table data is empty.
+* A listenable value named `loadedDataOnce` in `FlexibleTableController` which means whether data has loaded once.
+
 ## 2.4.3
 
 * Fix bug.

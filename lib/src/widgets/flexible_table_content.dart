@@ -1,8 +1,8 @@
+import 'package:flexible_scrollable_table_view/src/addition/flexible_table_additions.dart';
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/header_footer/flexible_header_footer.dart';
 import 'package:flutter/widgets.dart';
 
 import 'flexible_table_info_row.dart';
@@ -13,7 +13,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     this.controller, {
     super.key,
     required this.configurations,
-    this.headerFooter,
+    this.additions,
     this.decorations,
     this.animations,
     this.verticalScrollController,
@@ -27,7 +27,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     FlexibleTableController<T> controller, {
     Key? key,
     required AbsFlexibleTableConfigurations<T> configurations,
-    AbsFlexibleHeaderFooter<T>? headerFooter,
+    AbsFlexibleTableAdditions<T>? additions,
     AbsFlexibleTableDecorations<T>? decorations,
     AbsFlexibleTableAnimations<T>? animations,
   }) =>
@@ -35,14 +35,14 @@ class FlexibleTableContent<T> extends StatelessWidget {
         controller,
         key: key,
         configurations: configurations,
-        headerFooter: headerFooter,
+        additions: additions,
         decorations: decorations,
         animations: animations,
       );
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleHeaderFooter<T>? headerFooter;
+  final AbsFlexibleTableAdditions<T>? additions;
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
 
@@ -54,23 +54,34 @@ class FlexibleTableContent<T> extends StatelessWidget {
 
   final bool verticalScrollable;
 
-  bool get hasHeader => headerFooter?.headerBuilder != null;
+  bool get hasHeader => additions?.headerBuilder != null;
 
-  bool get hasFooter => headerFooter?.footerBuilder != null;
+  bool get hasFooter => additions?.footerBuilder != null;
+
+  bool get hasPlaceholder => additions?.placeholderBuilder != null;
 
   int getItemCount(List<T> dataList) {
+    //当数据列是空的
+    if (dataList.isEmpty) {
+      //需要显示占位符，则返回 有 1 条数据，否则为 0 条。
+      return hasPlaceholder ? 1 : 0;
+    }
+    //数据列不为空，数据总条数 = 头 + 数据列 + 尾
     return (hasHeader ? 1 : 0) + dataList.length + (hasFooter ? 1 : 0);
   }
 
   bool isHeaderIndex(int index) {
+    //当下标为 0，并且又有头部的时候，则当前下标为头部
     return index == 0 && hasHeader;
   }
 
   bool isFooterIndex(List<T> value, int index) {
+    //当下标 = 数据长度 + 头部数量，则当前下标为尾部
     return index == value.length + (hasHeader ? 1 : 0);
   }
 
   int realDataIndex(int index) {
+    //真实的数据下标 = 列表下标 - 头部数量
     return index - (hasHeader ? 1 : 0);
   }
 
@@ -80,11 +91,19 @@ class FlexibleTableContent<T> extends StatelessWidget {
     required List<T> value,
     required int index,
   }) {
+    //数据是空的，却又需要构建列表项，说明是需要绘制占位组件
+    if (value.isEmpty && hasPlaceholder) {
+      return additions!.placeholderBuilder!.call(
+        controller,
+        configurations,
+        rowWidth,
+      );
+    }
     if (isHeaderIndex(index)) {
-      return headerFooter!.headerBuilder!.call(controller, configurations);
+      return additions!.headerBuilder!.call(controller, configurations);
     }
     if (isFooterIndex(value, index)) {
-      return headerFooter!.footerBuilder!.call(controller, configurations);
+      return additions!.footerBuilder!.call(controller, configurations);
     }
     final int dataIndex = realDataIndex(index);
     return FlexibleTableInfoRow<T>(
@@ -103,12 +122,12 @@ class FlexibleTableContent<T> extends StatelessWidget {
       return null;
     }
     if (hasHeader) {
-      if (headerFooter!.fixedHeaderHeight != configurations.infoRowHeight) {
+      if (additions!.fixedHeaderHeight != configurations.infoRowHeight) {
         return null;
       }
     }
     if (hasFooter) {
-      if (headerFooter!.fixedFooterHeight != configurations.infoRowHeight) {
+      if (additions!.fixedFooterHeight != configurations.infoRowHeight) {
         return null;
       }
     }
@@ -160,7 +179,7 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
     super.controller, {
     super.key,
     required super.configurations,
-    super.headerFooter,
+    super.additions,
     super.decorations,
     super.animations,
   });

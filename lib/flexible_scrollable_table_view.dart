@@ -1,11 +1,11 @@
 library flexible_scrollable_table_view;
 
+export 'src/addition/flexible_table_additions.dart';
+
 export 'src/animation/animated_constraint_box.dart';
 export 'src/animation/flexible_table_animations.dart';
 
 export 'src/decoration/flexible_table_decorations.dart';
-
-export 'src/header_footer/flexible_header_footer.dart';
 
 export 'src/scrollable/scroll_behavior.dart';
 export 'src/scrollable/scroll_synchronization_mixin.dart';

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:example/src/sliver_persistent_header_delegate_impl.dart';
 import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
 import 'package:flutter/material.dart';
 
@@ -9,80 +10,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final Map<String, Widget> pages = <String, Widget>{
-      '普通列表': const NormalList(),
-      'Sliver内': const InSliverList(),
-    };
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('双向滚动TableView'),
-        ),
-        body: DefaultTabController(
-          length: pages.length,
-          child: Column(
-            children: [
-              TabBar(tabs: pages.keys.map<Widget>((e) => Tab(text: e)).toList()),
-              Expanded(
-                child: TabBarView(
-                  children: pages.values.toList(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NormalList extends StatefulWidget {
-  const NormalList({Key? key}) : super(key: key);
-
-  @override
-  State<NormalList> createState() => _NormalListState();
-}
-
-class _NormalListState extends State<NormalList> {
-  late FlexibleTableController<TableDataBean> controller;
-  final AbsFlexibleTableAnimations<TableDataBean> animations = const FlexibleTableAnimations(
-    duration: Duration(seconds: 2),
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    controller = FlexibleTableController<TableDataBean>();
-    refreshData();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void refreshData() {
-    final Random random = Random.secure();
-    controller.value = List<TableDataBean>.generate(
-      random.nextInt(40) + 30,
-      (index) => TableDataBean(
-        id: index,
-        title: '数据标题$index',
-        value1: 'String值$index',
-        value2: random.nextInt(1000),
-        value3: random.nextDouble() * 100,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,8 +64,117 @@ class _NormalListState extends State<NormalList> {
             debugPrint('点击了value3列头');
           },
         ),
+        NormalColumn(
+          'value1+value2',
+          fixedWidth: 200,
+          headerText: 'value1+value2列',
+          infoText: (data) => '${data.value1}+${data.value2}',
+        ),
+        NormalColumn(
+          'value2+value3',
+          fixedWidth: 200,
+          headerText: 'value2+value3列',
+          infoText: (data) => '${data.value2}+${data.value3}',
+        ),
+        NormalColumn(
+          'value1+value3',
+          fixedWidth: 200,
+          headerText: 'value1+value3列',
+          infoText: (data) => '${data.value1}+${data.value3}',
+        ),
+        NormalColumn(
+          'value1+value2+value3',
+          fixedWidth: 280,
+          headerText: 'value1+value2+value3列',
+          infoText: (data) => '${data.value1}+${data.value2}+${data.value3}',
+        ),
       },
     );
+    const AbsFlexibleTableAnimations<TableDataBean> animations = FlexibleTableAnimations(
+      duration: Duration(seconds: 2),
+    );
+    final Map<String, Widget> pages = <String, Widget>{
+      '普通列表': NormalList(configurations: configurations, animations: animations),
+      'Sliver内': InSliverList(configurations: configurations, animations: animations),
+    };
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        useMaterial3: true,
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('双向滚动TableView'),
+        ),
+        body: DefaultTabController(
+          length: pages.length,
+          child: Column(
+            children: [
+              TabBar(tabs: pages.keys.map<Widget>((e) => Tab(text: e)).toList()),
+              Expanded(
+                child: TabBarView(
+                  children: pages.values.toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NormalList extends StatefulWidget {
+  const NormalList({
+    Key? key,
+    required this.configurations,
+    required this.animations,
+  }) : super(key: key);
+
+  final AbsFlexibleTableConfigurations<TableDataBean> configurations;
+  final AbsFlexibleTableAnimations<TableDataBean> animations;
+
+  @override
+  State<NormalList> createState() => _NormalListState();
+}
+
+class _NormalListState extends State<NormalList> {
+  late FlexibleTableController<TableDataBean> controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = FlexibleTableController<TableDataBean>();
+    refreshData();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void refreshData() {
+    final Random random = Random.secure();
+    if (random.nextInt(10) % 3 == 0) {
+      controller.value = <TableDataBean>[];
+      return;
+    }
+    controller.value = List<TableDataBean>.generate(
+      random.nextInt(40) + 30,
+      (index) => TableDataBean(
+        id: index,
+        title: '数据标题$index',
+        value1: 'String值$index',
+        value2: random.nextInt(1000),
+        value3: random.nextDouble() * 100,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Row(children: [
@@ -165,15 +201,15 @@ class _NormalListState extends State<NormalList> {
           elevation: 2,
           child: FlexibleTableHeader<TableDataBean>(
             controller,
-            configurations: configurations,
-            animations: animations,
+            configurations: widget.configurations,
+            animations: widget.animations,
           ),
         ),
         Expanded(
           child: FlexibleTableContent<TableDataBean>(
             controller,
-            configurations: configurations,
-            animations: animations,
+            configurations: widget.configurations,
+            animations: widget.animations,
             decorations: FlexibleTableDecorationsWithData(
               infoBackgroundRowWithData: (dataIndex, data) => ColoredBox(
                 color: dataIndex.isOdd ? Colors.grey.shade200 : Colors.grey.shade300,
@@ -186,20 +222,35 @@ class _NormalListState extends State<NormalList> {
                 },
               ),
             ),
-            headerFooter: FlexibleHeaderFooter(
-              fixedHeaderHeight: configurations.infoRowHeight,
+            additions: FlexibleTableAdditions(
+              fixedHeaderHeight: widget.configurations.infoRowHeight,
               header: OutlinedButton(
                 onPressed: () {
                   debugPrint('点击了列表的Header');
                 },
                 child: const Text('这里是列表的Header，一个OutlinedButton'),
               ),
-              fixedFooterHeight: configurations.infoRowHeight,
+              fixedFooterHeight: widget.configurations.infoRowHeight,
               footer: OutlinedButton(
                 onPressed: () {
                   debugPrint('点击了列表的Footer');
                 },
                 child: const Text('这里是列表的Footer，一个OutlinedButton'),
+              ),
+              placeholder: Center(
+                child: ColoredBox(
+                  color: Colors.black,
+                  child: SizedBox.fromSize(
+                    size: const Size(300, 500),
+                    child: const Text(
+                      '这里是Placeholder，一个 300*900 大小的色块',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -210,7 +261,14 @@ class _NormalListState extends State<NormalList> {
 }
 
 class InSliverList extends StatefulWidget {
-  const InSliverList({Key? key}) : super(key: key);
+  const InSliverList({
+    Key? key,
+    required this.configurations,
+    required this.animations,
+  }) : super(key: key);
+
+  final AbsFlexibleTableConfigurations<TableDataBean> configurations;
+  final AbsFlexibleTableAnimations<TableDataBean> animations;
 
   @override
   State<InSliverList> createState() => _InSliverListState();
@@ -218,59 +276,11 @@ class InSliverList extends StatefulWidget {
 
 class _InSliverListState extends State<InSliverList> {
   late FlexibleTableController<TableDataBean> controller;
-  late AbsFlexibleTableConfigurations<TableDataBean> configurations;
 
   @override
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
-    configurations = FlexibleTableConfigurations<TableDataBean>(
-      infoRowHeight: 50,
-      pinnedColumns: {
-        NormalColumn(
-          'title',
-          fixedWidth: 130,
-          headerText: 'title列',
-          infoText: (data) => data.title,
-          onHeaderPressed: () {
-            debugPrint('点击了title列头');
-          },
-        ),
-      },
-      scrollableColumns: {
-        NormalColumn(
-          'value1',
-          fixedWidth: 150,
-          headerText: 'value1列',
-          infoText: (data) => data.value1,
-        ),
-        const CustomSelectableColumn(
-          'selectable',
-          selectableWidth: 48,
-          unSelectableWidth: 32,
-        ),
-        NormalColumn(
-          'value2',
-          fixedWidth: 100,
-          headerText: 'value2列',
-          infoText: (data) => data.value2.toString(),
-          comparator: (a, b) => a.value2.compareTo(b.value2),
-          onInfoPressed: (data) {
-            debugPrint('点击了value2列信息：${data.value2}');
-          },
-        ),
-        NormalColumn(
-          'value3',
-          fixedWidth: 130,
-          headerText: 'value3列',
-          infoText: (data) => data.value3.toStringAsFixed(4),
-          comparator: (a, b) => a.value3.compareTo(b.value3),
-          onHeaderPressed: () {
-            debugPrint('点击了value3列头');
-          },
-        ),
-      },
-    );
     refreshData();
   }
 
@@ -283,7 +293,7 @@ class _InSliverListState extends State<InSliverList> {
   void refreshData() {
     final Random random = Random.secure();
     controller.value = List<TableDataBean>.generate(
-      random.nextInt(20) + 10,
+      random.nextInt(20) + 20,
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',
@@ -304,6 +314,19 @@ class _InSliverListState extends State<InSliverList> {
             icon: const Icon(Icons.refresh_rounded),
           ),
         ),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: SliverPersistentHeaderDelegateImpl(
+            fixedHeight: widget.configurations.headerRowHeight,
+            child: ColoredBox(
+              color: Colors.white,
+              child: FlexibleTableHeader<TableDataBean>(
+                controller,
+                configurations: widget.configurations,
+              ),
+            ),
+          ),
+        ),
         SliverToBoxAdapter(
           child: ValueListenableBuilder<bool>(
             valueListenable: controller.selectable,
@@ -318,42 +341,29 @@ class _InSliverListState extends State<InSliverList> {
             ),
           ),
         ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-          sliver: FlexibleTableContent<TableDataBean>.sliver(
-            controller,
-            configurations: configurations,
-            decorations: FlexibleTableDecorationsWithData(
-              infoBackgroundRowWithData: (dataIndex, data) => ColoredBox(
-                color: dataIndex.isOdd ? Colors.grey.shade100 : Colors.grey.shade200,
-                child: const SizedBox.expand(),
-              ),
+        FlexibleTableContent<TableDataBean>.sliver(
+          controller,
+          configurations: widget.configurations,
+          animations: widget.animations,
+          decorations: FlexibleTableDecorationsWithData(
+            infoBackgroundRowWithData: (dataIndex, data) => ColoredBox(
+              color: dataIndex.isOdd ? Colors.grey.shade100 : Colors.grey.shade200,
+              child: const SizedBox.expand(),
             ),
-            headerFooter: FlexibleHeaderFooter(
-              fixedHeaderHeight: configurations.infoRowHeight,
-              header: ElevatedButton(
-                onPressed: () {
-                  debugPrint('点击了Header');
-                },
-                child: const Text('这里是Header，一个ElevatedButton'),
-              ),
-              // fixedFooterHeight: configurations.infoRowHeight,
-              footer: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      debugPrint('点击了Footer');
-                    },
-                    child: const Text('这里是Footer，一个ElevatedButton'),
-                  ),
-                  const ColoredBox(
-                    color: Colors.yellow,
-                    child: SizedBox.square(
-                      dimension: 200,
-                    ),
-                  ),
-                ],
+          ),
+          additions: FlexibleTableAdditions(
+            fixedHeaderHeight: widget.configurations.infoRowHeight,
+            header: ElevatedButton(
+              onPressed: () {
+                debugPrint('点击了Header');
+              },
+              child: const Text('这里是Header，一个ElevatedButton'),
+            ),
+            footer: const ColoredBox(
+              color: Colors.yellow,
+              child: SizedBox.square(
+                dimension: 200,
+                child: Text('这里是Footer，一个ColoredBox'),
               ),
             ),
           ),

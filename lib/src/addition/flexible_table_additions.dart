@@ -7,27 +7,39 @@ typedef TableHeaderFooterBuilder<T> = Widget Function(
   AbsFlexibleTableConfigurations<T> configurations,
 );
 
-///表列表头、尾布局配置
-abstract class AbsFlexibleHeaderFooter<T> {
-  const AbsFlexibleHeaderFooter();
+typedef TablePlaceholderBuilder<T> = Widget Function(
+  FlexibleTableController<T> controller,
+  AbsFlexibleTableConfigurations<T> configurations,
+  double viewportWidth,
+);
+
+///表内容区域附加组件
+abstract class AbsFlexibleTableAdditions<T> {
+  const AbsFlexibleTableAdditions();
 
   ///返回 null 表示不限制高度
   double? get fixedHeaderHeight;
 
+  ///头部
   TableHeaderFooterBuilder<T>? get headerBuilder;
 
   ///返回 null 表示不限制高度
   double? get fixedFooterHeight;
 
+  ///尾部
   TableHeaderFooterBuilder<T>? get footerBuilder;
+
+  ///没有数据时的占位布局
+  TablePlaceholderBuilder<T>? get placeholderBuilder;
 }
 
-class FlexibleHeaderFooter<T> extends AbsFlexibleHeaderFooter<T> {
-  const FlexibleHeaderFooter({
+class FlexibleTableAdditions<T> extends AbsFlexibleTableAdditions<T> {
+  const FlexibleTableAdditions({
     this.fixedHeaderHeight,
     this.fixedFooterHeight,
     this.header,
     this.footer,
+    this.placeholder,
   });
 
   @override
@@ -38,10 +50,15 @@ class FlexibleHeaderFooter<T> extends AbsFlexibleHeaderFooter<T> {
 
   final Widget? header;
   final Widget? footer;
+  final Widget? placeholder;
 
   @override
   TableHeaderFooterBuilder<T>? get headerBuilder => header == null ? null : (controller, configurations) => header!;
 
   @override
   TableHeaderFooterBuilder<T>? get footerBuilder => footer == null ? null : (controller, configurations) => footer!;
+
+  @override
+  TablePlaceholderBuilder<T>? get placeholderBuilder =>
+      placeholder == null ? null : (controller, configurations, viewportWidth) => placeholder!;
 }
