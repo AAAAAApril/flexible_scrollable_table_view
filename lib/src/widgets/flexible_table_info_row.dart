@@ -31,7 +31,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double height = configurations.fixedInfoRowHeight(controller, context, dataIndex, data);
+    final double height = configurations.rowHeight.fixedInfoRowHeight(controller, dataIndex, data);
     return TableInfoRowConstraintAnimationWrapper<T>(
       controller,
       animations: animations,
@@ -45,6 +45,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
         decorations: decorations,
         dataIndex: dataIndex,
         data: data,
+        parentWidth: rowWidth,
         rowHeight: height,
       ),
     );
@@ -58,6 +59,7 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
     required this.configurations,
     required this.dataIndex,
     required this.data,
+    required this.parentWidth,
     required this.rowHeight,
     this.decorations,
     this.animations,
@@ -69,6 +71,7 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
   final AbsFlexibleTableAnimations<T>? animations;
   final int dataIndex;
   final T data;
+  final double parentWidth;
   final double rowHeight;
 
   @override
@@ -80,6 +83,7 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
       decorations: decorations,
       dataIndex: dataIndex,
       data: data,
+      parentWidth: parentWidth,
       height: rowHeight,
     );
     final Widget scrollable = ScrollableTableInfoRow<T>(
@@ -88,6 +92,7 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
       decorations: decorations,
       dataIndex: dataIndex,
       data: data,
+      parentWidth: parentWidth,
       height: rowHeight,
     );
     Widget child;
@@ -124,6 +129,7 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
     required this.dataIndex,
     this.animations,
     required this.data,
+    required this.parentWidth,
     required this.height,
   });
 
@@ -133,6 +139,7 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
   final AbsFlexibleTableDecorations<T>? decorations;
   final int dataIndex;
   final T data;
+  final double parentWidth;
   final double height;
 
   @override
@@ -149,6 +156,7 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
               dataIndex: dataIndex,
               data: data,
               column: e,
+              parentWidth: parentWidth,
               height: height,
             ),
           )
@@ -166,6 +174,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
     this.decorations,
     required this.dataIndex,
     required this.data,
+    required this.parentWidth,
     required this.height,
   });
 
@@ -174,6 +183,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
   final AbsFlexibleTableDecorations<T>? decorations;
   final int dataIndex;
   final T data;
+  final double parentWidth;
   final double height;
 
   @override
@@ -194,6 +204,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
           dataIndex: dataIndex,
           data: data,
           column: columns[index],
+          parentWidth: parentWidth,
           height: height,
         ),
       ),

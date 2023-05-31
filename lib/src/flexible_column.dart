@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
@@ -10,7 +11,7 @@ abstract class AbsFlexibleColumn<T> {
   final String id;
 
   ///该列的宽度
-  double get fixedWidth;
+  AbsFlexibleTableColumnWidth get columnWidth;
 
   ///排序时会使用的回调（为 null 表示该列没有排序功能）
   Comparator<T>? get comparator => null;
@@ -22,12 +23,14 @@ abstract class AbsFlexibleColumn<T> {
   Widget buildHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   );
 
   ///构建表信息
   Widget buildInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   );
@@ -43,13 +46,13 @@ abstract class AbsFlexibleColumn<T> {
 class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   const FlexibleColumn(
     super.id, {
-    required this.fixedWidth,
+    required this.columnWidth,
     required this.header,
     required this.info,
   });
 
   @override
-  final double fixedWidth;
+  final AbsFlexibleTableColumnWidth columnWidth;
 
   final Widget header;
   final Widget Function(int dataIndex, T data) info;
@@ -58,6 +61,7 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   Widget buildHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) =>
       header;
 
@@ -65,6 +69,7 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   Widget buildInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) =>

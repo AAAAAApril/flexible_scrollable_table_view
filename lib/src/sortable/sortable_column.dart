@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
@@ -14,14 +15,14 @@ abstract class AbsSortableColumn<T> extends AbsFlexibleColumn<T> {
 class SortableColumn<T> extends AbsSortableColumn<T> {
   const SortableColumn(
     super.id, {
-    required this.fixedWidth,
+    required this.columnWidth,
     required this.comparator,
     required this.header,
     required this.info,
   });
 
   @override
-  final double fixedWidth;
+  final AbsFlexibleTableColumnWidth columnWidth;
   @override
   final Comparator<T> comparator;
 
@@ -32,6 +33,7 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
   Widget buildHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) =>
       header;
 
@@ -39,6 +41,7 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
   Widget buildInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) =>

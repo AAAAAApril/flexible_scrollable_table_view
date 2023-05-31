@@ -20,6 +20,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     required this.dataIndex,
     required this.data,
     required this.column,
+    required this.parentWidth,
     required this.height,
   });
 
@@ -34,6 +35,9 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
   ///列配置
   final AbsFlexibleColumn<T> column;
 
+  ///父容器宽度
+  final double parentWidth;
+
   ///行高
   final double height;
 
@@ -42,7 +46,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     Widget child = TableInfoItemConstraintAnimationWrapper<T>(
       controller,
       constraints: BoxConstraints.tight(
-        Size(column.fixedWidth, height),
+        Size(column.columnWidth.getColumnWidth(parentWidth), height),
       ),
       animations: animations,
       column: column,
@@ -56,7 +60,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
               decorations: decorations,
               dataIndex: dataIndex,
               data: data,
-              child: column.buildInfo(controller, configurations, dataIndex, data),
+              child: column.buildInfo(controller, configurations, parentWidth, dataIndex, data),
             ),
     );
     //可选列
@@ -70,7 +74,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
             controller,
             animations: animations,
             constraints: BoxConstraints.tight(
-              Size(thisColumn.unSelectableWidth, height),
+              Size(thisColumn.unSelectableWidth.getColumnWidth(parentWidth), height),
             ),
             column: column,
             dataIndex: dataIndex,
@@ -86,6 +90,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
                     child: thisColumn.buildUnSelectableInfo(
                       controller,
                       configurations,
+                      parentWidth,
                       dataIndex,
                       data,
                     ),

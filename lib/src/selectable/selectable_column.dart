@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
@@ -8,47 +9,52 @@ abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
   const AbsSelectableColumn(super.id);
 
   ///可选状态时的固定宽度
-  double get selectableWidth;
+  AbsFlexibleTableColumnWidth get selectableWidth;
 
   ///非可选状态时的固定宽度
-  double get unSelectableWidth;
+  AbsFlexibleTableColumnWidth get unSelectableWidth;
 
   @override
-  double get fixedWidth => selectableWidth;
+  AbsFlexibleTableColumnWidth get columnWidth => selectableWidth;
 
   @override
   Widget buildHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) =>
-      buildSelectableHeader(controller, configurations);
+      buildSelectableHeader(controller, configurations, parentWidth);
 
   ///构建可编辑时的表头
   Widget buildSelectableHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   );
 
   ///构建不可编辑时的表头
   Widget buildUnSelectableHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) =>
-      SizedBox(width: unSelectableWidth);
+      SizedBox(width: unSelectableWidth.getColumnWidth(parentWidth));
 
   @override
   Widget buildInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) =>
-      buildSelectableInfo(controller, configurations, dataIndex, data);
+      buildSelectableInfo(controller, configurations, parentWidth, dataIndex, data);
 
   ///构建可编辑时的表信息
   Widget buildSelectableInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   );
@@ -57,17 +63,18 @@ abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
   Widget buildUnSelectableInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) =>
-      SizedBox(width: unSelectableWidth);
+      SizedBox(width: unSelectableWidth.getColumnWidth(parentWidth));
 }
 
 class SelectableColumn<T> extends AbsSelectableColumn<T> {
   const SelectableColumn(
     super.id, {
     required this.selectableWidth,
-    this.unSelectableWidth = 0,
+    this.unSelectableWidth = const FixedTableColumnWidth(0),
     required this.selectableHeader,
     this.unSelectableHeader,
     required this.selectableInfo,
@@ -75,10 +82,10 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   });
 
   @override
-  final double selectableWidth;
+  final AbsFlexibleTableColumnWidth selectableWidth;
 
   @override
-  final double unSelectableWidth;
+  final AbsFlexibleTableColumnWidth unSelectableWidth;
 
   final Widget selectableHeader;
   final Widget? unSelectableHeader;
@@ -89,6 +96,7 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   Widget buildSelectableHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) =>
       selectableHeader;
 
@@ -96,14 +104,16 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   Widget buildUnSelectableHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) {
-    return unSelectableHeader ?? super.buildUnSelectableHeader(controller, configurations);
+    return unSelectableHeader ?? super.buildUnSelectableHeader(controller, configurations, parentWidth);
   }
 
   @override
   Widget buildSelectableInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) =>
@@ -113,10 +123,11 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   Widget buildUnSelectableInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) {
     return unSelectableInfo?.call(dataIndex, data) ??
-        super.buildUnSelectableInfo(controller, configurations, dataIndex, data);
+        super.buildUnSelectableInfo(controller, configurations, parentWidth, dataIndex, data);
   }
 }

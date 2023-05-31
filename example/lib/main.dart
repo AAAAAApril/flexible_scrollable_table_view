@@ -14,17 +14,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AbsFlexibleTableConfigurations<TableDataBean> configurations = FlexibleTableConfigurations<TableDataBean>(
-      headerRowHeight: 40,
-      // headerRowHeight: 60,
-      infoRowHeight: 50,
-      infoRowHeightBuilder: (context, dataIndex, data) {
-        // return dataIndex == 9 ? 80 : null;
-        return null;
-      },
+      rowHeight: ChangeableTableRowHeight(
+        headerRowHeight: 40,
+        // headerRowHeight: 60,
+        infoRowHeight: 50,
+        infoRowHeightBuilder: (dataIndex, data) {
+          // return dataIndex == 9 ? 80 : null;
+          return null;
+        },
+      ),
       pinnedColumns: {
         NormalColumn(
           'title',
-          fixedWidth: 130,
+          columnWidth: const FixedTableColumnWidth(130),
           headerText: 'title列',
           infoText: (data) => data.title,
           onHeaderPressed: () {
@@ -33,20 +35,20 @@ class MyApp extends StatelessWidget {
         ),
         const CustomSelectableColumn(
           'selectable',
-          selectableWidth: 48,
-          unSelectableWidth: 32,
+          selectableWidth: FixedTableColumnWidth(48),
+          unSelectableWidth: FixedTableColumnWidth(32),
         ),
       },
       scrollableColumns: {
         NormalColumn(
           'value1',
-          fixedWidth: 150,
+          columnWidth: const FixedTableColumnWidth(150),
           headerText: 'value1列',
           infoText: (data) => data.value1,
         ),
         NormalColumn(
           'value2',
-          fixedWidth: 100,
+          columnWidth: const FixedTableColumnWidth(100),
           headerText: 'value2列',
           infoText: (data) => data.value2.toString(),
           comparator: (a, b) => a.value2.compareTo(b.value2),
@@ -56,7 +58,7 @@ class MyApp extends StatelessWidget {
         ),
         NormalColumn(
           'value3',
-          fixedWidth: 130,
+          columnWidth: const FixedTableColumnWidth(130),
           headerText: 'value3列',
           infoText: (data) => data.value3.toStringAsFixed(4),
           comparator: (a, b) => a.value3.compareTo(b.value3),
@@ -66,25 +68,25 @@ class MyApp extends StatelessWidget {
         ),
         NormalColumn(
           'value1+value2',
-          fixedWidth: 200,
+          columnWidth: const FixedTableColumnWidth(200),
           headerText: 'value1+value2列',
           infoText: (data) => '${data.value1}+${data.value2}',
         ),
         NormalColumn(
           'value2+value3',
-          fixedWidth: 200,
+          columnWidth: const FixedTableColumnWidth(200),
           headerText: 'value2+value3列',
           infoText: (data) => '${data.value2}+${data.value3}',
         ),
         NormalColumn(
           'value1+value3',
-          fixedWidth: 200,
+          columnWidth: const FixedTableColumnWidth(200),
           headerText: 'value1+value3列',
           infoText: (data) => '${data.value1}+${data.value3}',
         ),
         NormalColumn(
           'value1+value2+value3',
-          fixedWidth: 280,
+          columnWidth: const FixedTableColumnWidth(200),
           headerText: 'value1+value2+value3列',
           infoText: (data) => '${data.value1}+${data.value2}+${data.value3}',
         ),
@@ -223,14 +225,14 @@ class _NormalListState extends State<NormalList> {
               ),
             ),
             additions: FlexibleTableAdditions(
-              fixedHeaderHeight: widget.configurations.infoRowHeight,
+              fixedHeaderHeight: widget.configurations.rowHeight.infoRowHeight,
               header: OutlinedButton(
                 onPressed: () {
                   debugPrint('点击了列表的Header');
                 },
                 child: const Text('这里是列表的Header，一个OutlinedButton'),
               ),
-              fixedFooterHeight: widget.configurations.infoRowHeight,
+              fixedFooterHeight: widget.configurations.rowHeight.infoRowHeight,
               footer: OutlinedButton(
                 onPressed: () {
                   debugPrint('点击了列表的Footer');
@@ -317,7 +319,7 @@ class _InSliverListState extends State<InSliverList> {
         SliverPersistentHeader(
           pinned: true,
           delegate: SliverPersistentHeaderDelegateImpl(
-            fixedHeight: widget.configurations.headerRowHeight,
+            fixedHeight: widget.configurations.rowHeight.headerRowHeight,
             child: ColoredBox(
               color: Colors.white,
               child: FlexibleTableHeader<TableDataBean>(
@@ -352,7 +354,7 @@ class _InSliverListState extends State<InSliverList> {
             ),
           ),
           additions: FlexibleTableAdditions(
-            fixedHeaderHeight: widget.configurations.infoRowHeight,
+            fixedHeaderHeight: widget.configurations.rowHeight.infoRowHeight,
             header: ElevatedButton(
               onPressed: () {
                 debugPrint('点击了Header');
@@ -401,7 +403,7 @@ class TableDataBean {
 class NormalColumn<T> extends AbsFlexibleColumn<T> {
   const NormalColumn(
     super.id, {
-    required this.fixedWidth,
+    required this.columnWidth,
     required this.headerText,
     required this.infoText,
     this.onHeaderPressed,
@@ -414,7 +416,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   final VoidCallback? onHeaderPressed;
   final ValueChanged<T>? onInfoPressed;
   @override
-  final double fixedWidth;
+  final AbsFlexibleTableColumnWidth columnWidth;
 
   @override
   final Comparator<T>? comparator;
@@ -423,6 +425,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   Widget buildHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) {
     Widget child = SizedBox.expand(
       child: Center(
@@ -455,6 +458,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   Widget buildInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) {
@@ -487,19 +491,20 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   const CustomSelectableColumn(
     super.id, {
     required this.selectableWidth,
-    this.unSelectableWidth = 0,
+    this.unSelectableWidth = const FixedTableColumnWidth(0),
   });
 
   @override
-  final double selectableWidth;
+  final AbsFlexibleTableColumnWidth selectableWidth;
 
   @override
-  final double unSelectableWidth;
+  final AbsFlexibleTableColumnWidth unSelectableWidth;
 
   @override
   Widget buildSelectableHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) {
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -523,6 +528,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   Widget buildUnSelectableHeader(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
   ) {
     return const SizedBox.expand(
       child: ColoredBox(color: Colors.purple),
@@ -533,6 +539,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   Widget buildSelectableInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) {
@@ -559,6 +566,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   Widget buildUnSelectableInfo(
     FlexibleTableController<T> controller,
     AbsFlexibleTableConfigurations<T> configurations,
+    double parentWidth,
     int dataIndex,
     T data,
   ) {

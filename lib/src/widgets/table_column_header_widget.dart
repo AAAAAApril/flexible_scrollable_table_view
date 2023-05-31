@@ -18,6 +18,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
     this.animations,
     this.decorations,
     required this.column,
+    required this.parentWidth,
     required this.height,
   });
 
@@ -29,6 +30,9 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
   ///列配置
   final AbsFlexibleColumn<T> column;
 
+  ///父容器宽度
+  final double parentWidth;
+
   ///行高
   final double height;
 
@@ -39,7 +43,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
       column: column,
       animations: animations,
       constraints: BoxConstraints.tight(
-        Size(column.fixedWidth, height),
+        Size(column.columnWidth.getColumnWidth(parentWidth), height),
       ),
       child: height <= 0
           ? null
@@ -47,7 +51,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
               controller,
               configurations: configurations,
               decorations: decorations,
-              child: column.buildHeader(controller, configurations),
+              child: column.buildHeader(controller, configurations, parentWidth),
             ),
     );
     //可选列
@@ -61,7 +65,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
             controller,
             column: column,
             constraints: BoxConstraints.tight(
-              Size(thisColumn.unSelectableWidth, height),
+              Size(thisColumn.unSelectableWidth.getColumnWidth(parentWidth), height),
             ),
             animations: animations,
             child: height <= 0
@@ -70,7 +74,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
                     controller,
                     configurations: configurations,
                     decorations: decorations,
-                    child: thisColumn.buildUnSelectableHeader(controller, configurations),
+                    child: thisColumn.buildUnSelectableHeader(controller, configurations, parentWidth),
                   ),
           );
         },

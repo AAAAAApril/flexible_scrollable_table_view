@@ -33,7 +33,7 @@ class FlexibleTableHeader<T> extends StatelessWidget {
         constraints: BoxConstraints.tight(
           Size(
             constraints.maxWidth,
-            configurations.headerRowHeight,
+            configurations.rowHeight.headerRowHeight,
           ),
         ),
         animations: animations,
@@ -42,6 +42,7 @@ class FlexibleTableHeader<T> extends StatelessWidget {
           configurations: configurations,
           decorations: decorations,
           animations: animations,
+          parentWidth: constraints.maxWidth,
           physics: physics,
         ),
       ),
@@ -56,6 +57,7 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
     required this.configurations,
     this.decorations,
     this.animations,
+    required this.parentWidth,
     this.physics,
   });
 
@@ -63,6 +65,7 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
+  final double parentWidth;
   final ScrollPhysics? physics;
 
   @override
@@ -72,11 +75,13 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
       configurations: configurations,
       animations: animations,
       decorations: decorations,
+      parentWidth: parentWidth,
     );
     final Widget scrollable = ScrollableTableHeaderRow<T>(
       controller,
       configurations: configurations,
       decorations: decorations,
+      parentWidth: parentWidth,
       physics: physics,
     );
     final Widget child;
@@ -109,12 +114,14 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
     required this.configurations,
     this.animations,
     this.decorations,
+    required this.parentWidth,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableAnimations<T>? animations;
   final AbsFlexibleTableDecorations<T>? decorations;
+  final double parentWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +135,8 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
               animations: animations,
               decorations: decorations,
               column: e,
-              height: configurations.headerRowHeight,
+              parentWidth: parentWidth,
+              height: configurations.rowHeight.headerRowHeight,
             ),
           )
           .toList(growable: false),
@@ -143,12 +151,14 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
     super.key,
     required this.configurations,
     this.decorations,
+    required this.parentWidth,
     this.physics,
   });
 
   final FlexibleTableController<T> controller;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableDecorations<T>? decorations;
+  final double parentWidth;
   final ScrollPhysics? physics;
 
   @override
@@ -168,7 +178,8 @@ class ScrollableTableHeaderRow<T> extends StatelessWidget {
           configurations: configurations,
           decorations: decorations,
           column: columns[index],
-          height: configurations.headerRowHeight,
+          parentWidth: parentWidth,
+          height: configurations.rowHeight.headerRowHeight,
         ),
       ),
     );
