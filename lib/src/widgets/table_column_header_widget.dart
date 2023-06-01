@@ -51,7 +51,13 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
               controller,
               configurations: configurations,
               decorations: decorations,
-              child: column.buildHeader(controller, configurations, parentWidth),
+              child: column.buildHeader(
+                BuildArguments<T>(
+                  controller,
+                  configurations,
+                  parentWidth,
+                ),
+              ),
             ),
     );
     //可选列
@@ -74,7 +80,13 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
                     controller,
                     configurations: configurations,
                     decorations: decorations,
-                    child: thisColumn.buildUnSelectableHeader(controller, configurations, parentWidth),
+                    child: thisColumn.buildUnSelectableHeader(
+                      BuildArguments<T>(
+                        controller,
+                        configurations,
+                        parentWidth,
+                      ),
+                    ),
                   ),
           );
         },

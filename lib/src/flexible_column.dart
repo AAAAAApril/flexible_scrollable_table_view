@@ -20,20 +20,10 @@ abstract class AbsFlexibleColumn<T> {
   bool get comparableColumn => comparator != null;
 
   ///构建表头
-  Widget buildHeader(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-  );
+  Widget buildHeader(BuildArguments<T> arguments);
 
   ///构建表信息
-  Widget buildInfo(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-    int dataIndex,
-    T data,
-  );
+  Widget buildInfo(BuildArguments<T> arguments, int dataIndex, T data);
 
   @override
   bool operator ==(Object other) =>
@@ -58,20 +48,20 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   final Widget Function(int dataIndex, T data) info;
 
   @override
-  Widget buildHeader(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-  ) =>
-      header;
+  Widget buildHeader(BuildArguments<T> arguments) => header;
 
   @override
-  Widget buildInfo(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-    int dataIndex,
-    T data,
-  ) =>
-      info.call(dataIndex, data);
+  Widget buildInfo(BuildArguments<T> arguments, int dataIndex, T data) => info.call(dataIndex, data);
+}
+
+class BuildArguments<T> {
+  const BuildArguments(
+    this.controller,
+    this.configurations,
+    this.parentWidth,
+  );
+
+  final FlexibleTableController<T> controller;
+  final AbsFlexibleTableConfigurations<T> configurations;
+  final double parentWidth;
 }

@@ -118,20 +118,20 @@ class FlexibleTableContent<T> extends StatelessWidget {
   }
 
   double? get itemExtent {
-    if (configurations.rowHeight.infoRowHeightBuilder != null) {
+    if (configurations.rowHeight.infoRowHeightBuilder != null || configurations.rowHeight.fixedInfoRowHeight == null) {
       return null;
     }
     if (hasHeader) {
-      if (additions!.fixedHeaderHeight != configurations.rowHeight.infoRowHeight) {
+      if (additions!.fixedHeaderHeight != configurations.rowHeight.fixedInfoRowHeight) {
         return null;
       }
     }
     if (hasFooter) {
-      if (additions!.fixedFooterHeight != configurations.rowHeight.infoRowHeight) {
+      if (additions!.fixedFooterHeight != configurations.rowHeight.fixedInfoRowHeight) {
         return null;
       }
     }
-    return configurations.rowHeight.infoRowHeight;
+    return configurations.rowHeight.fixedInfoRowHeight;
   }
 
   @override

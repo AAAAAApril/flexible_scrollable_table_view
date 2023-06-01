@@ -1,3 +1,9 @@
+## 2.6.0
+
+* Set column width by `AbsFlexibleTableColumnWidth`.
+* Set row height by `AbsFlexibleTableRowHeight`.
+* Few column width and row height implementations can be used.
+
 ## 2.5.0
 
 * Rename `AbsFlexibleHeaderFooter` to `AbsFlexibleTableAdditions`.

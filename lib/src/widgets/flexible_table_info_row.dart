@@ -31,7 +31,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double height = configurations.rowHeight.fixedInfoRowHeight(controller, dataIndex, data);
+    final double height = configurations.rowHeight.infoRowHeight(controller, dataIndex, data);
     return TableInfoRowConstraintAnimationWrapper<T>(
       controller,
       animations: animations,

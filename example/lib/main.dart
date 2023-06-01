@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       rowHeight: ChangeableTableRowHeight(
         headerRowHeight: 40,
         // headerRowHeight: 60,
-        infoRowHeight: 50,
+        fixedInfoRowHeight: 50,
         infoRowHeightBuilder: (dataIndex, data) {
           // return dataIndex == 9 ? 80 : null;
           return null;
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       pinnedColumns: {
         NormalColumn(
           'title',
-          columnWidth: const FixedTableColumnWidth(130),
+          columnWidth: ProportionalWidth(1 / 3),
           headerText: 'title列',
           infoText: (data) => data.title,
           onHeaderPressed: () {
@@ -35,20 +35,20 @@ class MyApp extends StatelessWidget {
         ),
         const CustomSelectableColumn(
           'selectable',
-          selectableWidth: FixedTableColumnWidth(48),
-          unSelectableWidth: FixedTableColumnWidth(32),
+          selectableWidth: FixedWidth(48),
+          unSelectableWidth: FixedWidth(32),
         ),
       },
       scrollableColumns: {
         NormalColumn(
           'value1',
-          columnWidth: const FixedTableColumnWidth(150),
+          columnWidth: const FixedWidth(150),
           headerText: 'value1列',
           infoText: (data) => data.value1,
         ),
         NormalColumn(
           'value2',
-          columnWidth: const FixedTableColumnWidth(100),
+          columnWidth: const FixedWidth(100),
           headerText: 'value2列',
           infoText: (data) => data.value2.toString(),
           comparator: (a, b) => a.value2.compareTo(b.value2),
@@ -58,7 +58,10 @@ class MyApp extends StatelessWidget {
         ),
         NormalColumn(
           'value3',
-          columnWidth: const FixedTableColumnWidth(130),
+          columnWidth: FlexibleWidth.min(
+            fixedWidth: 130,
+            widthPercent: 0.3,
+          ),
           headerText: 'value3列',
           infoText: (data) => data.value3.toStringAsFixed(4),
           comparator: (a, b) => a.value3.compareTo(b.value3),
@@ -68,25 +71,28 @@ class MyApp extends StatelessWidget {
         ),
         NormalColumn(
           'value1+value2',
-          columnWidth: const FixedTableColumnWidth(200),
+          columnWidth: FlexibleWidth.max(
+            fixedWidth: 200,
+            widthPercent: 0.5,
+          ),
           headerText: 'value1+value2列',
           infoText: (data) => '${data.value1}+${data.value2}',
         ),
         NormalColumn(
           'value2+value3',
-          columnWidth: const FixedTableColumnWidth(200),
+          columnWidth: const FixedWidth(200),
           headerText: 'value2+value3列',
           infoText: (data) => '${data.value2}+${data.value3}',
         ),
         NormalColumn(
           'value1+value3',
-          columnWidth: const FixedTableColumnWidth(200),
+          columnWidth: ProportionalWidth(0.5),
           headerText: 'value1+value3列',
           infoText: (data) => '${data.value1}+${data.value3}',
         ),
         NormalColumn(
           'value1+value2+value3',
-          columnWidth: const FixedTableColumnWidth(200),
+          columnWidth: ProportionalWidth(0.6),
           headerText: 'value1+value2+value3列',
           infoText: (data) => '${data.value1}+${data.value2}+${data.value3}',
         ),
@@ -177,78 +183,83 @@ class _NormalListState extends State<NormalList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(children: [
-          IconButton(
-            onPressed: refreshData,
-            icon: const Icon(Icons.refresh_rounded),
+    return ScrollConfiguration(
+      behavior: const NoOverscrollMaterialScrollBehavior(
+        [AxisDirection.left, AxisDirection.right],
+      ),
+      child: Column(
+        children: [
+          Row(children: [
+            IconButton(
+              onPressed: refreshData,
+              icon: const Icon(Icons.refresh_rounded),
+            ),
+            Expanded(
+              child: ValueListenableBuilder<bool>(
+                valueListenable: controller.selectable,
+                builder: (context, value, child) => CheckboxListTile(
+                  value: value,
+                  title: const Text('切换可选与不可选状态'),
+                  onChanged: (newValue) {
+                    if (newValue != null) {
+                      controller.switchSelectable(newValue);
+                    }
+                  },
+                ),
+              ),
+            ),
+          ]),
+          Material(
+            elevation: 2,
+            child: FlexibleTableHeader<TableDataBean>(
+              controller,
+              configurations: widget.configurations,
+              animations: widget.animations,
+            ),
           ),
           Expanded(
-            child: ValueListenableBuilder<bool>(
-              valueListenable: controller.selectable,
-              builder: (context, value, child) => CheckboxListTile(
-                value: value,
-                title: const Text('切换可选与不可选状态'),
-                onChanged: (newValue) {
-                  if (newValue != null) {
-                    controller.switchSelectable(newValue);
-                  }
-                },
+            child: FlexibleTableContent<TableDataBean>(
+              controller,
+              configurations: widget.configurations,
+              animations: widget.animations,
+              decorations: FlexibleTableDecorationsWithData(
+                infoBackgroundRowWithData: (dataIndex, data) => ColoredBox(
+                  color: dataIndex.isOdd ? Colors.grey.shade200 : Colors.grey.shade300,
+                  child: const SizedBox.expand(),
+                ),
+                infoForegroundRowWithData: (dataIndex, data) => GestureDetector(
+                  behavior: HitTestBehavior.deferToChild,
+                  onTap: () {
+                    debugPrint('点击了前景装饰行:$dataIndex');
+                  },
+                ),
               ),
-            ),
-          ),
-        ]),
-        Material(
-          elevation: 2,
-          child: FlexibleTableHeader<TableDataBean>(
-            controller,
-            configurations: widget.configurations,
-            animations: widget.animations,
-          ),
-        ),
-        Expanded(
-          child: FlexibleTableContent<TableDataBean>(
-            controller,
-            configurations: widget.configurations,
-            animations: widget.animations,
-            decorations: FlexibleTableDecorationsWithData(
-              infoBackgroundRowWithData: (dataIndex, data) => ColoredBox(
-                color: dataIndex.isOdd ? Colors.grey.shade200 : Colors.grey.shade300,
-                child: const SizedBox.expand(),
-              ),
-              infoForegroundRowWithData: (dataIndex, data) => GestureDetector(
-                behavior: HitTestBehavior.deferToChild,
-                onTap: () {
-                  debugPrint('点击了前景装饰行:$dataIndex');
-                },
-              ),
-            ),
-            additions: FlexibleTableAdditions(
-              fixedHeaderHeight: widget.configurations.rowHeight.infoRowHeight,
-              header: OutlinedButton(
-                onPressed: () {
-                  debugPrint('点击了列表的Header');
-                },
-                child: const Text('这里是列表的Header，一个OutlinedButton'),
-              ),
-              fixedFooterHeight: widget.configurations.rowHeight.infoRowHeight,
-              footer: OutlinedButton(
-                onPressed: () {
-                  debugPrint('点击了列表的Footer');
-                },
-                child: const Text('这里是列表的Footer，一个OutlinedButton'),
-              ),
-              placeholder: Center(
-                child: ColoredBox(
-                  color: Colors.black,
-                  child: SizedBox.fromSize(
-                    size: const Size(300, 500),
-                    child: const Text(
-                      '这里是Placeholder，一个 300*900 大小的色块',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
+              additions: FlexibleTableAdditions(
+                fixedHeaderHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
+                header: OutlinedButton(
+                  onPressed: () {
+                    debugPrint('点击了列表的Header');
+                  },
+                  child: const Text('这里是列表的Header，一个OutlinedButton'),
+                ),
+                fixedFooterHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
+                footer: OutlinedButton(
+                  onPressed: () {
+                    debugPrint('点击了列表的Footer');
+                  },
+                  child: const Text('这里是列表的Footer，一个OutlinedButton'),
+                ),
+                placeholder: Center(
+                  child: ColoredBox(
+                    color: Colors.black,
+                    child: SizedBox.fromSize(
+                      size: const Size(300, 500),
+                      child: const Text(
+                        '这里是Placeholder，一个 300*500 大小的色块',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                        ),
                       ),
                     ),
                   ),
@@ -256,8 +267,8 @@ class _NormalListState extends State<NormalList> {
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -354,7 +365,7 @@ class _InSliverListState extends State<InSliverList> {
             ),
           ),
           additions: FlexibleTableAdditions(
-            fixedHeaderHeight: widget.configurations.rowHeight.infoRowHeight,
+            fixedHeaderHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
             header: ElevatedButton(
               onPressed: () {
                 debugPrint('点击了Header');
@@ -422,11 +433,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   final Comparator<T>? comparator;
 
   @override
-  Widget buildHeader(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-  ) {
+  Widget buildHeader(BuildArguments<T> arguments) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(headerText),
@@ -438,7 +445,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
         onTap: () {
           onHeaderPressed?.call();
           //点击列头排序
-          controller.sortByColumn(this);
+          arguments.controller.sortByColumn(this);
         },
         child: child,
       );
@@ -455,13 +462,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   }
 
   @override
-  Widget buildInfo(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-    int dataIndex,
-    T data,
-  ) {
+  Widget buildInfo(BuildArguments<T> arguments, int dataIndex, T data) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(infoText.call(data)),
@@ -491,7 +492,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   const CustomSelectableColumn(
     super.id, {
     required this.selectableWidth,
-    this.unSelectableWidth = const FixedTableColumnWidth(0),
+    this.unSelectableWidth = const FixedWidth(0),
   });
 
   @override
@@ -501,11 +502,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   final AbsFlexibleTableColumnWidth unSelectableWidth;
 
   @override
-  Widget buildSelectableHeader(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-  ) {
+  Widget buildSelectableHeader(BuildArguments<T> arguments) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -515,7 +512,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
         ),
       ),
       child: SelectableColumnHeader<T>(
-        controller,
+        arguments.controller,
         builder: (context, selected, onChanged, child) => Checkbox(
           value: selected,
           onChanged: onChanged,
@@ -525,24 +522,14 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableHeader(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-  ) {
+  Widget buildUnSelectableHeader(BuildArguments<T> arguments) {
     return const SizedBox.expand(
       child: ColoredBox(color: Colors.purple),
     );
   }
 
   @override
-  Widget buildSelectableInfo(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-    int dataIndex,
-    T data,
-  ) {
+  Widget buildSelectableInfo(BuildArguments<T> arguments, int dataIndex, T data) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -552,7 +539,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
         ),
       ),
       child: SelectableColumnInfo<T>(
-        controller,
+        arguments.controller,
         data: data,
         builder: (context, selected, onChanged, child) => Checkbox(
           value: selected,
@@ -563,15 +550,16 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableInfo(
-    FlexibleTableController<T> controller,
-    AbsFlexibleTableConfigurations<T> configurations,
-    double parentWidth,
-    int dataIndex,
-    T data,
-  ) {
+  Widget buildUnSelectableInfo(BuildArguments<T> arguments, int dataIndex, T data) {
     return SizedBox.expand(
       child: ColoredBox(color: dataIndex.isOdd ? Colors.red : Colors.yellow),
     );
   }
+}
+
+class NoOverscrollMaterialScrollBehavior extends MaterialScrollBehavior with NoOverscrollBehaviorMixin {
+  const NoOverscrollMaterialScrollBehavior(this.disallowedDirections);
+
+  @override
+  final List<AxisDirection> disallowedDirections;
 }

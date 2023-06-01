@@ -60,7 +60,15 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
               decorations: decorations,
               dataIndex: dataIndex,
               data: data,
-              child: column.buildInfo(controller, configurations, parentWidth, dataIndex, data),
+              child: column.buildInfo(
+                BuildArguments<T>(
+                  controller,
+                  configurations,
+                  parentWidth,
+                ),
+                dataIndex,
+                data,
+              ),
             ),
     );
     //可选列
@@ -88,9 +96,11 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
                     dataIndex: dataIndex,
                     data: data,
                     child: thisColumn.buildUnSelectableInfo(
-                      controller,
-                      configurations,
-                      parentWidth,
+                      BuildArguments<T>(
+                        controller,
+                        configurations,
+                        parentWidth,
+                      ),
                       dataIndex,
                       data,
                     ),
