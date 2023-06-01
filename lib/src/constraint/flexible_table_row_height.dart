@@ -17,8 +17,8 @@ abstract class AbsFlexibleTableRowHeight<T> {
 }
 
 ///固定高度
-class FixedTableRowHeight<T> extends AbsFlexibleTableRowHeight<T> {
-  const FixedTableRowHeight({
+class FixedHeight<T> extends AbsFlexibleTableRowHeight<T> {
+  const FixedHeight({
     required this.headerRowHeight,
     required this.fixedInfoRowHeight,
   });
@@ -37,8 +37,8 @@ class FixedTableRowHeight<T> extends AbsFlexibleTableRowHeight<T> {
 }
 
 ///根据数据变化
-class ChangeableTableRowHeight<T> extends AbsFlexibleTableRowHeight<T> {
-  const ChangeableTableRowHeight({
+class ChangeableHeight<T> extends AbsFlexibleTableRowHeight<T> {
+  const ChangeableHeight({
     required this.headerRowHeight,
     this.fixedInfoRowHeight,
     required this.infoRowHeightBuilder,

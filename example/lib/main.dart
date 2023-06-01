@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AbsFlexibleTableConfigurations<TableDataBean> configurations = FlexibleTableConfigurations<TableDataBean>(
-      rowHeight: ChangeableTableRowHeight(
+      rowHeight: ChangeableHeight(
         headerRowHeight: 40,
         // headerRowHeight: 60,
         fixedInfoRowHeight: 50,
