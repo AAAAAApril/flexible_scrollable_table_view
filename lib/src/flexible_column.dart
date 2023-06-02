@@ -1,5 +1,5 @@
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
-import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 ///列信息配置类
@@ -36,19 +36,26 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   const FlexibleColumn(
     super.id, {
     required this.columnWidth,
-    required this.header,
-    required this.info,
+    this.header,
+    this.headerBuilder,
+    this.info,
+    this.infoBuilder,
   });
 
   @override
   final AbsFlexibleTableColumnWidth columnWidth;
 
-  final Widget header;
-  final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column) info;
+  final Widget? header;
+  final Widget Function(TableHeaderRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column)? headerBuilder;
+
+  final Widget? info;
+  final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column)? infoBuilder;
 
   @override
-  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) => header;
+  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) =>
+      headerBuilder?.call(arguments, this) ?? header ?? const SizedBox.shrink();
 
   @override
-  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) => info.call(arguments, this);
+  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) =>
+      infoBuilder?.call(arguments, this) ?? info ?? const SizedBox.shrink();
 }

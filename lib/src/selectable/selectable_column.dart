@@ -1,6 +1,6 @@
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 ///定制化的可选中的 Column
@@ -42,10 +42,14 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
     super.id, {
     required this.selectableWidth,
     this.unSelectableWidth = const FixedWidth(0),
-    required this.selectableHeader,
+    this.selectableHeader,
+    this.selectableHeaderBuilder,
     this.unSelectableHeader,
-    required this.selectableInfo,
+    this.unSelectableHeaderBuilder,
+    this.selectableInfo,
+    this.selectableInfoBuilder,
     this.unSelectableInfo,
+    this.unSelectableInfoBuilder,
   });
 
   @override
@@ -54,24 +58,47 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   @override
   final AbsFlexibleTableColumnWidth unSelectableWidth;
 
-  final Widget selectableHeader;
+  final Widget? selectableHeader;
+  final Widget Function(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsSelectableColumn<T> column,
+  )? selectableHeaderBuilder;
+
   final Widget? unSelectableHeader;
-  final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsSelectableColumn<T> column) selectableInfo;
-  final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsSelectableColumn<T> column)? unSelectableInfo;
+  final Widget Function(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsSelectableColumn<T> column,
+  )? unSelectableHeaderBuilder;
+
+  final Widget? selectableInfo;
+  final Widget Function(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsSelectableColumn<T> column,
+  )? selectableInfoBuilder;
+
+  final Widget? unSelectableInfo;
+  final Widget Function(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsSelectableColumn<T> column,
+  )? unSelectableInfoBuilder;
 
   @override
-  Widget buildSelectableHeader(TableHeaderRowBuildArguments<T> arguments) => selectableHeader;
+  Widget buildSelectableHeader(TableHeaderRowBuildArguments<T> arguments) =>
+      selectableHeaderBuilder?.call(arguments, this) ?? selectableHeader ?? const SizedBox.shrink();
 
   @override
   Widget buildUnSelectableHeader(TableHeaderRowBuildArguments<T> arguments) {
-    return unSelectableHeader ?? super.buildUnSelectableHeader(arguments);
+    return unSelectableHeaderBuilder?.call(arguments, this) ??
+        unSelectableHeader ??
+        super.buildUnSelectableHeader(arguments);
   }
 
   @override
-  Widget buildSelectableInfo(TableInfoRowBuildArguments<T> arguments) => selectableInfo.call(arguments, this);
+  Widget buildSelectableInfo(TableInfoRowBuildArguments<T> arguments) =>
+      selectableInfoBuilder?.call(arguments, this) ?? selectableInfo ?? const SizedBox.shrink();
 
   @override
   Widget buildUnSelectableInfo(TableInfoRowBuildArguments<T> arguments) {
-    return unSelectableInfo?.call(arguments, this) ?? super.buildUnSelectableInfo(arguments);
+    return unSelectableInfoBuilder?.call(arguments, this) ?? unSelectableInfo ?? super.buildUnSelectableInfo(arguments);
   }
 }

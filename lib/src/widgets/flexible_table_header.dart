@@ -1,10 +1,10 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/horizontal_scroll_controller_builder.dart';
-import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_header_widget.dart';
 import 'package:flutter/widgets.dart';
 

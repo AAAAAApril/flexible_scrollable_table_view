@@ -1,5 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 typedef TableHeaderRowDecorationBuilder<T> = Widget Function(
@@ -7,20 +6,8 @@ typedef TableHeaderRowDecorationBuilder<T> = Widget Function(
   Widget child,
 );
 
-typedef TableHeaderItemDecorationBuilder<T> = Widget Function(
-  TableHeaderRowBuildArguments<T> arguments,
-  AbsFlexibleColumn<T> column,
-  Widget child,
-);
-
 typedef TableInfoRowDecorationBuilder<T> = Widget Function(
   TableInfoRowBuildArguments<T> arguments,
-  Widget child,
-);
-
-typedef TableInfoItemDecorationBuilder<T> = Widget Function(
-  TableInfoRowBuildArguments<T> arguments,
-  AbsFlexibleColumn<T> column,
   Widget child,
 );
 

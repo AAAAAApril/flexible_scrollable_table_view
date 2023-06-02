@@ -33,4 +33,15 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
   ///可以左右滑动的列
   @override
   final Set<AbsFlexibleColumn<T>> scrollableColumns;
+
+  FlexibleTableConfigurations copyWith({
+    AbsFlexibleTableRowHeight<T>? rowHeight,
+    Set<AbsFlexibleColumn<T>>? pinnedColumns,
+    Set<AbsFlexibleColumn<T>>? scrollableColumns,
+  }) =>
+      FlexibleTableConfigurations(
+        rowHeight: rowHeight ?? this.rowHeight,
+        pinnedColumns: pinnedColumns ?? this.pinnedColumns,
+        scrollableColumns: scrollableColumns ?? this.scrollableColumns,
+      );
 }

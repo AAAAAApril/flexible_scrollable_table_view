@@ -1,9 +1,9 @@
 import 'package:flexible_scrollable_table_view/src/addition/flexible_table_additions.dart';
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 import 'flexible_table_info_row.dart';

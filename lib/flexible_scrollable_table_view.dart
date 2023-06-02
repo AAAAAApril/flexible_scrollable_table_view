@@ -5,6 +5,9 @@ export 'src/addition/flexible_table_additions.dart';
 export 'src/animation/animated_constraint_box.dart';
 export 'src/animation/flexible_table_animations.dart';
 
+export 'src/arguments/table_build_arguments.dart';
+export 'src/arguments/table_row_build_arguments.dart';
+
 export 'src/constraint/flexible_table_column_width.dart';
 export 'src/constraint/flexible_table_row_height.dart';
 
@@ -30,5 +33,3 @@ export 'src/widgets/table_column_info_widget.dart';
 export 'src/flexible_column.dart';
 export 'src/flexible_table_configurations.dart';
 export 'src/flexible_table_controller.dart';
-
-export 'src/table_build_arguments.dart';

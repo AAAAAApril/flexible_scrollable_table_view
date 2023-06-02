@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 typedef TableAdditionBuilder<T> = Widget Function(AbsTableBuildArguments<T> arguments);

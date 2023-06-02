@@ -3,25 +3,7 @@ import 'package:flexible_scrollable_table_view/src/flexible_table_configurations
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
-///构建表行所需参数
-abstract class AbsTableBuildArguments<T> {
-  const AbsTableBuildArguments();
-
-  ///控制器
-  FlexibleTableController<T> get controller;
-
-  ///配置
-  AbsFlexibleTableConfigurations<T> get configurations;
-
-  ///父容器宽度
-  double get parentWidth;
-
-  ///不可滚动列列表
-  List<AbsFlexibleColumn<T>> get pinnedColumnList;
-
-  ///可滚动列列表
-  List<AbsFlexibleColumn<T>> get scrollableColumnList;
-}
+import 'table_build_arguments.dart';
 
 ///表行约束
 mixin TableRowConstraintMixin<T> on AbsTableBuildArguments<T> {
