@@ -13,7 +13,7 @@ abstract class AbsFlexibleTableRowHeight<T> {
   double? Function(int dataIndex, T data)? get infoRowHeightBuilder;
 
   ///信息行的固定高度
-  double infoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data);
+  double getInfoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data);
 }
 
 ///固定高度
@@ -33,7 +33,7 @@ class FixedHeight<T> extends AbsFlexibleTableRowHeight<T> {
   double? Function(int dataIndex, T data)? get infoRowHeightBuilder => null;
 
   @override
-  double infoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data) => fixedInfoRowHeight;
+  double getInfoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data) => fixedInfoRowHeight;
 }
 
 ///根据数据变化
@@ -54,7 +54,7 @@ class ChangeableHeight<T> extends AbsFlexibleTableRowHeight<T> {
   final double? Function(int dataIndex, T data) infoRowHeightBuilder;
 
   @override
-  double infoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data) {
+  double getInfoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data) {
     return infoRowHeightBuilder.call(dataIndex, data) ?? fixedInfoRowHeight ?? 0;
   }
 }

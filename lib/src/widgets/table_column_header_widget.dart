@@ -2,7 +2,6 @@ import 'package:flexible_scrollable_table_view/src/animation/flexible_table_anim
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
-import 'package:flexible_scrollable_table_view/src/decoration/table_item_decoration_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_wrapper.dart';
@@ -37,14 +36,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
           height,
         ),
       ),
-      child: height <= 0
-          ? null
-          : TableHeaderItemDecorationWrapper<T>(
-              arguments,
-              decorations: decorations,
-              column: column,
-              child: column.buildHeader(arguments),
-            ),
+      child: height <= 0 ? null : column.buildHeader(arguments),
     );
     //可选列
     if (column is AbsSelectableColumn<T>) {
@@ -61,14 +53,7 @@ class TableColumnHeaderWidget<T> extends StatelessWidget {
               ),
             ),
             animations: animations,
-            child: height <= 0
-                ? null
-                : TableHeaderItemDecorationWrapper<T>(
-                    arguments,
-                    decorations: decorations,
-                    column: column,
-                    child: thisColumn.buildUnSelectableHeader(arguments),
-                  ),
+            child: height <= 0 ? null : thisColumn.buildUnSelectableHeader(arguments),
           );
         },
       );
