@@ -1,10 +1,10 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/horizontal_scroll_controller_builder.dart';
+import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/table_column_header_widget.dart';
 import 'package:flutter/widgets.dart';
 
@@ -28,115 +28,94 @@ class FlexibleTableHeader<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) => TableHeaderRowConstraintAnimationWrapper<T>(
-        controller,
-        constraints: BoxConstraints.tight(
-          Size(
-            constraints.maxWidth,
-            configurations.rowHeight.headerRowHeight,
-          ),
-        ),
-        animations: animations,
-        child: _FlexibleTableHeader<T>(
+      builder: (context, constraints) {
+        final TableHeaderRowBuildArguments<T> arguments = TableHeaderRowBuildArguments<T>(
           controller,
-          configurations: configurations,
-          decorations: decorations,
+          configurations,
+          constraints.maxWidth,
+        );
+        return TableConstraintAnimationWrapper<T>(
           animations: animations,
-          parentWidth: constraints.maxWidth,
-          physics: physics,
-        ),
-      ),
+          constraints: arguments.rowConstraint,
+          child: _FlexibleTableHeader<T>(
+            arguments,
+            decorations: decorations,
+            animations: animations,
+            physics: physics,
+          ),
+        );
+      },
     );
   }
 }
 
 class _FlexibleTableHeader<T> extends StatelessWidget {
   const _FlexibleTableHeader(
-    this.controller, {
+    this.arguments, {
     super.key,
-    required this.configurations,
     this.decorations,
     this.animations,
-    required this.parentWidth,
     this.physics,
   });
 
-  final FlexibleTableController<T> controller;
-  final AbsFlexibleTableConfigurations<T> configurations;
+  final TableHeaderRowBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
-  final double parentWidth;
   final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
     final Widget pinned = PinnedTableHeaderRow<T>(
-      controller,
-      configurations: configurations,
+      arguments,
       animations: animations,
       decorations: decorations,
-      parentWidth: parentWidth,
     );
     final Widget scrollable = ScrollableTableHeaderRow<T>(
-      controller,
-      configurations: configurations,
+      arguments,
       decorations: decorations,
-      parentWidth: parentWidth,
       physics: physics,
     );
     final Widget child;
-    if (configurations.pinnedColumns.isNotEmpty && configurations.scrollableColumns.isNotEmpty) {
+    if (arguments.configurations.pinnedColumns.isNotEmpty && arguments.configurations.scrollableColumns.isNotEmpty) {
       child = Row(children: [
         pinned,
         Expanded(child: scrollable),
       ]);
     } else {
-      if (configurations.scrollableColumns.isEmpty) {
+      if (arguments.configurations.scrollableColumns.isEmpty) {
         child = pinned;
       } else {
         child = scrollable;
       }
     }
-    return decorations?.headerRowDecorationBuilder?.call(
-          controller,
-          configurations,
-          child,
-        ) ??
-        child;
+    return decorations?.headerRowDecorationBuilder?.call(arguments, child) ?? child;
   }
 }
 
 ///表头行固定区域
 class PinnedTableHeaderRow<T> extends StatelessWidget {
   const PinnedTableHeaderRow(
-    this.controller, {
+    this.arguments, {
     super.key,
-    required this.configurations,
     this.animations,
     this.decorations,
-    required this.parentWidth,
   });
 
-  final FlexibleTableController<T> controller;
-  final AbsFlexibleTableConfigurations<T> configurations;
+  final TableHeaderRowBuildArguments<T> arguments;
   final AbsFlexibleTableAnimations<T>? animations;
   final AbsFlexibleTableDecorations<T>? decorations;
-  final double parentWidth;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: configurations.pinnedColumns
+      children: arguments.configurations.pinnedColumns
           .map<Widget>(
             (e) => TableColumnHeaderWidget<T>(
-              controller,
-              configurations: configurations,
+              arguments,
               animations: animations,
               decorations: decorations,
               column: e,
-              parentWidth: parentWidth,
-              height: configurations.rowHeight.headerRowHeight,
             ),
           )
           .toList(growable: false),
@@ -147,39 +126,31 @@ class PinnedTableHeaderRow<T> extends StatelessWidget {
 ///表头行滚动区域
 class ScrollableTableHeaderRow<T> extends StatelessWidget {
   const ScrollableTableHeaderRow(
-    this.controller, {
+    this.arguments, {
     super.key,
-    required this.configurations,
     this.decorations,
-    required this.parentWidth,
     this.physics,
   });
 
-  final FlexibleTableController<T> controller;
-  final AbsFlexibleTableConfigurations<T> configurations;
+  final TableHeaderRowBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
-  final double parentWidth;
   final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
-    final List<AbsFlexibleColumn<T>> columns = configurations.scrollableColumns.toList(growable: false);
     return HorizontalScrollControllerBuilder<T>(
-      controller,
+      arguments.controller,
       builder: (context, scrollController) => ListView.builder(
         controller: scrollController,
-        itemCount: columns.length,
+        itemCount: arguments.scrollableColumnList.length,
         scrollDirection: Axis.horizontal,
         primary: false,
         padding: EdgeInsets.zero,
         physics: physics,
         itemBuilder: (context, index) => TableColumnHeaderWidget<T>(
-          controller,
-          configurations: configurations,
+          arguments,
           decorations: decorations,
-          column: columns[index],
-          parentWidth: parentWidth,
-          height: configurations.rowHeight.headerRowHeight,
+          column: arguments.scrollableColumnList[index],
         ),
       ),
     );

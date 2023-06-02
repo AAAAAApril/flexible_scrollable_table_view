@@ -222,15 +222,15 @@ class _NormalListState extends State<NormalList> {
               controller,
               configurations: widget.configurations,
               animations: widget.animations,
-              decorations: FlexibleTableDecorationsWithData(
-                infoBackgroundRowWithData: (dataIndex, data) => ColoredBox(
-                  color: dataIndex.isOdd ? Colors.grey.shade200 : Colors.grey.shade300,
+              decorations: FlexibleTableRowDecorations.infoArguments(
+                infoRowBackground: (arguments) => ColoredBox(
+                  color: arguments.dataIndex.isOdd ? Colors.grey.shade200 : Colors.grey.shade300,
                   child: const SizedBox.expand(),
                 ),
-                infoForegroundRowWithData: (dataIndex, data) => GestureDetector(
+                infoRowForeground: (arguments) => GestureDetector(
                   behavior: HitTestBehavior.deferToChild,
                   onTap: () {
-                    debugPrint('点击了前景装饰行:$dataIndex');
+                    debugPrint('点击了前景装饰行:${arguments.dataIndex}');
                   },
                 ),
               ),
@@ -358,9 +358,9 @@ class _InSliverListState extends State<InSliverList> {
           controller,
           configurations: widget.configurations,
           animations: widget.animations,
-          decorations: FlexibleTableDecorationsWithData(
-            infoBackgroundRowWithData: (dataIndex, data) => ColoredBox(
-              color: dataIndex.isOdd ? Colors.grey.shade100 : Colors.grey.shade200,
+          decorations: FlexibleTableRowDecorations.infoArguments(
+            infoRowBackground: (arguments) => ColoredBox(
+              color: arguments.dataIndex.isOdd ? Colors.grey.shade100 : Colors.grey.shade200,
               child: const SizedBox.expand(),
             ),
           ),
@@ -433,7 +433,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   final Comparator<T>? comparator;
 
   @override
-  Widget buildHeader(BuildArguments<T> arguments) {
+  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(headerText),
@@ -462,16 +462,16 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   }
 
   @override
-  Widget buildInfo(BuildArguments<T> arguments, int dataIndex, T data) {
+  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) {
     Widget child = SizedBox.expand(
       child: Center(
-        child: Text(infoText.call(data)),
+        child: Text(infoText.call(arguments.data)),
       ),
     );
     if (onInfoPressed != null) {
       child = GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => onInfoPressed?.call(data),
+        onTap: () => onInfoPressed?.call(arguments.data),
         child: child,
       );
     }
@@ -502,7 +502,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   final AbsFlexibleTableColumnWidth unSelectableWidth;
 
   @override
-  Widget buildSelectableHeader(BuildArguments<T> arguments) {
+  Widget buildSelectableHeader(TableHeaderRowBuildArguments<T> arguments) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -522,14 +522,14 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableHeader(BuildArguments<T> arguments) {
+  Widget buildUnSelectableHeader(TableHeaderRowBuildArguments<T> arguments) {
     return const SizedBox.expand(
       child: ColoredBox(color: Colors.purple),
     );
   }
 
   @override
-  Widget buildSelectableInfo(BuildArguments<T> arguments, int dataIndex, T data) {
+  Widget buildSelectableInfo(TableInfoRowBuildArguments<T> arguments) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -540,7 +540,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
       ),
       child: SelectableColumnInfo<T>(
         arguments.controller,
-        data: data,
+        data: arguments.data,
         builder: (context, selected, onChanged, child) => Checkbox(
           value: selected,
           onChanged: onChanged,
@@ -550,9 +550,9 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableInfo(BuildArguments<T> arguments, int dataIndex, T data) {
+  Widget buildUnSelectableInfo(TableInfoRowBuildArguments<T> arguments) {
     return SizedBox.expand(
-      child: ColoredBox(color: dataIndex.isOdd ? Colors.red : Colors.yellow),
+      child: ColoredBox(color: arguments.dataIndex.isOdd ? Colors.red : Colors.yellow),
     );
   }
 }

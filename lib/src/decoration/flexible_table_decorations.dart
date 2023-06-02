@@ -1,18 +1,26 @@
-import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 typedef TableHeaderRowDecorationBuilder<T> = Widget Function(
-  FlexibleTableController<T> controller,
-  AbsFlexibleTableConfigurations<T> configurations,
+  TableHeaderRowBuildArguments<T> arguments,
+  Widget child,
+);
+
+typedef TableHeaderItemDecorationBuilder<T> = Widget Function(
+  TableHeaderRowBuildArguments<T> arguments,
+  AbsFlexibleColumn<T> column,
   Widget child,
 );
 
 typedef TableInfoRowDecorationBuilder<T> = Widget Function(
-  FlexibleTableController<T> controller,
-  AbsFlexibleTableConfigurations<T> configurations,
-  int dataIndex,
-  T data,
+  TableInfoRowBuildArguments<T> arguments,
+  Widget child,
+);
+
+typedef TableInfoItemDecorationBuilder<T> = Widget Function(
+  TableInfoRowBuildArguments<T> arguments,
+  AbsFlexibleColumn<T> column,
   Widget child,
 );
 
@@ -20,68 +28,87 @@ typedef TableInfoRowDecorationBuilder<T> = Widget Function(
 abstract class AbsFlexibleTableDecorations<T> {
   const AbsFlexibleTableDecorations();
 
-  ///构建表头行前景装饰
+  ///构建表头行装饰
   TableHeaderRowDecorationBuilder<T>? get headerRowDecorationBuilder => null;
+
+  ///构建表头项装饰
+  // TableHeaderItemDecorationBuilder<T>? get headerItemDecorationBuilder => null;
 
   ///构建表信息行装饰
   TableInfoRowDecorationBuilder<T>? get infoRowDecorationBuilder => null;
+
+  ///构建表信息项装饰
+  // TableInfoItemDecorationBuilder<T>? get infoItemDecorationBuilder => null;
 }
 
-class FlexibleTableDecorations<T> extends AbsFlexibleTableDecorations<T> {
-  const FlexibleTableDecorations({
-    this.headerForegroundRow,
-    this.headerBackgroundRow,
-    this.infoForegroundRow,
-    this.infoBackgroundRow,
+class FlexibleTableRowDecorations<T> extends AbsFlexibleTableDecorations<T> {
+  const FlexibleTableRowDecorations({
+    this.headerRowForeground,
+    this.headerRowBackground,
+    this.infoRowForeground,
+    this.infoRowBackground,
   });
 
-  final Widget? headerForegroundRow;
-  final Widget? headerBackgroundRow;
+  factory FlexibleTableRowDecorations.infoArguments({
+    Widget? headerRowForeground,
+    Widget? headerRowBackground,
+    Widget Function(TableInfoRowBuildArguments<T> arguments)? infoRowForeground,
+    Widget Function(TableInfoRowBuildArguments<T> arguments)? infoRowBackground,
+  }) =>
+      _FlexibleTableRowDecorationsWithArguments<T>(
+        headerRowForeground: headerRowForeground,
+        headerRowBackground: headerRowBackground,
+        infoRowForegroundWithArguments: infoRowForeground,
+        infoRowBackgroundWithArguments: infoRowBackground,
+      );
 
-  final Widget? infoForegroundRow;
-  final Widget? infoBackgroundRow;
+  final Widget? headerRowForeground;
+  final Widget? headerRowBackground;
+
+  final Widget? infoRowForeground;
+  final Widget? infoRowBackground;
 
   @override
   TableHeaderRowDecorationBuilder<T>? get headerRowDecorationBuilder =>
-      (headerForegroundRow == null && headerBackgroundRow == null)
+      (headerRowForeground == null && headerRowBackground == null)
           ? null
-          : (controller, configurations, child) => Stack(children: [
-                if (headerBackgroundRow != null) Positioned.fill(child: headerBackgroundRow!),
+          : (arguments, child) => Stack(children: [
+                if (headerRowBackground != null) Positioned.fill(child: headerRowBackground!),
                 child,
-                if (headerForegroundRow != null) Positioned.fill(child: headerForegroundRow!),
+                if (headerRowForeground != null) Positioned.fill(child: headerRowForeground!),
               ]);
 
   @override
   TableInfoRowDecorationBuilder<T>? get infoRowDecorationBuilder =>
-      (infoForegroundRow == null && infoBackgroundRow == null)
+      (infoRowForeground == null && infoRowBackground == null)
           ? null
-          : (controller, configurations, dataIndex, data, child) => Stack(children: [
-                if (infoBackgroundRow != null) Positioned.fill(child: infoBackgroundRow!),
+          : (arguments, child) => Stack(children: [
+                if (infoRowBackground != null) Positioned.fill(child: infoRowBackground!),
                 child,
-                if (infoForegroundRow != null) Positioned.fill(child: infoForegroundRow!),
+                if (infoRowForeground != null) Positioned.fill(child: infoRowForeground!),
               ]);
 }
 
-class FlexibleTableDecorationsWithData<T> extends FlexibleTableDecorations<T> {
-  const FlexibleTableDecorationsWithData({
-    super.headerForegroundRow,
-    super.headerBackgroundRow,
-    this.infoForegroundRowWithData,
-    this.infoBackgroundRowWithData,
+class _FlexibleTableRowDecorationsWithArguments<T> extends FlexibleTableRowDecorations<T> {
+  const _FlexibleTableRowDecorationsWithArguments({
+    super.headerRowForeground,
+    super.headerRowBackground,
+    this.infoRowForegroundWithArguments,
+    this.infoRowBackgroundWithArguments,
   });
 
-  final Widget Function(int dataIndex, T data)? infoForegroundRowWithData;
-  final Widget Function(int dataIndex, T data)? infoBackgroundRowWithData;
+  final Widget Function(TableInfoRowBuildArguments<T> arguments)? infoRowForegroundWithArguments;
+  final Widget Function(TableInfoRowBuildArguments<T> arguments)? infoRowBackgroundWithArguments;
 
   @override
   TableInfoRowDecorationBuilder<T>? get infoRowDecorationBuilder =>
-      (infoForegroundRowWithData == null && infoBackgroundRowWithData == null)
+      (infoRowForegroundWithArguments == null && infoRowBackgroundWithArguments == null)
           ? null
-          : (controller, configurations, dataIndex, data, child) => Stack(children: [
-                if (infoBackgroundRowWithData != null)
-                  Positioned.fill(child: infoBackgroundRowWithData!.call(dataIndex, data)),
+          : (arguments, child) => Stack(children: [
+                if (infoRowBackgroundWithArguments != null)
+                  Positioned.fill(child: infoRowBackgroundWithArguments!.call(arguments)),
                 child,
-                if (infoForegroundRowWithData != null)
-                  Positioned.fill(child: infoForegroundRowWithData!.call(dataIndex, data)),
+                if (infoRowForegroundWithArguments != null)
+                  Positioned.fill(child: infoRowForegroundWithArguments!.call(arguments)),
               ]);
 }

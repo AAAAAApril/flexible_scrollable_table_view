@@ -3,6 +3,7 @@ import 'package:flexible_scrollable_table_view/src/animation/flexible_table_anim
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 import 'flexible_table_info_row.dart';
@@ -87,33 +88,25 @@ class FlexibleTableContent<T> extends StatelessWidget {
 
   Widget buildItem(
     BuildContext context, {
-    required double rowWidth,
+    required TableRowBuildArguments<T> arguments,
     required List<T> value,
     required int index,
   }) {
     //数据是空的，却又需要构建列表项，说明是需要绘制占位组件
     if (value.isEmpty && hasPlaceholder) {
-      return additions!.placeholderBuilder!.call(
-        controller,
-        configurations,
-        rowWidth,
-      );
+      return additions!.placeholderBuilder!.call(arguments);
     }
     if (isHeaderIndex(index)) {
-      return additions!.headerBuilder!.call(controller, configurations);
+      return additions!.headerBuilder!.call(arguments);
     }
     if (isFooterIndex(value, index)) {
-      return additions!.footerBuilder!.call(controller, configurations);
+      return additions!.footerBuilder!.call(arguments);
     }
     final int dataIndex = realDataIndex(index);
     return FlexibleTableInfoRow<T>(
-      controller,
-      configurations: configurations,
-      dataIndex: dataIndex,
-      data: value[dataIndex],
+      arguments.toInfoRowArguments(dataIndex),
       decorations: decorations,
       animations: animations,
-      rowWidth: rowWidth,
     );
   }
 
@@ -138,6 +131,11 @@ class FlexibleTableContent<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final TableRowBuildArguments<T> arguments = TableRowBuildArguments<T>(
+          controller,
+          configurations,
+          constraints.maxWidth,
+        );
         Widget child = ValueListenableBuilder<List<T>>(
           valueListenable: controller,
           builder: (context, value, child) => ListView.builder(
@@ -151,7 +149,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
             physics: !verticalScrollable ? const NeverScrollableScrollPhysics() : physics,
             itemBuilder: (context, index) => buildItem(
               context,
-              rowWidth: constraints.maxWidth,
+              arguments: arguments,
               value: value,
               index: index,
             ),
@@ -188,13 +186,18 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
   Widget build(BuildContext context) {
     return SliverLayoutBuilder(
       builder: (context, constraints) {
+        final TableRowBuildArguments<T> arguments = TableRowBuildArguments<T>(
+          controller,
+          configurations,
+          constraints.crossAxisExtent,
+        );
         return ValueListenableBuilder<List<T>>(
           valueListenable: controller,
           builder: (context, value, child) {
             final SliverChildDelegate delegate = SliverChildBuilderDelegate(
               (context, index) => buildItem(
                 context,
-                rowWidth: constraints.crossAxisExtent,
+                arguments: arguments,
                 value: value,
                 index: index,
               ),

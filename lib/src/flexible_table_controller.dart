@@ -18,19 +18,8 @@ class FlexibleTableController<T> extends ChangeNotifier
     implements FlexibleTableValueListenable<List<T>> {
   FlexibleTableController() : super();
 
-  @override
-  void dispose() {
-    _loadedDataOnce.dispose();
-    super.dispose();
-  }
-
   ///原始数据
   List<T> _rawValue = <T>[];
-
-  ///是否加载过一次数据了（只要有任何一次数据不为空，则 _loadedDataOnce.value = true ）
-  final ValueNotifier<bool> _loadedDataOnce = ValueNotifier<bool>(false);
-
-  ValueListenable<bool> get loadedDataOnce => _loadedDataOnce;
 
   @override
   List<T> get selectableValue => _rawValue;
@@ -49,15 +38,7 @@ class FlexibleTableController<T> extends ChangeNotifier
       return;
     }
     _rawValue = newValue;
-    if (newValue.isNotEmpty) {
-      _loadedDataOnce.value = true;
-    }
     onSelectableValueChanged();
     sortData();
-  }
-
-  ///重置数据是否已经加载过一次的状态
-  void resetDataLoadedOnce() {
-    _loadedDataOnce.value = false;
   }
 }

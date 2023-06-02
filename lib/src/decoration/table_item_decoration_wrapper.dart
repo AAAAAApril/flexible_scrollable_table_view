@@ -1,21 +1,21 @@
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 ///表头项装饰包装
 class TableHeaderItemDecorationWrapper<T> extends StatelessWidget {
   const TableHeaderItemDecorationWrapper(
-    this.controller, {
+    this.arguments, {
     super.key,
-    required this.configurations,
-    required this.decorations,
+    this.decorations,
+    required this.column,
     required this.child,
   });
 
-  final FlexibleTableController<T> controller;
-  final AbsFlexibleTableConfigurations<T> configurations;
+  final TableHeaderRowBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
+  final AbsFlexibleColumn<T> column;
   final Widget child;
 
   @override
@@ -27,20 +27,16 @@ class TableHeaderItemDecorationWrapper<T> extends StatelessWidget {
 ///表信息项装饰包装
 class TableInfoItemDecorationWrapper<T> extends StatelessWidget {
   const TableInfoItemDecorationWrapper(
-    this.controller, {
+    this.arguments, {
     super.key,
-    required this.configurations,
-    required this.decorations,
-    required this.dataIndex,
-    required this.data,
+    this.decorations,
+    required this.column,
     required this.child,
   });
 
-  final FlexibleTableController<T> controller;
-  final AbsFlexibleTableConfigurations<T> configurations;
+  final TableInfoRowBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
-  final int dataIndex;
-  final T data;
+  final AbsFlexibleColumn<T> column;
   final Widget child;
 
   @override

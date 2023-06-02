@@ -1,31 +1,11 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
 import 'animated_constraint_box.dart';
 
 typedef TableConstraintAnimationBuilder<T> = Widget Function(
+  //约束值
   BoxConstraints constraints,
-  Widget? child,
-);
-
-typedef TableHeaderItemConstraintAnimationBuilder<T> = Widget Function(
-  AbsFlexibleColumn<T> column,
-  BoxConstraints constraints,
-  Widget? child,
-);
-
-typedef TableInfoItemConstraintAnimationBuilder<T> = Widget Function(
-  AbsFlexibleColumn<T> column,
-  int dataIndex,
-  T data,
-  BoxConstraints constraints,
-  Widget? child,
-);
-
-typedef TableInfoRowConstraintAnimationBuilder<T> = Widget Function(
-  int dataIndex,
-  T data,
-  BoxConstraints constraints,
+  //被约束的组件
   Widget? child,
 );
 
@@ -35,26 +15,6 @@ abstract class AbsFlexibleTableAnimations<T> {
 
   ///约束变更动画
   TableConstraintAnimationBuilder<T>? get constraintAnimationBuilder => null;
-
-  ///表头项约束变更动画
-  TableHeaderItemConstraintAnimationBuilder<T>? get headerItemConstraintAnimationBuilder =>
-      constraintAnimationBuilder == null
-          ? null
-          : (column, constraints, child) => constraintAnimationBuilder!.call(constraints, child);
-
-  ///表头行约束变更动画
-  TableConstraintAnimationBuilder<T>? get headerRowConstraintAnimationBuilder => constraintAnimationBuilder;
-
-  ///表信息项约束变更动画
-  TableInfoItemConstraintAnimationBuilder<T>? get infoItemConstraintAnimationBuilder =>
-      constraintAnimationBuilder == null
-          ? null
-          : (column, dataIndex, data, constraints, child) => constraintAnimationBuilder!.call(constraints, child);
-
-  ///表信息行约束变更动画
-  TableInfoRowConstraintAnimationBuilder<T>? get infoRowConstraintAnimationBuilder => constraintAnimationBuilder == null
-      ? null
-      : (dataIndex, data, constraints, child) => constraintAnimationBuilder!.call(constraints, child);
 }
 
 class FlexibleTableAnimations<T> extends AbsFlexibleTableAnimations<T> {

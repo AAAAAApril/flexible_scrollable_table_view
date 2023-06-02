@@ -1,6 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 ///列信息配置类
@@ -20,10 +19,10 @@ abstract class AbsFlexibleColumn<T> {
   bool get comparableColumn => comparator != null;
 
   ///构建表头
-  Widget buildHeader(BuildArguments<T> arguments);
+  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments);
 
   ///构建表信息
-  Widget buildInfo(BuildArguments<T> arguments, int dataIndex, T data);
+  Widget buildInfo(TableInfoRowBuildArguments<T> arguments);
 
   @override
   bool operator ==(Object other) =>
@@ -45,23 +44,11 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   final AbsFlexibleTableColumnWidth columnWidth;
 
   final Widget header;
-  final Widget Function(int dataIndex, T data) info;
+  final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column) info;
 
   @override
-  Widget buildHeader(BuildArguments<T> arguments) => header;
+  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) => header;
 
   @override
-  Widget buildInfo(BuildArguments<T> arguments, int dataIndex, T data) => info.call(dataIndex, data);
-}
-
-class BuildArguments<T> {
-  const BuildArguments(
-    this.controller,
-    this.configurations,
-    this.parentWidth,
-  );
-
-  final FlexibleTableController<T> controller;
-  final AbsFlexibleTableConfigurations<T> configurations;
-  final double parentWidth;
+  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) => info.call(arguments, this);
 }

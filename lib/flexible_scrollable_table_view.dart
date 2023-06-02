@@ -30,3 +30,5 @@ export 'src/widgets/table_column_info_widget.dart';
 export 'src/flexible_column.dart';
 export 'src/flexible_table_configurations.dart';
 export 'src/flexible_table_controller.dart';
+
+export 'src/table_build_arguments.dart';

@@ -3,90 +3,71 @@ import 'package:flexible_scrollable_table_view/src/animation/table_constraint_an
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/table_item_decoration_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 ///列头组件
 class TableColumnHeaderWidget<T> extends StatelessWidget {
   const TableColumnHeaderWidget(
-    this.controller, {
+    this.arguments, {
     super.key,
-    required this.configurations,
     this.animations,
     this.decorations,
     required this.column,
-    required this.parentWidth,
-    required this.height,
   });
 
-  final FlexibleTableController<T> controller;
-  final AbsFlexibleTableConfigurations<T> configurations;
+  final TableHeaderRowBuildArguments<T> arguments;
   final AbsFlexibleTableAnimations<T>? animations;
   final AbsFlexibleTableDecorations<T>? decorations;
 
   ///列配置
   final AbsFlexibleColumn<T> column;
 
-  ///父容器宽度
-  final double parentWidth;
-
-  ///行高
-  final double height;
-
   @override
   Widget build(BuildContext context) {
-    Widget child = TableHeaderItemConstraintAnimationWrapper<T>(
-      controller,
-      column: column,
+    //行高
+    final double height = arguments.rowHeight;
+    Widget child = TableConstraintAnimationWrapper<T>(
       animations: animations,
       constraints: BoxConstraints.tight(
-        Size(column.columnWidth.getColumnWidth(parentWidth), height),
+        Size(
+          column.columnWidth.getColumnWidth(arguments.parentWidth),
+          height,
+        ),
       ),
       child: height <= 0
           ? null
           : TableHeaderItemDecorationWrapper<T>(
-              controller,
-              configurations: configurations,
+              arguments,
               decorations: decorations,
-              child: column.buildHeader(
-                BuildArguments<T>(
-                  controller,
-                  configurations,
-                  parentWidth,
-                ),
-              ),
+              column: column,
+              child: column.buildHeader(arguments),
             ),
     );
     //可选列
     if (column is AbsSelectableColumn<T>) {
       child = SelectableColumnWrapper<T>(
-        controller,
+        arguments.controller,
         selectableWidget: child,
         unSelectableBuilder: (context) {
           final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
-          return TableHeaderItemConstraintAnimationWrapper<T>(
-            controller,
-            column: column,
+          return TableConstraintAnimationWrapper<T>(
             constraints: BoxConstraints.tight(
-              Size(thisColumn.unSelectableWidth.getColumnWidth(parentWidth), height),
+              Size(
+                thisColumn.unSelectableWidth.getColumnWidth(arguments.parentWidth),
+                height,
+              ),
             ),
             animations: animations,
             child: height <= 0
                 ? null
                 : TableHeaderItemDecorationWrapper<T>(
-                    controller,
-                    configurations: configurations,
+                    arguments,
                     decorations: decorations,
-                    child: thisColumn.buildUnSelectableHeader(
-                      BuildArguments<T>(
-                        controller,
-                        configurations,
-                        parentWidth,
-                      ),
-                    ),
+                    column: column,
+                    child: thisColumn.buildUnSelectableHeader(arguments),
                   ),
           );
         },

@@ -1,17 +1,7 @@
-import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
-typedef TableHeaderFooterBuilder<T> = Widget Function(
-  FlexibleTableController<T> controller,
-  AbsFlexibleTableConfigurations<T> configurations,
-);
-
-typedef TablePlaceholderBuilder<T> = Widget Function(
-  FlexibleTableController<T> controller,
-  AbsFlexibleTableConfigurations<T> configurations,
-  double viewportWidth,
-);
+typedef TableAdditionBuilder<T> = Widget Function(AbsTableBuildArguments<T> arguments);
 
 ///表内容区域附加组件
 abstract class AbsFlexibleTableAdditions<T> {
@@ -21,16 +11,16 @@ abstract class AbsFlexibleTableAdditions<T> {
   double? get fixedHeaderHeight;
 
   ///头部
-  TableHeaderFooterBuilder<T>? get headerBuilder;
+  TableAdditionBuilder<T>? get headerBuilder;
 
   ///返回 null 表示不限制高度
   double? get fixedFooterHeight;
 
   ///尾部
-  TableHeaderFooterBuilder<T>? get footerBuilder;
+  TableAdditionBuilder<T>? get footerBuilder;
 
   ///没有数据时的占位布局
-  TablePlaceholderBuilder<T>? get placeholderBuilder;
+  TableAdditionBuilder<T>? get placeholderBuilder;
 }
 
 class FlexibleTableAdditions<T> extends AbsFlexibleTableAdditions<T> {
@@ -53,12 +43,11 @@ class FlexibleTableAdditions<T> extends AbsFlexibleTableAdditions<T> {
   final Widget? placeholder;
 
   @override
-  TableHeaderFooterBuilder<T>? get headerBuilder => header == null ? null : (controller, configurations) => header!;
+  TableAdditionBuilder<T>? get headerBuilder => header == null ? null : (arguments) => header!;
 
   @override
-  TableHeaderFooterBuilder<T>? get footerBuilder => footer == null ? null : (controller, configurations) => footer!;
+  TableAdditionBuilder<T>? get footerBuilder => footer == null ? null : (arguments) => footer!;
 
   @override
-  TablePlaceholderBuilder<T>? get placeholderBuilder =>
-      placeholder == null ? null : (controller, configurations, viewportWidth) => placeholder!;
+  TableAdditionBuilder<T>? get placeholderBuilder => placeholder == null ? null : (arguments) => placeholder!;
 }

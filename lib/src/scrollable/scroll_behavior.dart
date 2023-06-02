@@ -1,15 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-///允许设置不使用过度滚动效果的滚动行为配置类
-class NoOverscrollScrollBehavior extends ScrollBehavior with NoOverscrollBehaviorMixin {
-  const NoOverscrollScrollBehavior({
-    this.disallowedDirections = AxisDirection.values,
-  }) : super();
-
-  @override
-  final List<AxisDirection> disallowedDirections;
-}
-
 mixin NoOverscrollBehaviorMixin on ScrollBehavior {
   ///不使用过度滚动效果的方向
   List<AxisDirection> get disallowedDirections;
@@ -22,4 +12,14 @@ mixin NoOverscrollBehaviorMixin on ScrollBehavior {
     }
     return super.buildOverscrollIndicator(context, child, details);
   }
+}
+
+///允许设置不使用过度滚动效果的滚动行为配置类
+class NoOverscrollScrollBehavior extends ScrollBehavior with NoOverscrollBehaviorMixin {
+  const NoOverscrollScrollBehavior({
+    this.disallowedDirections = AxisDirection.values,
+  }) : super();
+
+  @override
+  final List<AxisDirection> disallowedDirections;
 }
