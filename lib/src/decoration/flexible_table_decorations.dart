@@ -31,14 +31,8 @@ abstract class AbsFlexibleTableDecorations<T> {
   ///构建表头行装饰
   TableHeaderRowDecorationBuilder<T>? get headerRowDecorationBuilder => null;
 
-  ///构建表头项装饰
-  // TableHeaderItemDecorationBuilder<T>? get headerItemDecorationBuilder => null;
-
   ///构建表信息行装饰
   TableInfoRowDecorationBuilder<T>? get infoRowDecorationBuilder => null;
-
-  ///构建表信息项装饰
-  // TableInfoItemDecorationBuilder<T>? get infoItemDecorationBuilder => null;
 }
 
 class FlexibleTableRowDecorations<T> extends AbsFlexibleTableDecorations<T> {

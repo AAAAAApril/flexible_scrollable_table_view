@@ -20,7 +20,8 @@ class FlexibleTableContent<T> extends StatelessWidget {
     this.verticalScrollController,
     this.shrinkWrap = false,
     this.primary,
-    this.physics,
+    this.verticalPhysics,
+    this.horizontalPhysics,
     this.verticalScrollable = true,
   });
 
@@ -51,7 +52,8 @@ class FlexibleTableContent<T> extends StatelessWidget {
 
   final bool shrinkWrap;
   final bool? primary;
-  final ScrollPhysics? physics;
+  final ScrollPhysics? verticalPhysics;
+  final ScrollPhysics? horizontalPhysics;
 
   final bool verticalScrollable;
 
@@ -102,11 +104,11 @@ class FlexibleTableContent<T> extends StatelessWidget {
     if (isFooterIndex(value, index)) {
       return additions!.footerBuilder!.call(arguments);
     }
-    final int dataIndex = realDataIndex(index);
     return FlexibleTableInfoRow<T>(
-      arguments.toInfoRowArguments(dataIndex),
+      arguments.toInfoRowArguments(value, realDataIndex(index)),
       decorations: decorations,
       animations: animations,
+      physics: horizontalPhysics,
     );
   }
 
@@ -146,7 +148,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
             padding: EdgeInsets.zero,
             scrollDirection: Axis.vertical,
             itemExtent: itemExtent,
-            physics: !verticalScrollable ? const NeverScrollableScrollPhysics() : physics,
+            physics: verticalScrollable ? verticalPhysics : const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => buildItem(
               context,
               arguments: arguments,
@@ -191,6 +193,7 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
           configurations,
           constraints.crossAxisExtent,
         );
+        final double? itemExtent = super.itemExtent;
         return ValueListenableBuilder<List<T>>(
           valueListenable: controller,
           builder: (context, value, child) {
@@ -203,7 +206,6 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
               ),
               childCount: getItemCount(value),
             );
-            final double? itemExtent = super.itemExtent;
             if (itemExtent == null) {
               return SliverList(delegate: delegate);
             }

@@ -74,14 +74,18 @@ class TableInfoRowBuildArguments<T> extends TableRowBuildArguments<T> with Table
     super.controller,
     super.configurations,
     super.parentWidth,
+    this._dataList,
     this.dataIndex,
   );
+
+  ///所有数据
+  final List<T> _dataList;
 
   ///当前行所在下标
   final int dataIndex;
 
   ///当前行数据
-  late final T data = controller.value[dataIndex];
+  late final T data = _dataList[dataIndex];
 
   @override
   late final double rowHeight = configurations.rowHeight.infoRowHeight(controller, dataIndex, data);
@@ -94,10 +98,11 @@ extension TableRowBuildArgumentsExt<T> on TableRowBuildArguments<T> {
         parentWidth,
       );
 
-  TableInfoRowBuildArguments<T> toInfoRowArguments(int dataIndex) => TableInfoRowBuildArguments<T>(
+  TableInfoRowBuildArguments<T> toInfoRowArguments(List<T> dataList, int dataIndex) => TableInfoRowBuildArguments<T>(
         controller,
         configurations,
         parentWidth,
+        dataList,
         dataIndex,
       );
 }
