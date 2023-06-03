@@ -1,3 +1,7 @@
+## 2.7.0
+
+* There are now fewer build parameter lists.
+
 ## 2.6.0
 
 * Set column width by `AbsFlexibleTableColumnWidth`.
