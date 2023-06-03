@@ -1,8 +1,8 @@
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/widgets.dart';
 
-class SelectableColumnWrapper<T> extends StatelessWidget {
-  const SelectableColumnWrapper(
+class SelectableColumnCellWrapper<T> extends StatelessWidget {
+  const SelectableColumnCellWrapper(
     this.controller, {
     super.key,
     required this.unSelectableBuilder,

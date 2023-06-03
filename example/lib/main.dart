@@ -236,18 +236,22 @@ class _NormalListState extends State<NormalList> {
               ),
               additions: FlexibleTableAdditions(
                 fixedHeaderHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
-                header: OutlinedButton(
-                  onPressed: () {
-                    debugPrint('点击了列表的Header');
-                  },
-                  child: const Text('这里是列表的Header，一个OutlinedButton'),
+                header: Center(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      debugPrint('点击了列表的Header');
+                    },
+                    child: const Text('这里是列表的Header，一个OutlinedButton'),
+                  ),
                 ),
                 fixedFooterHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
-                footer: OutlinedButton(
-                  onPressed: () {
-                    debugPrint('点击了列表的Footer');
-                  },
-                  child: const Text('这里是列表的Footer，一个OutlinedButton'),
+                footer: Center(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      debugPrint('点击了列表的Footer');
+                    },
+                    child: const Text('这里是列表的Footer，一个OutlinedButton'),
+                  ),
                 ),
                 placeholder: Center(
                   child: ColoredBox(
@@ -366,17 +370,21 @@ class _InSliverListState extends State<InSliverList> {
           ),
           additions: FlexibleTableAdditions(
             fixedHeaderHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
-            header: ElevatedButton(
-              onPressed: () {
-                debugPrint('点击了Header');
-              },
-              child: const Text('这里是Header，一个ElevatedButton'),
+            header: Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  debugPrint('点击了Header');
+                },
+                child: const Text('这里是Header，一个ElevatedButton'),
+              ),
             ),
-            footer: const ColoredBox(
-              color: Colors.yellow,
-              child: SizedBox.square(
-                dimension: 200,
-                child: Text('这里是Footer，一个ColoredBox'),
+            footer: const Center(
+              child: ColoredBox(
+                color: Colors.yellow,
+                child: SizedBox.square(
+                  dimension: 200,
+                  child: Text('这里是Footer，一个ColoredBox'),
+                ),
               ),
             ),
           ),
@@ -433,7 +441,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   final Comparator<T>? comparator;
 
   @override
-  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(headerText),
@@ -462,7 +470,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   }
 
   @override
-  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(infoText.call(arguments.data)),
@@ -502,7 +510,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   final AbsFlexibleTableColumnWidth unSelectableWidth;
 
   @override
-  Widget buildSelectableHeader(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -522,14 +530,14 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableHeader(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildUnSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
     return const SizedBox.expand(
       child: ColoredBox(color: Colors.purple),
     );
   }
 
   @override
-  Widget buildSelectableInfo(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -550,7 +558,7 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   }
 
   @override
-  Widget buildUnSelectableInfo(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildUnSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) {
     return SizedBox.expand(
       child: ColoredBox(color: arguments.dataIndex.isOdd ? Colors.red : Colors.yellow),
     );

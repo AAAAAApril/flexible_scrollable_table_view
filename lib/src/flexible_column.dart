@@ -19,10 +19,10 @@ abstract class AbsFlexibleColumn<T> {
   bool get comparableColumn => comparator != null;
 
   ///构建表头
-  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments);
+  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments);
 
   ///构建表信息
-  Widget buildInfo(TableInfoRowBuildArguments<T> arguments);
+  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments);
 
   @override
   bool operator ==(Object other) =>
@@ -52,10 +52,10 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column)? infoBuilder;
 
   @override
-  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) =>
+  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
       headerBuilder?.call(arguments, this) ?? header ?? const SizedBox.shrink();
 
   @override
-  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) =>
+  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) =>
       infoBuilder?.call(arguments, this) ?? info ?? const SizedBox.shrink();
 }

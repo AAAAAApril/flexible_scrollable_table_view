@@ -1,11 +1,15 @@
+import 'dart:io';
 import 'dart:math';
 
 ///列宽
 abstract class AbsFlexibleTableColumnWidth {
   const AbsFlexibleTableColumnWidth();
 
+  ///在移动设备上，默认使用缓存，因为移动设备的屏幕宽度变更的可能性很小
+  bool get useCache => Platform.isAndroid || Platform.isIOS;
+
   ///根据父容器宽度，返回当前列宽度
-  double getColumnWidth(double parentWidth);
+  double getColumnWidth(double parentWidth, {bool? useCache});
 }
 
 ///取固定宽度或者比例中的较大或较小值
@@ -13,13 +17,11 @@ class FlexibleWidth extends AbsFlexibleTableColumnWidth {
   FlexibleWidth.min({
     required this.fixedWidth,
     required this.widthPercent,
-    this.useCache = true,
   }) : _min = true;
 
   FlexibleWidth.max({
     required this.fixedWidth,
     required this.widthPercent,
-    this.useCache = true,
   }) : _min = false;
 
   final double fixedWidth;
@@ -27,15 +29,12 @@ class FlexibleWidth extends AbsFlexibleTableColumnWidth {
   //percent of viewport width
   final double widthPercent;
 
-  ///是否使用缓存
-  final bool useCache;
-
   final bool _min;
   final Map<double, double> _cache = <double, double>{};
 
   @override
-  double getColumnWidth(double parentWidth) {
-    if (!useCache) {
+  double getColumnWidth(double parentWidth, {bool? useCache}) {
+    if (useCache == false || !this.useCache) {
       return _widthFromParent(parentWidth);
     }
     double? result = _cache[parentWidth];
@@ -62,7 +61,7 @@ class FixedWidth extends AbsFlexibleTableColumnWidth {
   final double fixedWidth;
 
   @override
-  double getColumnWidth(double parentWidth) => fixedWidth;
+  double getColumnWidth(double parentWidth, {bool? useCache}) => fixedWidth;
 }
 
 ///固定比例（相比于父容器的宽度比）
@@ -70,7 +69,6 @@ class ProportionalWidth extends AbsFlexibleTableColumnWidth {
   ProportionalWidth(
     this.percent, {
     this.omittedWidth = 0,
-    this.useCache = true,
   });
 
   //percent of viewport width
@@ -79,14 +77,11 @@ class ProportionalWidth extends AbsFlexibleTableColumnWidth {
   ///不参与比例计算的宽度
   final double omittedWidth;
 
-  ///是否使用缓存
-  final bool useCache;
-
   final Map<double, double> _cache = <double, double>{};
 
   @override
-  double getColumnWidth(double parentWidth) {
-    if (!useCache) {
+  double getColumnWidth(double parentWidth, {bool? useCache}) {
+    if (useCache == false || !this.useCache) {
       return _widthFromParent(parentWidth);
     }
     double? cacheWidth = _cache[parentWidth];

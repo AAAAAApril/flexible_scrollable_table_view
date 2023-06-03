@@ -34,10 +34,10 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
   final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsSortableColumn<T> column)? infoBuilder;
 
   @override
-  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) =>
+  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
       headerBuilder?.call(arguments, this) ?? header ?? const SizedBox.shrink();
 
   @override
-  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) =>
+  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) =>
       infoBuilder?.call(arguments, this) ?? info ?? const SizedBox.shrink();
 }

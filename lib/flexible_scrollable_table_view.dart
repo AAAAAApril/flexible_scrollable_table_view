@@ -13,6 +13,7 @@ export 'src/constraint/flexible_table_row_height.dart';
 
 export 'src/decoration/flexible_table_decorations.dart';
 
+export 'src/scrollable/horizontal_scroll_controller_builder.dart';
 export 'src/scrollable/scroll_behavior.dart';
 export 'src/scrollable/scroll_synchronization_mixin.dart';
 
@@ -27,8 +28,8 @@ export 'src/widgets/flexible_table_content.dart';
 export 'src/widgets/flexible_table_header.dart';
 export 'src/widgets/flexible_table_info_row.dart';
 
-export 'src/widgets/table_column_header_widget.dart';
-export 'src/widgets/table_column_info_widget.dart';
+export 'src/widgets/flexible_table_header_cell.dart';
+export 'src/widgets/flexible_table_info_cell.dart';
 
 export 'src/flexible_column.dart';
 export 'src/flexible_table_configurations.dart';

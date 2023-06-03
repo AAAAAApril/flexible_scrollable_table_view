@@ -17,23 +17,23 @@ abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
   AbsFlexibleTableColumnWidth get columnWidth => selectableWidth;
 
   @override
-  Widget buildHeader(TableHeaderRowBuildArguments<T> arguments) => buildSelectableHeader(arguments);
+  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) => buildSelectableHeaderCell(arguments);
 
   ///构建可编辑时的表头
-  Widget buildSelectableHeader(TableHeaderRowBuildArguments<T> arguments);
+  Widget buildSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments);
 
   ///构建不可编辑时的表头
-  Widget buildUnSelectableHeader(TableHeaderRowBuildArguments<T> arguments) =>
+  Widget buildUnSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
       SizedBox(width: unSelectableWidth.getColumnWidth(arguments.parentWidth));
 
   @override
-  Widget buildInfo(TableInfoRowBuildArguments<T> arguments) => buildSelectableInfo(arguments);
+  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) => buildSelectableInfoCell(arguments);
 
   ///构建可编辑时的表信息
-  Widget buildSelectableInfo(TableInfoRowBuildArguments<T> arguments);
+  Widget buildSelectableInfoCell(TableInfoRowBuildArguments<T> arguments);
 
   ///构建不可编辑时的表信息
-  Widget buildUnSelectableInfo(TableInfoRowBuildArguments<T> arguments) =>
+  Widget buildUnSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) =>
       SizedBox(width: unSelectableWidth.getColumnWidth(arguments.parentWidth));
 }
 
@@ -83,22 +83,24 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   )? unSelectableInfoBuilder;
 
   @override
-  Widget buildSelectableHeader(TableHeaderRowBuildArguments<T> arguments) =>
+  Widget buildSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
       selectableHeaderBuilder?.call(arguments, this) ?? selectableHeader ?? const SizedBox.shrink();
 
   @override
-  Widget buildUnSelectableHeader(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildUnSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
     return unSelectableHeaderBuilder?.call(arguments, this) ??
         unSelectableHeader ??
-        super.buildUnSelectableHeader(arguments);
+        super.buildUnSelectableHeaderCell(arguments);
   }
 
   @override
-  Widget buildSelectableInfo(TableInfoRowBuildArguments<T> arguments) =>
+  Widget buildSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) =>
       selectableInfoBuilder?.call(arguments, this) ?? selectableInfo ?? const SizedBox.shrink();
 
   @override
-  Widget buildUnSelectableInfo(TableInfoRowBuildArguments<T> arguments) {
-    return unSelectableInfoBuilder?.call(arguments, this) ?? unSelectableInfo ?? super.buildUnSelectableInfo(arguments);
+  Widget buildUnSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) {
+    return unSelectableInfoBuilder?.call(arguments, this) ??
+        unSelectableInfo ??
+        super.buildUnSelectableInfoCell(arguments);
   }
 }

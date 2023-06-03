@@ -4,12 +4,12 @@ import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arg
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
-import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_cell_wrapper.dart';
 import 'package:flutter/widgets.dart';
 
-///列信息组件
-class TableColumnInfoWidget<T> extends StatelessWidget {
-  const TableColumnInfoWidget(
+///列头组件
+class FlexibleTableHeaderCell<T> extends StatelessWidget {
+  const FlexibleTableHeaderCell(
     this.arguments, {
     super.key,
     this.animations,
@@ -17,7 +17,7 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
     required this.column,
   });
 
-  final TableInfoRowBuildArguments<T> arguments;
+  final TableHeaderRowBuildArguments<T> arguments;
   final AbsFlexibleTableAnimations<T>? animations;
   final AbsFlexibleTableDecorations<T>? decorations;
 
@@ -27,31 +27,27 @@ class TableColumnInfoWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = TableConstraintAnimationWrapper<T>(
-      constraints: BoxConstraints.tight(
-        Size(
-          column.columnWidth.getColumnWidth(arguments.parentWidth),
-          arguments.rowHeight,
-        ),
-      ),
       animations: animations,
-      child: arguments.rowHeight <= 0 ? null : column.buildInfo(arguments),
+      constraints: BoxConstraints.tightFor(
+        width: column.columnWidth.getColumnWidth(arguments.parentWidth),
+        height: arguments.rowHeight,
+      ),
+      child: arguments.rowHeight <= 0 ? null : column.buildHeaderCell(arguments),
     );
     //可选列
     if (column is AbsSelectableColumn<T>) {
-      child = SelectableColumnWrapper<T>(
+      child = SelectableColumnCellWrapper<T>(
         arguments.controller,
         selectableWidget: child,
         unSelectableBuilder: (context) {
           final AbsSelectableColumn<T> thisColumn = column as AbsSelectableColumn<T>;
           return TableConstraintAnimationWrapper<T>(
             animations: animations,
-            constraints: BoxConstraints.tight(
-              Size(
-                thisColumn.unSelectableWidth.getColumnWidth(arguments.parentWidth),
-                arguments.rowHeight,
-              ),
+            constraints: BoxConstraints.tightFor(
+              width: thisColumn.unSelectableWidth.getColumnWidth(arguments.parentWidth),
+              height: arguments.rowHeight,
             ),
-            child: arguments.rowHeight <= 0 ? null : thisColumn.buildUnSelectableInfo(arguments),
+            child: arguments.rowHeight <= 0 ? null : thisColumn.buildUnSelectableHeaderCell(arguments),
           );
         },
       );

@@ -3,7 +3,7 @@ import 'package:flexible_scrollable_table_view/src/animation/table_constraint_an
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/horizontal_scroll_controller_builder.dart';
-import 'package:flexible_scrollable_table_view/src/widgets/table_column_info_widget.dart';
+import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_info_cell.dart';
 import 'package:flutter/widgets.dart';
 
 ///表信息行
@@ -98,7 +98,7 @@ class PinnedTableInfoRow<T> extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: arguments.configurations.pinnedColumns
           .map<Widget>(
-            (e) => TableColumnInfoWidget<T>(
+            (e) => FlexibleTableInfoCell<T>(
               arguments,
               animations: animations,
               decorations: decorations,
@@ -125,7 +125,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HorizontalScrollControllerBuilder<T>(
+    return HorizontalScrollControllerBuilder(
       arguments.controller,
       builder: (context, scrollController) => ListView.builder(
         controller: scrollController,
@@ -134,7 +134,7 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
         primary: false,
         padding: EdgeInsets.zero,
         physics: physics,
-        itemBuilder: (context, index) => TableColumnInfoWidget<T>(
+        itemBuilder: (context, index) => FlexibleTableInfoCell<T>(
           arguments,
           decorations: decorations,
           column: arguments.scrollableColumnList[index],
