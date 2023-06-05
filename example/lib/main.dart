@@ -58,10 +58,10 @@ class MyApp extends StatelessWidget {
         ),
         NormalColumn(
           'value3',
-          columnWidth: FlexibleWidth.min(
-            fixedWidth: 130,
-            widthPercent: 0.3,
-          ),
+          columnWidth: FlexibleWidth.min({
+            const FixedWidth(130),
+            ProportionalWidth(0.3),
+          }),
           headerText: 'value3列',
           infoText: (data) => data.value3.toStringAsFixed(4),
           comparator: (a, b) => a.value3.compareTo(b.value3),
@@ -71,10 +71,10 @@ class MyApp extends StatelessWidget {
         ),
         NormalColumn(
           'value1+value2',
-          columnWidth: FlexibleWidth.max(
-            fixedWidth: 200,
-            widthPercent: 0.5,
-          ),
+          columnWidth: FlexibleWidth.max({
+            const FixedWidth(200),
+            ProportionalWidth(0.5),
+          }),
           headerText: 'value1+value2列',
           infoText: (data) => '${data.value1}+${data.value2}',
         ),
@@ -309,6 +309,10 @@ class _InSliverListState extends State<InSliverList> {
 
   void refreshData() {
     final Random random = Random.secure();
+    if (random.nextInt(10) % 3 == 0) {
+      controller.value = <TableDataBean>[];
+      return;
+    }
     controller.value = List<TableDataBean>.generate(
       random.nextInt(20) + 20,
       (index) => TableDataBean(
@@ -385,6 +389,12 @@ class _InSliverListState extends State<InSliverList> {
                   dimension: 200,
                   child: Text('这里是Footer，一个ColoredBox'),
                 ),
+              ),
+            ),
+            placeholder: const Center(
+              child: ColoredBox(
+                color: Colors.red,
+                child: SizedBox.square(dimension: 200),
               ),
             ),
           ),

@@ -14,27 +14,19 @@ abstract class AbsFlexibleTableColumnWidth {
 
 ///取固定宽度或者比例中的较大或较小值
 class FlexibleWidth extends AbsFlexibleTableColumnWidth {
-  FlexibleWidth.min({
-    required this.fixedWidth,
-    required this.widthPercent,
-  }) : _min = true;
+  FlexibleWidth.min(this.widths) : _min = true;
 
-  FlexibleWidth.max({
-    required this.fixedWidth,
-    required this.widthPercent,
-  }) : _min = false;
+  FlexibleWidth.max(this.widths) : _min = false;
 
-  final double fixedWidth;
-
-  //percent of viewport width
-  final double widthPercent;
+  ///所有的需要用于比较的值
+  final Set<AbsFlexibleTableColumnWidth> widths;
 
   final bool _min;
   final Map<double, double> _cache = <double, double>{};
 
   @override
   double getColumnWidth(double parentWidth, {bool? useCache}) {
-    if (useCache == false || !this.useCache) {
+    if (!(useCache ?? this.useCache)) {
       return _widthFromParent(parentWidth);
     }
     double? result = _cache[parentWidth];
@@ -46,11 +38,12 @@ class FlexibleWidth extends AbsFlexibleTableColumnWidth {
   }
 
   double _widthFromParent(double parentWidth) {
-    if (_min) {
-      return min<double>(parentWidth * widthPercent, fixedWidth);
-    } else {
-      return max<double>(parentWidth * widthPercent, fixedWidth);
-    }
+    return widths.fold<double>(0, (previousValue, element) {
+      if (_min) {
+        return min<double>(previousValue, element.getColumnWidth(parentWidth));
+      }
+      return max<double>(previousValue, element.getColumnWidth(parentWidth));
+    });
   }
 }
 
@@ -81,7 +74,7 @@ class ProportionalWidth extends AbsFlexibleTableColumnWidth {
 
   @override
   double getColumnWidth(double parentWidth, {bool? useCache}) {
-    if (useCache == false || !this.useCache) {
+    if (!(useCache ?? this.useCache)) {
       return _widthFromParent(parentWidth);
     }
     double? cacheWidth = _cache[parentWidth];

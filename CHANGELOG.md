@@ -1,3 +1,7 @@
+## 2.7.1
+
+* Optimize the implementation of `FlexibleWidth` and `ScrollSynchronizationMixin`.
+
 ## 2.7.0
 
 * There are now fewer build parameter lists.

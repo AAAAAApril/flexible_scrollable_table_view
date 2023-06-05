@@ -32,12 +32,12 @@ mixin ScrollSynchronizationMixin {
   }
 
   void _onHorizontalScrollChanged(ScrollController controller) {
+    if (!controller.hasClients || !controller.position.isScrollingNotifier.value) {
+      return;
+    }
     for (var element in List<ScrollController>.of(_scrollControllerCache.keys)) {
       try {
-        if (element != controller &&
-            element.hasClients &&
-            controller.hasClients &&
-            element.offset != controller.offset) {
+        if (element != controller && element.hasClients && element.offset != controller.offset) {
           element.jumpTo(controller.offset);
         }
       } catch (_) {
