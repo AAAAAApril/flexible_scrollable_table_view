@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           return null;
         },
       ),
-      pinnedColumns: {
+      leftPinnedColumns: {
         NormalColumn(
           'title',
           columnWidth: ProportionalWidth(1 / 3),
@@ -33,6 +33,8 @@ class MyApp extends StatelessWidget {
             debugPrint('点击了title列头');
           },
         ),
+      },
+      rightPinnedColumns: {
         const CustomSelectableColumn(
           'selectable',
           selectableWidth: FixedWidth(48),

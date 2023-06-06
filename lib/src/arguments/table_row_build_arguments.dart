@@ -32,7 +32,10 @@ class TableRowBuildArguments<T> extends AbsTableBuildArguments<T> {
   final double parentWidth;
 
   @override
-  late final List<AbsFlexibleColumn<T>> pinnedColumnList = configurations.pinnedColumns.toList(growable: false);
+  late final List<AbsFlexibleColumn<T>> leftPinnedColumnList = configurations.leftPinnedColumns.toList(growable: false);
+  @override
+  late final List<AbsFlexibleColumn<T>> rightPinnedColumnList =
+      configurations.rightPinnedColumns.toList(growable: false);
 
   @override
   late final List<AbsFlexibleColumn<T>> scrollableColumnList = configurations.scrollableColumns.toList(growable: false);

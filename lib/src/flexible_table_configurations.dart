@@ -8,8 +8,14 @@ abstract class AbsFlexibleTableConfigurations<T> {
   ///表行高
   AbsFlexibleTableRowHeight<T> get rowHeight;
 
+  @Deprecated('Use leftPinnedColumns instead.')
+  Set<AbsFlexibleColumn<T>> get pinnedColumns => leftPinnedColumns;
+
   ///不能左右滑动的列（会堆积在左侧）
-  Set<AbsFlexibleColumn<T>> get pinnedColumns;
+  Set<AbsFlexibleColumn<T>> get leftPinnedColumns;
+
+  ///不能左右滑动的列（会堆积在右侧）
+  Set<AbsFlexibleColumn<T>> get rightPinnedColumns;
 
   ///可以左右滑动的列
   Set<AbsFlexibleColumn<T>> get scrollableColumns;
@@ -18,30 +24,38 @@ abstract class AbsFlexibleTableConfigurations<T> {
 class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
   FlexibleTableConfigurations({
     required this.rowHeight,
-    Set<AbsFlexibleColumn<T>>? pinnedColumns,
+    @Deprecated('Use leftPinnedColumns instead.') Set<AbsFlexibleColumn<T>>? pinnedColumns,
+    Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
+    Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
     Set<AbsFlexibleColumn<T>>? scrollableColumns,
-  })  : pinnedColumns = pinnedColumns ?? <AbsFlexibleColumn<T>>{},
+  })  : leftPinnedColumns = leftPinnedColumns ?? pinnedColumns ?? <AbsFlexibleColumn<T>>{},
+        rightPinnedColumns = rightPinnedColumns ?? <AbsFlexibleColumn<T>>{},
         scrollableColumns = scrollableColumns ?? <AbsFlexibleColumn<T>>{};
 
   @override
   final AbsFlexibleTableRowHeight<T> rowHeight;
 
-  ///不能左右滑动的列（会堆积在左侧）
   @override
-  final Set<AbsFlexibleColumn<T>> pinnedColumns;
+  final Set<AbsFlexibleColumn<T>> leftPinnedColumns;
 
-  ///可以左右滑动的列
+  @override
+  final Set<AbsFlexibleColumn<T>> rightPinnedColumns;
+
   @override
   final Set<AbsFlexibleColumn<T>> scrollableColumns;
 
   FlexibleTableConfigurations copyWith({
     AbsFlexibleTableRowHeight<T>? rowHeight,
-    Set<AbsFlexibleColumn<T>>? pinnedColumns,
+    @Deprecated('Use leftPinnedColumns instead.') Set<AbsFlexibleColumn<T>>? pinnedColumns,
+    Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
+    Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
     Set<AbsFlexibleColumn<T>>? scrollableColumns,
   }) =>
       FlexibleTableConfigurations(
         rowHeight: rowHeight ?? this.rowHeight,
         pinnedColumns: pinnedColumns ?? this.pinnedColumns,
+        leftPinnedColumns: leftPinnedColumns ?? this.leftPinnedColumns,
+        rightPinnedColumns: rightPinnedColumns ?? this.rightPinnedColumns,
         scrollableColumns: scrollableColumns ?? this.scrollableColumns,
       );
 }

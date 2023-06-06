@@ -15,8 +15,14 @@ abstract class AbsTableBuildArguments<T> {
   ///父容器宽度
   double get parentWidth;
 
-  ///不可滚动列列表
-  List<AbsFlexibleColumn<T>> get pinnedColumnList;
+  @Deprecated('Use leftPinnedColumnList instead.')
+  List<AbsFlexibleColumn<T>> get pinnedColumnList => leftPinnedColumnList;
+
+  ///不可滚动列列表（左侧）
+  List<AbsFlexibleColumn<T>> get leftPinnedColumnList;
+
+  ///不可滚动列列表（右侧）
+  List<AbsFlexibleColumn<T>> get rightPinnedColumnList;
 
   ///可滚动列列表
   List<AbsFlexibleColumn<T>> get scrollableColumnList;
