@@ -1,3 +1,7 @@
+## 2.7.2
+
+* Added columns that can be pinned to the right.
+
 ## 2.7.1
 
 * Optimize the implementation of `FlexibleWidth` and `ScrollSynchronizationMixin`.
