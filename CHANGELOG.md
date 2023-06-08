@@ -1,3 +1,8 @@
+## 2.7.4
+
+* Add `SynchronizedScrollController`, a `ScrollController` that synchronizes the scroll position of
+  all users.
+
 ## 2.7.3
 
 * Add height-fixed `SliverPersistentHeaderDelegate`.
@@ -24,7 +29,8 @@
 
 * Rename `AbsFlexibleHeaderFooter` to `AbsFlexibleTableAdditions`.
 * Support set placeholder widget when table data is empty.
-* A listenable value named `loadedDataOnce` in `FlexibleTableController` which means whether data has loaded once.
+* A listenable value named `loadedDataOnce` in `FlexibleTableController` which means whether data
+  has loaded once.
 
 ## 2.4.3
 

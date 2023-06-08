@@ -3,7 +3,6 @@ import 'package:flexible_scrollable_table_view/src/animation/table_constraint_an
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/scrollable/horizontal_scroll_controller_builder.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_info_cell.dart';
 import 'package:flutter/widgets.dart';
 
@@ -142,20 +141,17 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HorizontalScrollControllerBuilder(
-      arguments.controller,
-      builder: (context, scrollController) => ListView.builder(
-        controller: scrollController,
-        itemCount: arguments.scrollableColumnList.length,
-        scrollDirection: Axis.horizontal,
-        primary: false,
-        padding: EdgeInsets.zero,
-        physics: physics,
-        itemBuilder: (context, index) => FlexibleTableInfoCell<T>(
-          arguments,
-          decorations: decorations,
-          column: arguments.scrollableColumnList[index],
-        ),
+    return ListView.builder(
+      controller: arguments.controller.horizontalScrollController,
+      itemCount: arguments.scrollableColumnList.length,
+      scrollDirection: Axis.horizontal,
+      primary: false,
+      padding: EdgeInsets.zero,
+      physics: physics,
+      itemBuilder: (context, index) => FlexibleTableInfoCell<T>(
+        arguments,
+        decorations: decorations,
+        column: arguments.scrollableColumnList[index],
       ),
     );
   }

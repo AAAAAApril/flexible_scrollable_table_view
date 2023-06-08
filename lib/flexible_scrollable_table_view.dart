@@ -13,9 +13,8 @@ export 'src/constraint/flexible_table_row_height.dart';
 
 export 'src/decoration/flexible_table_decorations.dart';
 
-export 'src/scrollable/horizontal_scroll_controller_builder.dart';
 export 'src/scrollable/scroll_behavior.dart';
-export 'src/scrollable/scroll_synchronization_mixin.dart';
+export 'src/scrollable/synchronized_scroll_controller.dart';
 
 export 'src/selectable/selectable_column.dart';
 export 'src/selectable/selectable_column_widgets.dart';
