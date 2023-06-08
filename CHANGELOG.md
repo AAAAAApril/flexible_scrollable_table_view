@@ -1,3 +1,7 @@
+## 2.8.0
+
+* Remove all deprecated fields.
+
 ## 2.7.4
 
 * Add `SynchronizedScrollController`, a `ScrollController` that synchronizes the scroll position of
