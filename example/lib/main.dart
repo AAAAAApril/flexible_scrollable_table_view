@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:example/src/sliver_persistent_header_delegate_impl.dart';
 import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
 import 'package:flutter/material.dart';
 
@@ -339,8 +338,8 @@ class _InSliverListState extends State<InSliverList> {
         ),
         SliverPersistentHeader(
           pinned: true,
-          delegate: SliverPersistentHeaderDelegateImpl(
-            fixedHeight: widget.configurations.rowHeight.headerRowHeight,
+          delegate: FixedSliverPersistentHeaderDelegate(
+            widget.configurations.rowHeight.headerRowHeight,
             child: ColoredBox(
               color: Colors.white,
               child: FlexibleTableHeader<TableDataBean>(

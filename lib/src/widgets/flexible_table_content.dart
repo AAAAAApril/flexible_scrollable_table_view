@@ -4,6 +4,7 @@ import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arg
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/sliver/sliver_flexible_table_content.dart';
 import 'package:flutter/widgets.dart';
 
 import 'flexible_table_info_row.dart';
@@ -168,49 +169,6 @@ class FlexibleTableContent<T> extends StatelessWidget {
             Size(constraints.maxWidth, constraints.maxHeight),
           ),
           child: child,
-        );
-      },
-    );
-  }
-}
-
-class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
-  const SliverFlexibleTableContent(
-    super.controller, {
-    super.key,
-    required super.configurations,
-    super.additions,
-    super.decorations,
-    super.animations,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverLayoutBuilder(
-      builder: (context, constraints) {
-        final TableRowBuildArguments<T> arguments = TableRowBuildArguments<T>(
-          controller,
-          configurations,
-          constraints.crossAxisExtent,
-        );
-        final double? itemExtent = super.itemExtent;
-        return ValueListenableBuilder<List<T>>(
-          valueListenable: controller,
-          builder: (context, value, child) {
-            final SliverChildDelegate delegate = SliverChildBuilderDelegate(
-              (context, index) => buildItem(
-                context,
-                arguments: arguments,
-                value: value,
-                index: index,
-              ),
-              childCount: getItemCount(value),
-            );
-            if (itemExtent == null) {
-              return SliverList(delegate: delegate);
-            }
-            return SliverFixedExtentList(delegate: delegate, itemExtent: itemExtent);
-          },
         );
       },
     );
