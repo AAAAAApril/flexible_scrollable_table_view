@@ -1,3 +1,7 @@
+## 2.7.3
+
+* Add height-fixed `SliverPersistentHeaderDelegate`.
+
 ## 2.7.2
 
 * Added columns that can be pinned to the right.
