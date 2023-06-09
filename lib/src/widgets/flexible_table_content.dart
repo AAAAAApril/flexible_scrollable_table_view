@@ -148,7 +148,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
             primary: primary,
             padding: EdgeInsets.zero,
             scrollDirection: Axis.vertical,
-            itemExtent: itemExtent,
+            itemExtent: value.isEmpty ? null : itemExtent,
             physics: verticalScrollable ? verticalPhysics : const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => buildItem(
               context,

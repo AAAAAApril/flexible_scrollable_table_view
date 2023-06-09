@@ -22,10 +22,10 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
           configurations,
           constraints.crossAxisExtent,
         );
-        final double? itemExtent = super.itemExtent;
         return ValueListenableBuilder<List<T>>(
           valueListenable: controller,
           builder: (context, value, child) {
+            final double? itemExtent = value.isEmpty ? null : super.itemExtent;
             final SliverChildDelegate delegate = SliverChildBuilderDelegate(
               (context, index) => buildItem(
                 context,
