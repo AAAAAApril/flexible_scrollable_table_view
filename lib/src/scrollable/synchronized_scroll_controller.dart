@@ -37,7 +37,7 @@ class SynchronizedScrollController extends ScrollController {
       }
       _lastUpdatedOffset = position.pixels;
       final target = initialScrollOffset;
-      for (final element in List.of(positions)..remove(position)) {
+      for (final element in Set.of(positions)..remove(position)) {
         if (element.pixels != target && target <= element.maxScrollExtent) {
           element.jumpTo(target);
         }
