@@ -1,3 +1,7 @@
+## 2.8.1
+
+* Fix bug about placeholder widget's height. 
+
 ## 2.8.0
 
 * Remove all deprecated fields.
