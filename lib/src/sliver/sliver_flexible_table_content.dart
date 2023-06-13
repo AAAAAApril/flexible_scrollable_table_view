@@ -26,14 +26,16 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
           valueListenable: controller,
           builder: (context, value, child) {
             final double? itemExtent = value.isEmpty ? null : super.itemExtent;
+            final int totalItemCount = getItemCount(value);
             final SliverChildDelegate delegate = SliverChildBuilderDelegate(
               (context, index) => buildItem(
                 context,
                 arguments: arguments,
                 value: value,
                 index: index,
+                itemCount: totalItemCount,
               ),
-              childCount: getItemCount(value),
+              childCount: totalItemCount,
             );
             if (itemExtent == null) {
               return SliverList(delegate: delegate);

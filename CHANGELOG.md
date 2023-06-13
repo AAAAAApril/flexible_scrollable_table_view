@@ -1,3 +1,9 @@
+## 2.8.2
+
+* Optimize the code.
+* Fix bug of `FlexibleWidth.min`.
+* Add usage.
+
 ## 2.8.1
 
 * Fix bug about placeholder widget's height. 

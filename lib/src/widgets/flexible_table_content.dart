@@ -94,6 +94,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     required TableRowBuildArguments<T> arguments,
     required List<T> value,
     required int index,
+    required int itemCount,
   }) {
     //数据是空的，却又需要构建列表项，说明是需要绘制占位组件
     if (value.isEmpty && hasPlaceholder) {
@@ -106,7 +107,12 @@ class FlexibleTableContent<T> extends StatelessWidget {
       return additions!.footerBuilder!.call(arguments);
     }
     return FlexibleTableInfoRow<T>(
-      arguments.toInfoRowArguments(value, realDataIndex(index)),
+      arguments.toInfoRowArguments(
+        dataList: value,
+        dataIndex: realDataIndex(index),
+        currentItemIndex: index,
+        totalItemCount: itemCount,
+      ),
       decorations: decorations,
       animations: animations,
       physics: horizontalPhysics,
@@ -141,22 +147,26 @@ class FlexibleTableContent<T> extends StatelessWidget {
         );
         Widget child = ValueListenableBuilder<List<T>>(
           valueListenable: controller,
-          builder: (context, value, child) => ListView.builder(
-            controller: verticalScrollController,
-            itemCount: getItemCount(value),
-            shrinkWrap: shrinkWrap,
-            primary: primary,
-            padding: EdgeInsets.zero,
-            scrollDirection: Axis.vertical,
-            itemExtent: value.isEmpty ? null : itemExtent,
-            physics: verticalScrollable ? verticalPhysics : const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => buildItem(
-              context,
-              arguments: arguments,
-              value: value,
-              index: index,
-            ),
-          ),
+          builder: (context, value, child) {
+            final int totalItemCount = getItemCount(value);
+            return ListView.builder(
+              controller: verticalScrollController,
+              itemCount: totalItemCount,
+              shrinkWrap: shrinkWrap,
+              primary: primary,
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.vertical,
+              itemExtent: value.isEmpty ? null : itemExtent,
+              physics: verticalScrollable ? verticalPhysics : const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => buildItem(
+                context,
+                arguments: arguments,
+                value: value,
+                index: index,
+                itemCount: totalItemCount,
+              ),
+            );
+          },
         );
         if (!verticalScrollable) {
           return SizedBox(

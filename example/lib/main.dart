@@ -42,14 +42,11 @@ class MyApp extends StatelessWidget {
       },
       scrollableColumns: {
         NormalColumn(
-          'value1',
-          columnWidth: const FixedWidth(150),
-          headerText: 'value1列',
-          infoText: (data) => data.value1,
-        ),
-        NormalColumn(
           'value2',
-          columnWidth: const FixedWidth(100),
+          columnWidth: FlexibleWidth.max({
+            const FixedWidth(100),
+            ProportionalWidth(2 / 5),
+          }),
           headerText: 'value2列',
           infoText: (data) => data.value2.toString(),
           comparator: (a, b) => a.value2.compareTo(b.value2),
@@ -61,7 +58,7 @@ class MyApp extends StatelessWidget {
           'value3',
           columnWidth: FlexibleWidth.min({
             const FixedWidth(130),
-            ProportionalWidth(0.3),
+            ProportionalWidth(3 / 5),
           }),
           headerText: 'value3列',
           infoText: (data) => data.value3.toStringAsFixed(4),
@@ -69,33 +66,6 @@ class MyApp extends StatelessWidget {
           onHeaderPressed: () {
             debugPrint('点击了value3列头');
           },
-        ),
-        NormalColumn(
-          'value1+value2',
-          columnWidth: FlexibleWidth.max({
-            const FixedWidth(200),
-            ProportionalWidth(0.5),
-          }),
-          headerText: 'value1+value2列',
-          infoText: (data) => '${data.value1}+${data.value2}',
-        ),
-        NormalColumn(
-          'value2+value3',
-          columnWidth: const FixedWidth(200),
-          headerText: 'value2+value3列',
-          infoText: (data) => '${data.value2}+${data.value3}',
-        ),
-        NormalColumn(
-          'value1+value3',
-          columnWidth: ProportionalWidth(0.5),
-          headerText: 'value1+value3列',
-          infoText: (data) => '${data.value1}+${data.value3}',
-        ),
-        NormalColumn(
-          'value1+value2+value3',
-          columnWidth: ProportionalWidth(0.6),
-          headerText: 'value1+value2+value3列',
-          infoText: (data) => '${data.value1}+${data.value2}+${data.value3}',
         ),
       },
     );
@@ -175,7 +145,6 @@ class _NormalListState extends State<NormalList> {
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',
-        value1: 'String值$index',
         value2: random.nextInt(1000),
         value3: random.nextDouble() * 100,
       ),
@@ -319,7 +288,6 @@ class _InSliverListState extends State<InSliverList> {
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',
-        value1: 'String值$index',
         value2: random.nextInt(1000),
         value3: random.nextDouble() * 100,
       ),
@@ -410,14 +378,12 @@ class TableDataBean {
   const TableDataBean({
     required this.id,
     required this.title,
-    required this.value1,
     required this.value2,
     required this.value3,
   });
 
   final int id;
   final String title;
-  final String value1;
   final int value2;
   final double value3;
 

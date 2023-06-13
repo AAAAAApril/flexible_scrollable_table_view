@@ -61,6 +61,8 @@ class TableInfoRowBuildArguments<T> extends TableRowBuildArguments<T> with Table
     super.parentWidth,
     this._dataList,
     this.dataIndex,
+    this.itemIndex,
+    this.itemCount,
   );
 
   ///所有数据
@@ -68,6 +70,15 @@ class TableInfoRowBuildArguments<T> extends TableRowBuildArguments<T> with Table
 
   ///当前行所在下标
   final int dataIndex;
+
+  ///数据总长度
+  late final int dataLength = _dataList.length;
+
+  ///当前 列表项 下标
+  final int itemIndex;
+
+  ///列表项 总数
+  final int itemCount;
 
   ///当前行数据
   late final T data = _dataList[dataIndex];
@@ -83,11 +94,19 @@ extension TableRowBuildArgumentsExt<T> on TableRowBuildArguments<T> {
         parentWidth,
       );
 
-  TableInfoRowBuildArguments<T> toInfoRowArguments(List<T> dataList, int dataIndex) => TableInfoRowBuildArguments<T>(
+  TableInfoRowBuildArguments<T> toInfoRowArguments({
+    required List<T> dataList,
+    required int dataIndex,
+    required int currentItemIndex,
+    required int totalItemCount,
+  }) =>
+      TableInfoRowBuildArguments<T>(
         controller,
         configurations,
         parentWidth,
         dataList,
         dataIndex,
+        currentItemIndex,
+        totalItemCount,
       );
 }

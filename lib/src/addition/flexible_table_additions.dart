@@ -8,19 +8,19 @@ abstract class AbsFlexibleTableAdditions<T> {
   const AbsFlexibleTableAdditions();
 
   ///返回 null 表示不限制高度
-  double? get fixedHeaderHeight;
+  double? get fixedHeaderHeight => null;
 
   ///头部
-  TableAdditionBuilder<T>? get headerBuilder;
+  TableAdditionBuilder<T>? get headerBuilder => null;
 
   ///返回 null 表示不限制高度
-  double? get fixedFooterHeight;
+  double? get fixedFooterHeight => null;
 
   ///尾部
-  TableAdditionBuilder<T>? get footerBuilder;
+  TableAdditionBuilder<T>? get footerBuilder => null;
 
   ///没有数据时的占位布局
-  TableAdditionBuilder<T>? get placeholderBuilder;
+  TableAdditionBuilder<T>? get placeholderBuilder => null;
 }
 
 class FlexibleTableAdditions<T> extends AbsFlexibleTableAdditions<T> {
