@@ -2,7 +2,7 @@ import 'package:flexible_scrollable_table_view/src/animation/flexible_table_anim
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/constraint/layout_builder_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/constraint/lazy_layout_builder.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_info_cell.dart';
@@ -56,7 +56,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
         ),
       );
     } else {
-      return LayoutBuilderWrapper(
+      return LazyLayoutBuilder(
         builder: (context, constraints) {
           final TableInfoRowBuildArguments<T> arguments = this.arguments.toInfoRowArguments(
                 rowWidth: constraints.maxWidth,

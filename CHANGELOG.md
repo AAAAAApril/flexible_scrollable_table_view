@@ -1,8 +1,12 @@
-## 2.8.3
+## 2.9.0
+
+* Broken changes: `AbsTableBuildArguments<T>` no longer has the `parentWidth` field.
 
 * Now `switchSortType(newSortType)` supported in `FlexibleTableController<T>`.
 * Now `findColumnById(columnId)` supported in `AbsFlexibleTableConfigurations<T>`.
 * Optimize the performance of `SliverFlexibleTableContent<T>` widget.
+* New widget `LazyLayoutBuilder` is added who will never rebuild when constraints did not changed.
+* Any other optimizations.
 
 ## 2.8.2
 
