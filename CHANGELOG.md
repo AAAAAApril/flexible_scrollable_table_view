@@ -2,6 +2,7 @@
 
 * Now `switchSortType(newSortType)` supported in `FlexibleTableController<T>`.
 * Now `findColumnById(columnId)` supported in `AbsFlexibleTableConfigurations<T>`.
+* Optimize the performance of `SliverFlexibleTableContent<T>` widget.
 
 ## 2.8.2
 
@@ -11,7 +12,7 @@
 
 ## 2.8.1
 
-* Fix bug about placeholder widget's height. 
+* Fix bug about placeholder widget's height.
 
 ## 2.8.0
 

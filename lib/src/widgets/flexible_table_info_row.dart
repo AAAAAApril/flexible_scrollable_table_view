@@ -1,6 +1,8 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/constraint/layout_builder_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_info_cell.dart';
@@ -14,25 +16,68 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
     this.decorations,
     this.animations,
     this.physics,
+    required this.dataIndex,
+    required this.dataList,
+    required this.itemIndex,
+    required this.itemCount,
+    this.rowWidth,
   });
 
-  final TableInfoRowBuildArguments<T> arguments;
+  final AbsTableBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
   final ScrollPhysics? physics;
 
+  final int dataIndex;
+  final List<T> dataList;
+  final int itemIndex;
+  final int itemCount;
+
+  final double? rowWidth;
+
   @override
   Widget build(BuildContext context) {
-    return TableConstraintAnimationWrapper<T>(
-      animations: animations,
-      constraints: arguments.rowConstraint,
-      child: _FlexibleTableInfoRow<T>(
-        arguments,
+    if (rowWidth != null) {
+      final TableInfoRowBuildArguments<T> arguments = this.arguments.toInfoRowArguments(
+            rowWidth: rowWidth!,
+            dataList: dataList,
+            dataIndex: dataIndex,
+            currentItemIndex: itemIndex,
+            totalItemCount: itemCount,
+          );
+      return TableConstraintAnimationWrapper<T>(
         animations: animations,
-        decorations: decorations,
-        physics: physics,
-      ),
-    );
+        constraints: arguments.rowConstraint,
+        child: _FlexibleTableInfoRow<T>(
+          arguments,
+          animations: animations,
+          decorations: decorations,
+          physics: physics,
+        ),
+      );
+    } else {
+      return LayoutBuilderWrapper(
+        builder: (context, constraints) {
+          final TableInfoRowBuildArguments<T> arguments = this.arguments.toInfoRowArguments(
+                rowWidth: constraints.maxWidth,
+                dataList: dataList,
+                dataIndex: dataIndex,
+                currentItemIndex: itemIndex,
+                totalItemCount: itemCount,
+              );
+          return TableConstraintAnimationWrapper<T>(
+            animations: animations,
+            constraints: arguments.rowConstraint,
+            child: _FlexibleTableInfoRow<T>(
+              arguments,
+              animations: animations,
+              decorations: decorations,
+              physics: physics,
+            ),
+          );
+        },
+      );
+    }
   }
 }
 

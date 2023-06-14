@@ -12,9 +12,6 @@ abstract class AbsTableBuildArguments<T> {
   ///配置
   AbsFlexibleTableConfigurations<T> get configurations;
 
-  ///父容器宽度
-  double get parentWidth;
-
   ///不可滚动列列表（左侧）
   List<AbsFlexibleColumn<T>> get leftPinnedColumnList;
 
@@ -23,4 +20,28 @@ abstract class AbsTableBuildArguments<T> {
 
   ///可滚动列列表
   List<AbsFlexibleColumn<T>> get scrollableColumnList;
+}
+
+///构建表所需参数
+class TableBuildArguments<T> extends AbsTableBuildArguments<T> {
+  TableBuildArguments(
+    this.controller,
+    this.configurations,
+  );
+
+  @override
+  final FlexibleTableController<T> controller;
+
+  @override
+  final AbsFlexibleTableConfigurations<T> configurations;
+
+  @override
+  late final List<AbsFlexibleColumn<T>> leftPinnedColumnList = configurations.leftPinnedColumns.toList(growable: false);
+
+  @override
+  late final List<AbsFlexibleColumn<T>> rightPinnedColumnList =
+      configurations.rightPinnedColumns.toList(growable: false);
+
+  @override
+  late final List<AbsFlexibleColumn<T>> scrollableColumnList = configurations.scrollableColumns.toList(growable: false);
 }
