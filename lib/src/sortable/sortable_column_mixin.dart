@@ -54,6 +54,17 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
 
   //====================================================================================================================
 
+  ///切换排序方式
+  void switchSortType(FlexibleColumnSortType newType) {
+    if (newType == _sortingType.value) {
+      return;
+    }
+    _sortingType.value = newType;
+    if (_sortingColumn.value != null) {
+      sortData();
+    }
+  }
+
   ///按某一列排序
   void sortByColumn(AbsFlexibleColumn<T> sortingColumn) {
     //该列没有排序功能

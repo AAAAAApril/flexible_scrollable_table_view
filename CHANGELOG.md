@@ -1,3 +1,8 @@
+## 2.8.3
+
+* Now `switchSortType(newSortType)` supported in `FlexibleTableController<T>`.
+* Now `findColumnById(columnId)` supported in `AbsFlexibleTableConfigurations<T>`.
+
 ## 2.8.2
 
 * Optimize the code.

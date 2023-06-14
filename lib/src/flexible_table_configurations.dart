@@ -16,6 +16,9 @@ abstract class AbsFlexibleTableConfigurations<T> {
 
   ///可以左右滑动的列
   Set<AbsFlexibleColumn<T>> get scrollableColumns;
+
+  ///根据 列 id 查找 列实例
+  AbsFlexibleColumn<T>? findColumnById(String columnId);
 }
 
 class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
@@ -52,4 +55,19 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
         rightPinnedColumns: rightPinnedColumns ?? this.rightPinnedColumns,
         scrollableColumns: scrollableColumns ?? this.scrollableColumns,
       );
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    if (leftPinnedColumns.isEmpty && rightPinnedColumns.isEmpty && scrollableColumns.isEmpty) {
+      return null;
+    }
+    for (final element in Set<AbsFlexibleColumn<T>>.of(leftPinnedColumns)
+      ..addAll(rightPinnedColumns)
+      ..addAll(scrollableColumns)) {
+      if (element.id == columnId) {
+        return element;
+      }
+    }
+    return null;
+  }
 }
