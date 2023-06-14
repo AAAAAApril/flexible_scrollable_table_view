@@ -1,6 +1,8 @@
 import 'package:flexible_scrollable_table_view/src/addition/flexible_table_additions.dart';
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/constraint/lazy_row_layout_builder.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
@@ -107,16 +109,39 @@ class FlexibleTableContent<T> extends StatelessWidget {
     if (isFooterIndex(value, index)) {
       return additions!.footerBuilder!.call(arguments);
     }
+    final int dataIndex = realDataIndex(index);
+    if (rowWidth == null) {
+      return LazyRowLayoutBuilder(
+        rowHeight: configurations.rowHeight.getInfoRowHeight(
+          controller,
+          dataIndex,
+          value[dataIndex],
+        ),
+        builder: (context, parentWidth) => FlexibleTableInfoRow<T>(
+          arguments.toInfoRowArguments(
+            rowWidth: parentWidth,
+            dataIndex: dataIndex,
+            dataList: value,
+            currentItemIndex: index,
+            totalItemCount: itemCount,
+          ),
+          decorations: decorations,
+          animations: animations,
+          physics: horizontalPhysics,
+        ),
+      );
+    }
     return FlexibleTableInfoRow<T>(
-      arguments,
-      dataList: value,
-      dataIndex: realDataIndex(index),
-      itemIndex: index,
-      itemCount: itemCount,
+      arguments.toInfoRowArguments(
+        rowWidth: rowWidth,
+        dataIndex: dataIndex,
+        dataList: value,
+        currentItemIndex: index,
+        totalItemCount: itemCount,
+      ),
       decorations: decorations,
       animations: animations,
       physics: horizontalPhysics,
-      rowWidth: rowWidth,
     );
   }
 
