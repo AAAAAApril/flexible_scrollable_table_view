@@ -1,3 +1,7 @@
+## 2.9.1
+
+* Rename `LazyLayoutBuilder` to `LazyRowLayoutBuilder` and will clear cache when row height changed.
+
 ## 2.9.0
 
 * Broken changes: `AbsTableBuildArguments<T>` no longer has the `parentWidth` field.
