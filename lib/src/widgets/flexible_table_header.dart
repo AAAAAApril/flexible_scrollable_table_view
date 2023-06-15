@@ -5,6 +5,7 @@ import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_dec
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_layout_builder.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_header_cell.dart';
 import 'package:flutter/widgets.dart';
 
@@ -27,7 +28,7 @@ class FlexibleTableHeader<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
+    return LazyLayoutBuilder(
       builder: (context, constraints) {
         final TableHeaderRowBuildArguments<T> arguments = TableHeaderRowBuildArguments<T>(
           controller,

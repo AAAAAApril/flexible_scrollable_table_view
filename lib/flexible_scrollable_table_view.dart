@@ -10,9 +10,11 @@ export 'src/arguments/table_row_build_arguments.dart';
 
 export 'src/constraint/flexible_table_column_width.dart';
 export 'src/constraint/flexible_table_row_height.dart';
-export 'src/constraint/lazy_row_layout_builder.dart';
 
 export 'src/decoration/flexible_table_decorations.dart';
+
+export 'src/layout_builder/lazy_layout_builder.dart';
+export 'src/layout_builder/lazy_sliver_layout_builder.dart';
 
 export 'src/scrollable/scroll_behavior.dart';
 export 'src/scrollable/synchronized_scroll_controller.dart';

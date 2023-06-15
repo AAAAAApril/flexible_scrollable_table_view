@@ -1,3 +1,11 @@
+## 2.10.0
+
+* Fix bug when sort with `SliverFlexibleTableContent<T>`.
+* Rename `LazyRowLayoutBuilder` to `LazyLayoutBuilder`.
+* Add `LazySliverLayoutBuilder` widget who will never rebuild when `crossAxisExtent` did not changed.
+* Now `AbsTableBuildArguments<T>` has the `parentWidth` field again.
+* Now `switchSortColumn(newSortColumn)` supported in `FlexibleTableController<T>`.
+
 ## 2.9.1
 
 * Rename `LazyLayoutBuilder` to `LazyRowLayoutBuilder` and will clear cache when row height changed.

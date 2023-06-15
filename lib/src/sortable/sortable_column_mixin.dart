@@ -65,6 +65,21 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
     }
   }
 
+  ///切换排序列
+  void switchSortColumn(AbsFlexibleColumn<T> newSortColumn) {
+    //该列没有排序功能
+    if (!newSortColumn.comparableColumn ||
+        //排序列相同，不切换
+        _sortingColumn.value == newSortColumn ||
+        //默认排序方式时，不切换排序列
+        _sortingType.value == FlexibleColumnSortType.normal) {
+      return;
+    }
+    _sortingColumn.value = newSortColumn;
+    //重新排序
+    sortData();
+  }
+
   ///按某一列排序
   void sortByColumn(AbsFlexibleColumn<T> sortingColumn) {
     //该列没有排序功能

@@ -4,17 +4,11 @@ import 'table_build_arguments.dart';
 
 ///表行约束
 mixin TableRowConstraintMixin<T> on AbsTableBuildArguments<T> {
-  ///当前行的宽度
-  double get rowWidth;
-
   ///当前行的高度
   double get rowHeight;
 
-  ///父容器宽度（由于目前行是撑满的，所以这两个值相等）
-  double get parentWidth => rowWidth;
-
   ///当前行的大小约束
-  late final BoxConstraints rowConstraint = BoxConstraints.tightFor(width: rowWidth, height: rowHeight);
+  late final BoxConstraints rowConstraint = BoxConstraints.tightFor(width: parentWidth, height: rowHeight);
 }
 
 ///构建表头行所需参数
@@ -22,11 +16,8 @@ class TableHeaderRowBuildArguments<T> extends TableBuildArguments<T> with TableR
   TableHeaderRowBuildArguments(
     super.controller,
     super.configurations,
-    this.rowWidth,
+    super.parentWidth,
   );
-
-  @override
-  final double rowWidth;
 
   @override
   late final double rowHeight = configurations.rowHeight.headerRowHeight;
@@ -37,7 +28,7 @@ class TableInfoRowBuildArguments<T> extends TableBuildArguments<T> with TableRow
   TableInfoRowBuildArguments(
     super.controller,
     super.configurations,
-    this.rowWidth,
+    super.parentWidth,
     this._dataList,
     this.dataIndex,
     this.itemIndex,
@@ -63,17 +54,14 @@ class TableInfoRowBuildArguments<T> extends TableBuildArguments<T> with TableRow
   late final T data = _dataList[dataIndex];
 
   @override
-  final double rowWidth;
-
-  @override
   late final double rowHeight = configurations.rowHeight.getInfoRowHeight(controller, dataIndex, data);
 }
 
 extension TableBuildArgumentsExt<T> on AbsTableBuildArguments<T> {
-  TableHeaderRowBuildArguments<T> toHeaderRowArguments(double rowWidth) => TableHeaderRowBuildArguments<T>(
+  TableHeaderRowBuildArguments<T> toHeaderRowArguments() => TableHeaderRowBuildArguments<T>(
         controller,
         configurations,
-        rowWidth,
+        parentWidth,
       );
 
   TableInfoRowBuildArguments<T> toInfoRowArguments({
@@ -81,12 +69,11 @@ extension TableBuildArgumentsExt<T> on AbsTableBuildArguments<T> {
     required int dataIndex,
     required int currentItemIndex,
     required int totalItemCount,
-    required double rowWidth,
   }) =>
       TableInfoRowBuildArguments<T>(
         controller,
         configurations,
-        rowWidth,
+        parentWidth,
         dataList,
         dataIndex,
         currentItemIndex,

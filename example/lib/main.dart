@@ -284,7 +284,7 @@ class _InSliverListState extends State<InSliverList> {
       return;
     }
     controller.value = List<TableDataBean>.generate(
-      random.nextInt(20) + 20,
+      random.nextInt(2000) + 200,
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',

@@ -12,6 +12,9 @@ abstract class AbsTableBuildArguments<T> {
   ///配置
   AbsFlexibleTableConfigurations<T> get configurations;
 
+  ///父容器宽度
+  double get parentWidth;
+
   ///不可滚动列列表（左侧）
   List<AbsFlexibleColumn<T>> get leftPinnedColumnList;
 
@@ -27,6 +30,7 @@ class TableBuildArguments<T> extends AbsTableBuildArguments<T> {
   TableBuildArguments(
     this.controller,
     this.configurations,
+    this.parentWidth,
   );
 
   @override
@@ -34,6 +38,9 @@ class TableBuildArguments<T> extends AbsTableBuildArguments<T> {
 
   @override
   final AbsFlexibleTableConfigurations<T> configurations;
+
+  @override
+  final double parentWidth;
 
   @override
   late final List<AbsFlexibleColumn<T>> leftPinnedColumnList = configurations.leftPinnedColumns.toList(growable: false);
