@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
         headerRowHeight: 40,
         // headerRowHeight: 60,
         fixedInfoRowHeight: 50,
-        infoRowHeightBuilder: (dataIndex, data) {
-          // return dataIndex == 9 ? 80 : null;
+        infoRowHeightBuilder: (arguments) {
+          // return arguments.dataIndex == 9 ? 80 : null;
           return null;
         },
       ),

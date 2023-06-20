@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 
 ///行高
 abstract class AbsFlexibleTableRowHeight<T> {
@@ -10,10 +10,10 @@ abstract class AbsFlexibleTableRowHeight<T> {
   ///表信息行高度
   double? get fixedInfoRowHeight;
 
-  double? Function(int dataIndex, T data)? get infoRowHeightBuilder;
+  double? Function(TableInfoRowBuildArguments<T> arguments)? get infoRowHeightBuilder;
 
   ///信息行的固定高度
-  double getInfoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data);
+  double getInfoRowHeight(TableInfoRowBuildArguments<T> arguments);
 }
 
 ///固定高度
@@ -30,10 +30,10 @@ class FixedHeight<T> extends AbsFlexibleTableRowHeight<T> {
   final double fixedInfoRowHeight;
 
   @override
-  double? Function(int dataIndex, T data)? get infoRowHeightBuilder => null;
+  double? Function(TableInfoRowBuildArguments<T> arguments)? get infoRowHeightBuilder => null;
 
   @override
-  double getInfoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data) => fixedInfoRowHeight;
+  double getInfoRowHeight(TableInfoRowBuildArguments<T> arguments) => fixedInfoRowHeight;
 }
 
 ///根据数据变化
@@ -51,10 +51,10 @@ class ChangeableHeight<T> extends AbsFlexibleTableRowHeight<T> {
   final double? fixedInfoRowHeight;
 
   @override
-  final double? Function(int dataIndex, T data) infoRowHeightBuilder;
+  final double? Function(TableInfoRowBuildArguments<T> arguments) infoRowHeightBuilder;
 
   @override
-  double getInfoRowHeight(FlexibleTableController<T> controller, int dataIndex, T data) {
-    return infoRowHeightBuilder.call(dataIndex, data) ?? fixedInfoRowHeight ?? 0;
+  double getInfoRowHeight(TableInfoRowBuildArguments<T> arguments) {
+    return infoRowHeightBuilder.call(arguments) ?? fixedInfoRowHeight ?? 0;
   }
 }

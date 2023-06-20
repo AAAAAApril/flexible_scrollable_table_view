@@ -46,12 +46,7 @@ class FlexibleWidth extends AbsFlexibleTableColumnWidth {
     required bool useCache,
   }) {
     return widths.fold<double>(
-      _min
-          ? widths.first.getColumnWidth(
-              parentWidth,
-              useCache: useCache,
-            )
-          : 0,
+      _min ? double.infinity : 0,
       (previousValue, element) {
         if (_min) {
           return min<double>(

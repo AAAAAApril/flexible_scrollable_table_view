@@ -54,7 +54,7 @@ class TableInfoRowBuildArguments<T> extends TableBuildArguments<T> with TableRow
   late final T data = _dataList[dataIndex];
 
   @override
-  late final double rowHeight = configurations.rowHeight.getInfoRowHeight(controller, dataIndex, data);
+  late final double rowHeight = configurations.rowHeight.getInfoRowHeight(this);
 }
 
 extension TableBuildArgumentsExt<T> on AbsTableBuildArguments<T> {
