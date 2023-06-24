@@ -2,7 +2,6 @@ import 'package:flexible_scrollable_table_view/src/animation/flexible_table_anim
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_layout_builder.dart';
@@ -66,77 +65,33 @@ class _FlexibleTableHeader<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = <Widget>[];
-    if (arguments.configurations.leftPinnedColumns.isNotEmpty) {
-      children.add(PinnedTableHeaderRow<T>(
-        arguments,
-        pinnedColumns: arguments.configurations.leftPinnedColumns,
-        animations: animations,
-        decorations: decorations,
-      ));
-    }
-    if (arguments.configurations.scrollableColumns.isNotEmpty) {
-      children.add(ScrollableTableHeaderRow<T>(
-        arguments,
-        decorations: decorations,
-        physics: physics,
-      ));
-    }
-    if (arguments.configurations.rightPinnedColumns.isNotEmpty) {
-      children.add(PinnedTableHeaderRow<T>(
-        arguments,
-        pinnedColumns: arguments.configurations.rightPinnedColumns,
-        animations: animations,
-        decorations: decorations,
-      ));
-    }
-    Widget child;
-    if (children.length == 1) {
-      child = children.first;
-    } else {
-      child = Row(
-        children: children.map<Widget>((e) {
-          if (e is ScrollableTableHeaderRow<T>) {
-            return Expanded(child: e);
-          }
-          return e;
-        }).toList(growable: false),
-      );
-    }
+    Widget child = Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+      ...arguments.configurations.leftPinnedColumns.map<Widget>(
+        (e) => FlexibleTableHeaderCell<T>(
+          arguments,
+          animations: animations,
+          decorations: decorations,
+          column: e,
+        ),
+      ),
+      if (arguments.configurations.scrollableColumns.isNotEmpty)
+        Expanded(
+          child: ScrollableTableHeaderRow<T>(
+            arguments,
+            decorations: decorations,
+            physics: physics,
+          ),
+        ),
+      ...arguments.configurations.rightPinnedColumns.map<Widget>(
+        (e) => FlexibleTableHeaderCell<T>(
+          arguments,
+          animations: animations,
+          decorations: decorations,
+          column: e,
+        ),
+      ),
+    ]);
     return decorations?.headerRowDecorationBuilder?.call(arguments, child) ?? child;
-  }
-}
-
-///表头行固定区域
-class PinnedTableHeaderRow<T> extends StatelessWidget {
-  const PinnedTableHeaderRow(
-    this.arguments, {
-    super.key,
-    required this.pinnedColumns,
-    this.animations,
-    this.decorations,
-  });
-
-  final TableHeaderRowBuildArguments<T> arguments;
-  final Set<AbsFlexibleColumn<T>> pinnedColumns;
-  final AbsFlexibleTableAnimations<T>? animations;
-  final AbsFlexibleTableDecorations<T>? decorations;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: pinnedColumns
-          .map<Widget>(
-            (e) => FlexibleTableHeaderCell<T>(
-              arguments,
-              animations: animations,
-              decorations: decorations,
-              column: e,
-            ),
-          )
-          .toList(growable: false),
-    );
   }
 }
 

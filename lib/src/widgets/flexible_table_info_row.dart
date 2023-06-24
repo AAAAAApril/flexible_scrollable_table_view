@@ -2,7 +2,6 @@ import 'package:flexible_scrollable_table_view/src/animation/flexible_table_anim
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_info_cell.dart';
 import 'package:flutter/widgets.dart';
 
@@ -52,77 +51,33 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = <Widget>[];
-    if (arguments.configurations.leftPinnedColumns.isNotEmpty) {
-      children.add(PinnedTableInfoRow<T>(
-        arguments,
-        pinnedColumns: arguments.configurations.leftPinnedColumns,
-        animations: animations,
-        decorations: decorations,
-      ));
-    }
-    if (arguments.configurations.scrollableColumns.isNotEmpty) {
-      children.add(ScrollableTableInfoRow<T>(
-        arguments,
-        decorations: decorations,
-        physics: physics,
-      ));
-    }
-    if (arguments.configurations.rightPinnedColumns.isNotEmpty) {
-      children.add(PinnedTableInfoRow<T>(
-        arguments,
-        pinnedColumns: arguments.configurations.rightPinnedColumns,
-        animations: animations,
-        decorations: decorations,
-      ));
-    }
-    Widget child;
-    if (children.length == 1) {
-      child = children.first;
-    } else {
-      child = Row(
-        children: children.map<Widget>((e) {
-          if (e is ScrollableTableInfoRow<T>) {
-            return Expanded(child: e);
-          }
-          return e;
-        }).toList(growable: false),
-      );
-    }
+    Widget child = Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+      ...arguments.configurations.leftPinnedColumns.map<Widget>(
+        (e) => FlexibleTableInfoCell<T>(
+          arguments,
+          animations: animations,
+          decorations: decorations,
+          column: e,
+        ),
+      ),
+      if (arguments.configurations.scrollableColumns.isNotEmpty)
+        Expanded(
+          child: ScrollableTableInfoRow<T>(
+            arguments,
+            decorations: decorations,
+            physics: physics,
+          ),
+        ),
+      ...arguments.configurations.rightPinnedColumns.map<Widget>(
+        (e) => FlexibleTableInfoCell<T>(
+          arguments,
+          animations: animations,
+          decorations: decorations,
+          column: e,
+        ),
+      ),
+    ]);
     return decorations?.infoRowDecorationBuilder?.call(arguments, child) ?? child;
-  }
-}
-
-///表信息行固定区域
-class PinnedTableInfoRow<T> extends StatelessWidget {
-  const PinnedTableInfoRow(
-    this.arguments, {
-    super.key,
-    required this.pinnedColumns,
-    this.decorations,
-    this.animations,
-  });
-
-  final TableInfoRowBuildArguments<T> arguments;
-  final Set<AbsFlexibleColumn<T>> pinnedColumns;
-  final AbsFlexibleTableAnimations<T>? animations;
-  final AbsFlexibleTableDecorations<T>? decorations;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: pinnedColumns
-          .map<Widget>(
-            (e) => FlexibleTableInfoCell<T>(
-              arguments,
-              animations: animations,
-              decorations: decorations,
-              column: e,
-            ),
-          )
-          .toList(growable: false),
-    );
   }
 }
 
