@@ -1,3 +1,8 @@
+## 2.11.0
+
+* Now you will get `TableInfoRowArgumentsMixin<T>` when function `getInfoRowHeight` called in `AbsFlexibleTableRowHeight<T>`.
+* Optimize the code.
+
 ## 2.10.0
 
 * Fix bug when sort with `SliverFlexibleTableContent<T>`.
