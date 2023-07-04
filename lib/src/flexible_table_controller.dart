@@ -5,18 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'selectable/selectable_row_mixin.dart';
 import 'sortable/sortable_column_mixin.dart';
 
-abstract class FlexibleTableValueListenable<T> extends ValueListenable<T> {
-  const FlexibleTableValueListenable() : super();
-
-  ///原始数据
-  T get tableValue;
-}
-
 ///表控制器
 ///[T] 表数据实体
 class FlexibleTableController<T> extends ChangeNotifier
     with SortableColumnMixin<T>, SelectableRowMixin<T>
-    implements FlexibleTableValueListenable<List<T>> {
+    implements ValueListenable<List<T>> {
   FlexibleTableController() : super();
 
   ///用于横向滚动区域的同步滚动控制器
@@ -37,8 +30,7 @@ class FlexibleTableController<T> extends ChangeNotifier
   @override
   List<T> get sortableValue => _rawValue;
 
-  @override
-  List<T> get tableValue => _rawValue;
+  List<T> get rawValue => _rawValue;
 
   @override
   List<T> get value => sortedValue;

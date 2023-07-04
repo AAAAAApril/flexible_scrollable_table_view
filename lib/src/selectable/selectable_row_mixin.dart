@@ -57,12 +57,18 @@ mixin SelectableRowMixin<T> on ChangeNotifier {
 
   ///选中某一些行
   void selectRows(List<T> rowDataList) {
+    if (rowDataList.isEmpty) {
+      return;
+    }
     rowDataList.removeWhere((element) => _selectedValue.value.contains(element));
     _selectedValue.value = List<T>.of(_selectedValue.value)..addAll(rowDataList);
   }
 
   ///取消选中某一些行
   void unselectRows(List<T> rowDataList) {
+    if (rowDataList.isEmpty) {
+      return;
+    }
     _selectedValue.value = List<T>.of(_selectedValue.value)..removeWhere((element) => rowDataList.contains(element));
   }
 

@@ -1,3 +1,7 @@
+## 2.12.0
+
+* Optimize the code of `SortableColumnMixin<T>`, and fix bugs.
+
 ## 2.11.0
 
 * Now you will get `TableInfoRowArgumentsMixin<T>` when function `getInfoRowHeight` called in `AbsFlexibleTableRowHeight<T>`.

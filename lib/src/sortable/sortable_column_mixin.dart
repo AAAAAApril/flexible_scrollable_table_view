@@ -27,21 +27,21 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
   }
 
   ///当前的排序方式
-  final ValueNotifier<FlexibleColumnSortType> _sortingType =
+  final ValueNotifier<FlexibleColumnSortType> _currentSortingType =
       ValueNotifier<FlexibleColumnSortType>(FlexibleColumnSortType.normal);
 
-  ValueListenable<FlexibleColumnSortType> get sortingType => _sortingType;
+  ValueListenable<FlexibleColumnSortType> get currentSortingType => _currentSortingType;
 
   ///触发排序的列
-  final ValueNotifier<AbsFlexibleColumn<T>?> _sortingColumn = ValueNotifier<AbsFlexibleColumn<T>?>(null);
+  final ValueNotifier<AbsFlexibleColumn<T>?> _currentSortingColumn = ValueNotifier<AbsFlexibleColumn<T>?>(null);
 
-  ValueListenable<AbsFlexibleColumn<T>?> get sortingColumn => _sortingColumn;
+  ValueListenable<AbsFlexibleColumn<T>?> get currentSortingColumn => _currentSortingColumn;
 
   @override
   void dispose() {
     super.dispose();
-    _sortingType.dispose();
-    _sortingColumn.dispose();
+    _currentSortingType.dispose();
+    _currentSortingColumn.dispose();
   }
 
   ///被排序过的数据
@@ -55,78 +55,60 @@ mixin SortableColumnMixin<T> on ChangeNotifier {
   //====================================================================================================================
 
   ///切换排序方式
-  void switchSortType(FlexibleColumnSortType newType) {
-    if (newType == _sortingType.value) {
+  void switchSortType(FlexibleColumnSortType newSortType) {
+    if (newSortType == _currentSortingType.value) {
       return;
     }
-    _sortingType.value = newType;
-    if (_sortingColumn.value != null) {
+    _currentSortingType.value = newSortType;
+    if (_currentSortingColumn.value != null) {
       sortData();
     }
   }
 
+  ///切换到下一个排序方式
+  void switch2NextSortType() {
+    switchSortType(nextSortType(_currentSortingType.value));
+  }
+
   ///切换排序列
-  void switchSortColumn(AbsFlexibleColumn<T> newSortColumn) {
-    //该列没有排序功能
-    if (!newSortColumn.comparableColumn ||
-        //排序列相同，不切换
-        _sortingColumn.value == newSortColumn ||
-        //默认排序方式时，不切换排序列
-        _sortingType.value == FlexibleColumnSortType.normal) {
+  void switchSortColumn(AbsFlexibleColumn<T>? newSortColumn) {
+    assert(newSortColumn == null || newSortColumn.comparableColumn);
+    //排序列相同，不切换
+    if (_currentSortingColumn.value == newSortColumn) {
       return;
     }
-    _sortingColumn.value = newSortColumn;
+    _currentSortingColumn.value = newSortColumn;
     //重新排序
     sortData();
   }
 
-  ///按某一列排序
-  void sortByColumn(AbsFlexibleColumn<T> sortingColumn) {
-    //该列没有排序功能
-    if (!sortingColumn.comparableColumn) {
-      return;
+  ///切换排序方式以及排序列
+  void switchSortTypeAndColumn({
+    required FlexibleColumnSortType newSortType,
+    required AbsFlexibleColumn<T>? newSortColumn,
+  }) {
+    bool needSort = false;
+    if (newSortType != _currentSortingType.value) {
+      _currentSortingType.value = newSortType;
+      needSort = true;
     }
-    final AbsFlexibleColumn<T>? currentColumn = _sortingColumn.value;
-    FlexibleColumnSortType currentSortType = _sortingType.value;
-    //重复点击了列头
-    if (currentColumn == null || currentColumn == sortingColumn) {
-      //切换排序方式
-      currentSortType = nextSortType(currentSortType);
+    if ((newSortColumn == null || newSortColumn.comparableColumn) && _currentSortingColumn.value != newSortColumn) {
+      _currentSortingColumn.value = newSortColumn;
+      needSort = true;
     }
-    //切换了列头
-    else {
-      //是默认排序方式
-      if (currentSortType == FlexibleColumnSortType.normal) {
-        //切换排序方式
-        currentSortType = nextSortType(currentSortType);
-      }
-      //不是默认排序方式
-      else {
-        //不切换排序方式
-      }
+    if (needSort) {
+      sortData();
     }
-    _sortingType.value = currentSortType;
-    //先置空
-    _sortingColumn.value = null;
-    _sortingColumn.value = currentSortType == FlexibleColumnSortType.normal ? null : sortingColumn;
-    //重新排序
-    sortData();
-  }
-
-  ///重置排序状态
-  void resetSortState() {
-    _sortingColumn.value = null;
-    _sortingType.value = FlexibleColumnSortType.normal;
-    sortData();
   }
 
   //====================================================================================================================
 
   ///给数据排序
+  @protected
   void sortData() {
     final List<T> value = List<T>.of(sortableValue);
-    final FlexibleColumnSortType sortType = _sortingType.value;
-    final Comparator<T>? comparator = _sortingColumn.value?.comparator;
+    final FlexibleColumnSortType sortType = _currentSortingType.value;
+    final Comparator<T>? comparator = _currentSortingColumn.value?.comparator;
     if (value.isNotEmpty && sortType != FlexibleColumnSortType.normal && comparator != null) {
       value.sort(
         (a, b) {

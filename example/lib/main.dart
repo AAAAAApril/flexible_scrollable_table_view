@@ -430,7 +430,27 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
         onTap: () {
           onHeaderPressed?.call();
           //点击列头排序
-          arguments.controller.sortByColumn(this);
+          //当前正在排序
+          if (arguments.controller.currentSortingColumn.value == this) {
+            //切换排序方式
+            arguments.controller.switch2NextSortType();
+          }
+          //当前列未在排序
+          else {
+            //当前没有正在排序的列
+            if (arguments.controller.currentSortingColumn.value == null) {
+              //切换为当前列降序排序
+              arguments.controller.switchSortTypeAndColumn(
+                newSortType: FlexibleColumnSortType.descending,
+                newSortColumn: this,
+              );
+            }
+            //当前有正在排序的列
+            else {
+              //切换排序列为当前
+              arguments.controller.switchSortColumn(this);
+            }
+          }
         },
         child: child,
       );
