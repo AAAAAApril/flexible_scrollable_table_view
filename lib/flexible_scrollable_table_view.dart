@@ -17,7 +17,7 @@ export 'src/layout_builder/lazy_layout_builder.dart';
 export 'src/layout_builder/lazy_sliver_layout_builder.dart';
 
 export 'src/scrollable/scroll_behavior.dart';
-export 'src/scrollable/synchronized_scroll_controller.dart';
+export 'src/scrollable/synchronized_scroll_mixin.dart';
 
 export 'src/selectable/selectable_column.dart';
 export 'src/selectable/selectable_column_widgets.dart';

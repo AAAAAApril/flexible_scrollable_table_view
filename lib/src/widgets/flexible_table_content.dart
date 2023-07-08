@@ -6,6 +6,7 @@ import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_dec
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_layout_builder.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/synchronized_scroll_mixin.dart';
 import 'package:flexible_scrollable_table_view/src/sliver/sliver_flexible_table_content.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,6 +21,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
     this.additions,
     this.decorations,
     this.animations,
+    this.horizontalScrollController,
     this.verticalScrollController,
     this.shrinkWrap = false,
     this.primary,
@@ -34,6 +36,8 @@ class FlexibleTableContent<T> extends StatelessWidget {
     AbsFlexibleTableAdditions<T>? additions,
     AbsFlexibleTableDecorations<T>? decorations,
     AbsFlexibleTableAnimations<T>? animations,
+    SynchronizedScrollMixin? horizontalScrollController,
+    ScrollPhysics? horizontalPhysics,
   }) =>
       SliverFlexibleTableContent<T>(
         controller,
@@ -42,6 +46,8 @@ class FlexibleTableContent<T> extends StatelessWidget {
         additions: additions,
         decorations: decorations,
         animations: animations,
+        horizontalScrollController: horizontalScrollController,
+        horizontalPhysics: horizontalPhysics,
       );
 
   final FlexibleTableController<T> controller;
@@ -50,6 +56,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
 
+  final SynchronizedScrollMixin? horizontalScrollController;
   final ScrollController? verticalScrollController;
 
   final bool shrinkWrap;
@@ -119,6 +126,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
       ),
       decorations: decorations,
       animations: animations,
+      scrollController: horizontalScrollController,
       physics: horizontalPhysics,
     );
   }

@@ -1,13 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-///可以同步多个使用者的控制器
-class SynchronizedScrollController extends ScrollController {
-  SynchronizedScrollController({
-    super.initialScrollOffset,
-    super.keepScrollOffset,
-    super.debugLabel,
-  });
-
+///可以同步每个滚动组件的扩展功能
+mixin SynchronizedScrollMixin on ScrollController {
   final Map<ScrollPosition, VoidCallback> _positionToListener = <ScrollPosition, VoidCallback>{};
 
   double? _lastUpdatedOffset;
@@ -16,23 +10,11 @@ class SynchronizedScrollController extends ScrollController {
   double get initialScrollOffset => _lastUpdatedOffset ?? super.initialScrollOffset;
 
   @override
-  ScrollPosition createScrollPosition(ScrollPhysics physics, ScrollContext context, ScrollPosition? oldPosition) {
-    return ScrollPositionWithSingleContext(
-      physics: physics,
-      context: context,
-      initialPixels: initialScrollOffset,
-      keepScrollOffset: keepScrollOffset,
-      oldPosition: oldPosition,
-      debugLabel: debugLabel,
-    );
-  }
-
-  @override
   void attach(ScrollPosition position) {
     super.attach(position);
     assert(!_positionToListener.containsKey(position));
     _positionToListener[position] = () {
-      if (!position.isScrollingNotifier.value) {
+      if (!position.isScrollingNotifier.value || _lastUpdatedOffset == position.pixels) {
         return;
       }
       _lastUpdatedOffset = position.pixels;
@@ -65,4 +47,12 @@ class SynchronizedScrollController extends ScrollController {
     }
     super.dispose();
   }
+}
+
+class SynchronizedScrollController extends ScrollController with SynchronizedScrollMixin {
+  SynchronizedScrollController({
+    super.initialScrollOffset,
+    super.keepScrollOffset,
+    super.debugLabel,
+  });
 }

@@ -1,3 +1,7 @@
+## 2.12.1
+
+* Custom `SynchronizedScrollMixin` is now supported.
+
 ## 2.12.0
 
 * Optimize the code of `SortableColumnMixin<T>`, and fix bugs.

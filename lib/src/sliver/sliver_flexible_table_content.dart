@@ -12,6 +12,8 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
     super.additions,
     super.decorations,
     super.animations,
+    super.horizontalScrollController,
+    super.horizontalPhysics,
   });
 
   @override

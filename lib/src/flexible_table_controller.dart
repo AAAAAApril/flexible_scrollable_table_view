@@ -1,7 +1,6 @@
-import 'package:flexible_scrollable_table_view/src/scrollable/synchronized_scroll_controller.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
+import 'scrollable/synchronized_scroll_mixin.dart';
 import 'selectable/selectable_row_mixin.dart';
 import 'sortable/sortable_column_mixin.dart';
 
@@ -10,14 +9,21 @@ import 'sortable/sortable_column_mixin.dart';
 class FlexibleTableController<T> extends ChangeNotifier
     with SortableColumnMixin<T>, SelectableRowMixin<T>
     implements ValueListenable<List<T>> {
-  FlexibleTableController() : super();
+  FlexibleTableController({
+    SynchronizedScrollMixin? horizontalScrollController,
+  })  : _horizontalScrollController = horizontalScrollController,
+        horizontalScrollController = horizontalScrollController ?? SynchronizedScrollController(),
+        super();
 
   ///用于横向滚动区域的同步滚动控制器
-  final ScrollController horizontalScrollController = SynchronizedScrollController();
+  final SynchronizedScrollMixin horizontalScrollController;
+  final SynchronizedScrollMixin? _horizontalScrollController;
 
   @override
   void dispose() {
-    horizontalScrollController.dispose();
+    if (_horizontalScrollController == null) {
+      horizontalScrollController.dispose();
+    }
     super.dispose();
   }
 

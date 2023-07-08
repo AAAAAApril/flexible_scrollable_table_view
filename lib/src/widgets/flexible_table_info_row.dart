@@ -2,6 +2,7 @@ import 'package:flexible_scrollable_table_view/src/animation/flexible_table_anim
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/synchronized_scroll_mixin.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_info_cell.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,12 +13,14 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
     super.key,
     this.decorations,
     this.animations,
+    this.scrollController,
     this.physics,
   });
 
   final TableInfoRowBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
+  final SynchronizedScrollMixin? scrollController;
   final ScrollPhysics? physics;
 
   @override
@@ -29,6 +32,7 @@ class FlexibleTableInfoRow<T> extends StatelessWidget {
         arguments,
         animations: animations,
         decorations: decorations,
+        scrollController: scrollController,
         physics: physics,
       ),
     );
@@ -41,12 +45,14 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
     super.key,
     this.decorations,
     this.animations,
+    this.scrollController,
     this.physics,
   });
 
   final TableInfoRowBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
+  final SynchronizedScrollMixin? scrollController;
   final ScrollPhysics? physics;
 
   @override
@@ -65,6 +71,7 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
           child: ScrollableTableInfoRow<T>(
             arguments,
             decorations: decorations,
+            scrollController: scrollController,
             physics: physics,
           ),
         ),
@@ -87,17 +94,19 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
     this.arguments, {
     super.key,
     this.decorations,
+    this.scrollController,
     this.physics,
   });
 
   final TableInfoRowBuildArguments<T> arguments;
   final AbsFlexibleTableDecorations<T>? decorations;
+  final SynchronizedScrollMixin? scrollController;
   final ScrollPhysics? physics;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      controller: arguments.controller.horizontalScrollController,
+      controller: scrollController ?? arguments.controller.horizontalScrollController,
       itemCount: arguments.scrollableColumnList.length,
       scrollDirection: Axis.horizontal,
       primary: false,
