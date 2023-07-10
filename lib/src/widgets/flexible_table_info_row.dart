@@ -57,12 +57,11 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+    final Widget child = Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
       ...arguments.configurations.leftPinnedColumns.map<Widget>(
         (e) => FlexibleTableInfoCell<T>(
           arguments,
           animations: animations,
-          decorations: decorations,
           column: e,
         ),
       ),
@@ -70,7 +69,6 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
         Expanded(
           child: ScrollableTableInfoRow<T>(
             arguments,
-            decorations: decorations,
             scrollController: scrollController,
             physics: physics,
           ),
@@ -79,7 +77,6 @@ class _FlexibleTableInfoRow<T> extends StatelessWidget {
         (e) => FlexibleTableInfoCell<T>(
           arguments,
           animations: animations,
-          decorations: decorations,
           column: e,
         ),
       ),
@@ -93,13 +90,11 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
   const ScrollableTableInfoRow(
     this.arguments, {
     super.key,
-    this.decorations,
     this.scrollController,
     this.physics,
   });
 
   final TableInfoRowBuildArguments<T> arguments;
-  final AbsFlexibleTableDecorations<T>? decorations;
   final SynchronizedScrollMixin? scrollController;
   final ScrollPhysics? physics;
 
@@ -114,7 +109,6 @@ class ScrollableTableInfoRow<T> extends StatelessWidget {
       physics: physics,
       itemBuilder: (context, index) => FlexibleTableInfoCell<T>(
         arguments,
-        decorations: decorations,
         column: arguments.scrollableColumnList[index],
       ),
     );

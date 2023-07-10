@@ -1,7 +1,7 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
+import 'package:flexible_scrollable_table_view/src/dynamic_width/dynamic_width_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_cell_wrapper.dart';
@@ -13,19 +13,20 @@ class FlexibleTableInfoCell<T> extends StatelessWidget {
     this.arguments, {
     super.key,
     this.animations,
-    this.decorations,
     required this.column,
   });
 
   final TableInfoRowBuildArguments<T> arguments;
   final AbsFlexibleTableAnimations<T>? animations;
-  final AbsFlexibleTableDecorations<T>? decorations;
 
   ///列配置
   final AbsFlexibleColumn<T> column;
 
   @override
   Widget build(BuildContext context) {
+    if (column is AbsDynamicWidthColumn<T, dynamic>) {
+      return (column as AbsDynamicWidthColumn<T, dynamic>).buildDynamicInfoCell(arguments, animations);
+    }
     Widget child = TableConstraintAnimationWrapper<T>(
       animations: animations,
       constraints: BoxConstraints.tightFor(

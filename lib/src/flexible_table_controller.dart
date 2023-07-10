@@ -13,7 +13,9 @@ class FlexibleTableController<T> extends ChangeNotifier
     SynchronizedScrollMixin? horizontalScrollController,
   })  : _horizontalScrollController = horizontalScrollController,
         horizontalScrollController = horizontalScrollController ?? SynchronizedScrollController(),
-        super();
+        super(){
+    addValueSettingCallback(_onValueSetting);
+  }
 
   ///用于横向滚动区域的同步滚动控制器
   final SynchronizedScrollMixin horizontalScrollController;
@@ -21,6 +23,7 @@ class FlexibleTableController<T> extends ChangeNotifier
 
   @override
   void dispose() {
+    removeValueSettingCallback(_onValueSetting);
     if (_horizontalScrollController == null) {
       horizontalScrollController.dispose();
     }
@@ -41,12 +44,37 @@ class FlexibleTableController<T> extends ChangeNotifier
   @override
   List<T> get value => sortedValue;
 
+  ///设置新数据时的回调
+  final List<TableValueSettingCallback<T>> _settingCallback = <TableValueSettingCallback<T>>[];
+
   set value(List<T> newValue) {
     if (_rawValue == newValue || (_rawValue.isEmpty && newValue.isEmpty)) {
       return;
     }
+    final oldValue = _rawValue;
     _rawValue = newValue;
-    onSelectableValueChanged();
+    for (final element in _settingCallback) {
+      element.call(oldValue, newValue);
+    }
     sortData();
   }
+
+  ///添加设置数据时的回调
+  void addValueSettingCallback(TableValueSettingCallback<T> callback) {
+    if (!_settingCallback.contains(callback)) {
+      _settingCallback.add(callback);
+    }
+  }
+
+  ///移除设置数据时的回调
+  void removeValueSettingCallback(TableValueSettingCallback<T> callback) {
+    _settingCallback.remove(callback);
+  }
+
+  void _onValueSetting(List<T> oldValue, List<T> newValue){
+    onSelectableValueChanged();
+  }
+
 }
+
+typedef TableValueSettingCallback<T> = void Function(List<T> oldValue, List<T> newValue);

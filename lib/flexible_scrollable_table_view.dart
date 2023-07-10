@@ -13,6 +13,11 @@ export 'src/constraint/flexible_table_row_height.dart';
 
 export 'src/decoration/flexible_table_decorations.dart';
 
+export 'src/dynamic_width/dynamic_width.dart';
+export 'src/dynamic_width/dynamic_width_column.dart';
+export 'src/dynamic_width/intrinsic_width_group.dart';
+export 'src/dynamic_width/size_listenable_widget.dart';
+
 export 'src/layout_builder/lazy_layout_builder.dart';
 export 'src/layout_builder/lazy_sliver_layout_builder.dart';
 
