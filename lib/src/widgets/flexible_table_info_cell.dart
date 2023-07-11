@@ -2,6 +2,7 @@ import 'package:flexible_scrollable_table_view/src/animation/flexible_table_anim
 import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/dynamic_width/dynamic_width_column.dart';
+import 'package:flexible_scrollable_table_view/src/dynamic_width/intrinsic_width_group.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column.dart';
 import 'package:flexible_scrollable_table_view/src/selectable/selectable_column_cell_wrapper.dart';
@@ -24,8 +25,15 @@ class FlexibleTableInfoCell<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (column is AbsDynamicWidthColumn<T, dynamic>) {
-      return (column as AbsDynamicWidthColumn<T, dynamic>).buildDynamicInfoCell(arguments, animations);
+    if (column is AbsDynamicWidthColumn<T>) {
+      return IntrinsicWidthChild(
+        arguments.dataIndex,
+        controller: arguments.controller,
+        key: ValueKey<String>('${column.id}_${arguments.dataIndex}'),
+        group: (column as AbsDynamicWidthColumn<T>).columnWidth.widthGroup,
+        fixedHeight: arguments.rowHeight,
+        child: arguments.rowHeight <= 0 ? const SizedBox.shrink() : column.buildInfoCell(arguments),
+      );
     }
     Widget child = TableConstraintAnimationWrapper<T>(
       animations: animations,

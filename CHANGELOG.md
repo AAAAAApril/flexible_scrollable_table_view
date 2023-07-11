@@ -1,3 +1,7 @@
+## 2.12.2
+
+* New feature: Support for dynamically changing the width of columns based on the maximum width of content. See the Example project.
+
 ## 2.12.1
 
 * Custom `SynchronizedScrollMixin` is now supported.

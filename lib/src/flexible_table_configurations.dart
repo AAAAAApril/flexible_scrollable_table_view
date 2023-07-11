@@ -19,6 +19,13 @@ abstract class AbsFlexibleTableConfigurations<T> {
 
   ///根据 列 id 查找 列实例
   AbsFlexibleColumn<T>? findColumnById(String columnId);
+
+  AbsFlexibleTableConfigurations<T> copyWith({
+    AbsFlexibleTableRowHeight<T>? rowHeight,
+    Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
+    Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
+    Set<AbsFlexibleColumn<T>>? scrollableColumns,
+  });
 }
 
 class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
@@ -43,13 +50,14 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
   @override
   final Set<AbsFlexibleColumn<T>> scrollableColumns;
 
-  FlexibleTableConfigurations copyWith({
+  @override
+  FlexibleTableConfigurations<T> copyWith({
     AbsFlexibleTableRowHeight<T>? rowHeight,
     Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
     Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
     Set<AbsFlexibleColumn<T>>? scrollableColumns,
   }) =>
-      FlexibleTableConfigurations(
+      FlexibleTableConfigurations<T>(
         rowHeight: rowHeight ?? this.rowHeight,
         leftPinnedColumns: leftPinnedColumns ?? this.leftPinnedColumns,
         rightPinnedColumns: rightPinnedColumns ?? this.rightPinnedColumns,

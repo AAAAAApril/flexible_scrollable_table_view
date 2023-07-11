@@ -5,25 +5,25 @@ import 'package:flutter/foundation.dart';
 import 'intrinsic_width_group.dart';
 
 ///动态宽度
-abstract class AbsDynamicWidth<T, I> extends AbsFlexibleTableColumnWidth {
+abstract class AbsDynamicWidth<T> extends AbsFlexibleTableColumnWidth {
   AbsDynamicWidth(this.controller) {
-    controller.addValueSettingCallback(_onTableValueSetting);
+    controller.addValueSettingCallback(_onValueSetting);
   }
 
   final FlexibleTableController<T> controller;
 
   ///宽度组
-  IntrinsicWidthGroup<I> get widthGroup;
+  IntrinsicWidthGroup get widthGroup;
 
   ///释放函数
   @mustCallSuper
   void dispose() {
-    controller.removeValueSettingCallback(_onTableValueSetting);
+    controller.removeValueSettingCallback(_onValueSetting);
   }
 
-  void _onTableValueSetting(List<T> oldValue, List<T> newValue) {
-    if (!widthGroup.keepChildWidth) {
-      widthGroup.clearWidthCaches(notifyListeners: false);
+  void _onValueSetting(List<T> oldValue, List<T> newValue) {
+    if (oldValue.length > newValue.length) {
+      widthGroup.removeCacheAfter(newValue.length - 1);
     }
   }
 
@@ -33,10 +33,9 @@ abstract class AbsDynamicWidth<T, I> extends AbsFlexibleTableColumnWidth {
   }
 }
 
-class DynamicWidth<T, I> extends AbsDynamicWidth<T, I> {
+class DynamicWidth<T> extends AbsDynamicWidth<T> {
   DynamicWidth(
     super.controller, {
-    this.useCache = false,
     this.minWidth,
     this.maxWidth,
   });
@@ -45,11 +44,7 @@ class DynamicWidth<T, I> extends AbsDynamicWidth<T, I> {
   final double? maxWidth;
 
   @override
-  final bool useCache;
-
-  @override
-  late final IntrinsicWidthGroup<I> widthGroup = IntrinsicWidthGroup(
-    keepChildWidth: useCache,
+  late final IntrinsicWidthGroup widthGroup = IntrinsicWidthGroup(
     widthLowerBound: minWidth,
     widthUpperBound: maxWidth,
   );

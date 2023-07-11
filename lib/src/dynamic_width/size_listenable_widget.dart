@@ -18,7 +18,9 @@ class SizeListenableWidget extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, covariant SizeListenableRenderObject renderObject) {
-    renderObject.onSizeChanged = onSizeChanged;
+    renderObject
+      ..onSizeChanged = onSizeChanged
+      ..oldSize = null;
   }
 
   @override
@@ -38,15 +40,11 @@ class SizeListenableRenderObject extends RenderProxyBox {
   @override
   void performLayout() {
     super.performLayout();
-    Size? newSize = child?.size;
+    final Size? newSize = child?.size;
     if (oldSize == newSize) {
       return;
     }
     oldSize = newSize;
-    if (onSizeChanged != null) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        onSizeChanged?.call(oldSize);
-      });
-    }
+    onSizeChanged?.call(oldSize);
   }
 }

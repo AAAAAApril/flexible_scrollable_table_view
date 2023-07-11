@@ -121,25 +121,42 @@ class NormalList extends StatefulWidget {
 class _NormalListState extends State<NormalList> {
   late FlexibleTableController<TableDataBean> controller;
 
+  late AbsDynamicWidth<TableDataBean> dynamicWidth;
+  late AbsFlexibleTableConfigurations<TableDataBean> localConfigurations;
+
   @override
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
+    dynamicWidth = DynamicWidth<TableDataBean>(
+      controller,
+      minWidth: 120,
+      maxWidth: 200,
+    );
+    localConfigurations = widget.configurations.copyWith(
+      scrollableColumns: <AbsFlexibleColumn<TableDataBean>>{}
+        ..add(
+          DynamicWidthColumn<TableDataBean>(
+            '动态宽度列',
+            columnWidth: dynamicWidth,
+            headerBuilder: (column, arguments) => Center(child: Text(column.id)),
+            infoBuilder: (column, arguments) => Center(child: Text(arguments.data.strValue)),
+          ),
+        )
+        ..addAll(widget.configurations.scrollableColumns),
+    );
     refreshData();
   }
 
   @override
   void dispose() {
+    dynamicWidth.dispose();
     controller.dispose();
     super.dispose();
   }
 
   void refreshData() {
     final Random random = Random.secure();
-    if (random.nextInt(10) % 3 == 0) {
-      controller.value = <TableDataBean>[];
-      return;
-    }
     controller.value = List<TableDataBean>.generate(
       random.nextInt(40) + 30,
       (index) => TableDataBean(
@@ -147,6 +164,7 @@ class _NormalListState extends State<NormalList> {
         title: '数据标题$index',
         value2: random.nextInt(1000),
         value3: random.nextDouble() * 100,
+        strValue: 'S' * (random.nextInt(25) + 1),
       ),
     );
   }
@@ -183,14 +201,14 @@ class _NormalListState extends State<NormalList> {
             elevation: 2,
             child: FlexibleTableHeader<TableDataBean>(
               controller,
-              configurations: widget.configurations,
+              configurations: localConfigurations,
               animations: widget.animations,
             ),
           ),
           Expanded(
             child: FlexibleTableContent<TableDataBean>(
               controller,
-              configurations: widget.configurations,
+              configurations: localConfigurations,
               animations: widget.animations,
               decorations: FlexibleTableRowDecorations.infoArguments(
                 infoRowBackground: (arguments) => ColoredBox(
@@ -205,7 +223,7 @@ class _NormalListState extends State<NormalList> {
                 ),
               ),
               additions: FlexibleTableAdditions(
-                fixedHeaderHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
+                fixedHeaderHeight: localConfigurations.rowHeight.fixedInfoRowHeight,
                 header: Center(
                   child: OutlinedButton(
                     onPressed: () {
@@ -214,7 +232,7 @@ class _NormalListState extends State<NormalList> {
                     child: const Text('这里是列表的Header，一个OutlinedButton'),
                   ),
                 ),
-                fixedFooterHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
+                fixedFooterHeight: localConfigurations.rowHeight.fixedInfoRowHeight,
                 footer: Center(
                   child: OutlinedButton(
                     onPressed: () {
@@ -290,6 +308,7 @@ class _InSliverListState extends State<InSliverList> {
         title: '数据标题$index',
         value2: random.nextInt(1000),
         value3: random.nextDouble() * 100,
+        strValue: 'strValue' * (random.nextInt(3) + 1),
       ),
     );
   }
@@ -380,12 +399,14 @@ class TableDataBean {
     required this.title,
     required this.value2,
     required this.value3,
+    required this.strValue,
   });
 
   final int id;
   final String title;
   final int value2;
   final double value3;
+  final String strValue;
 
   @override
   bool operator ==(Object other) =>
