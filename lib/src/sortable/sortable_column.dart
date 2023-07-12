@@ -25,7 +25,7 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
   });
 
   @override
-  final AbsFlexibleTableColumnWidth columnWidth;
+  final AbsFlexibleTableColumnWidth<T> columnWidth;
   @override
   final Comparator<T> comparator;
 

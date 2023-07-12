@@ -1,3 +1,7 @@
+## 2.12.4
+
+* Now you can get `AbsTableBuildArguments<T>` when get column width in `AbsFlexibleTableColumnWidth<T>` and `getColumnWidth(parentWidth)` is deprecated.
+
 ## 2.12.3
 
 * Rename `SelectableRowMixin<T>` to `TableSelectableMixin<T>`.

@@ -429,7 +429,7 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   final VoidCallback? onHeaderPressed;
   final ValueChanged<T>? onInfoPressed;
   @override
-  final AbsFlexibleTableColumnWidth columnWidth;
+  final AbsFlexibleTableColumnWidth<T> columnWidth;
 
   @override
   final Comparator<T>? comparator;
@@ -518,10 +518,10 @@ class CustomSelectableColumn<T> extends AbsSelectableColumn<T> {
   });
 
   @override
-  final AbsFlexibleTableColumnWidth selectableWidth;
+  final AbsFlexibleTableColumnWidth<T> selectableWidth;
 
   @override
-  final AbsFlexibleTableColumnWidth unSelectableWidth;
+  final AbsFlexibleTableColumnWidth<T> unSelectableWidth;
 
   @override
   Widget buildSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) {

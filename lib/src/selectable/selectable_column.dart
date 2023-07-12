@@ -29,7 +29,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
       unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
         animations: animations,
         constraints: BoxConstraints.tightFor(
-          width: unSelectableWidth.getColumnWidth(arguments.parentWidth),
+          width: unSelectableWidth.getColumnWidthByArguments(arguments),
           height: arguments.rowHeight,
         ),
         child: arguments.rowHeight <= 0 ? null : buildUnSelectableHeaderCell(arguments),
@@ -48,7 +48,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
       unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
         animations: animations,
         constraints: BoxConstraints.tightFor(
-          width: unSelectableWidth.getColumnWidth(arguments.parentWidth),
+          width: unSelectableWidth.getColumnWidthByArguments(arguments),
           height: arguments.rowHeight,
         ),
         child: arguments.rowHeight <= 0 ? null : buildUnSelectableInfoCell(arguments),
@@ -66,7 +66,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
   ///构建不可编辑时的表头
   @protected
   Widget buildUnSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
-      SizedBox(width: unSelectableWidth.getColumnWidth(arguments.parentWidth));
+      SizedBox(width: unSelectableWidth.getColumnWidthByArguments(arguments));
 
   @override
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) => buildSelectableInfoCell(arguments);
@@ -78,7 +78,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
   ///构建不可编辑时的表信息
   @protected
   Widget buildUnSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) =>
-      SizedBox(width: unSelectableWidth.getColumnWidth(arguments.parentWidth));
+      SizedBox(width: unSelectableWidth.getColumnWidthByArguments(arguments));
 }
 
 abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> with SelectableColumnMixin<T> {
@@ -101,10 +101,10 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   });
 
   @override
-  final AbsFlexibleTableColumnWidth selectableWidth;
+  final AbsFlexibleTableColumnWidth<T> selectableWidth;
 
   @override
-  final AbsFlexibleTableColumnWidth unSelectableWidth;
+  final AbsFlexibleTableColumnWidth<T> unSelectableWidth;
 
   final Widget? selectableHeader;
   final Widget Function(TableHeaderRowBuildArguments<T> arguments, SelectableColumnMixin<T> column)?

@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'intrinsic_width_group.dart';
 
 ///动态宽度
-abstract class AbsDynamicWidth<T> extends AbsFlexibleTableColumnWidth {
+abstract class AbsDynamicWidth<T> extends AbsFlexibleTableColumnWidth<T> {
   AbsDynamicWidth(this.controller) {
     controller.addValueSettingCallback(_onValueSetting);
   }
@@ -28,9 +29,12 @@ abstract class AbsDynamicWidth<T> extends AbsFlexibleTableColumnWidth {
   }
 
   @override
-  double getColumnWidth(double parentWidth, {bool? useCache}) {
+  double getColumnWidthByArguments(AbsTableBuildArguments<T> arguments) {
     throw Exception('Instance of AbsDynamicWidth<T,I> only used in AbsDynamicWidthColumn<T,I> .');
   }
+
+  @override
+  double getColumnWidth(double parentWidth, {bool? useCache}) => 0.0;
 }
 
 class DynamicWidth<T> extends AbsDynamicWidth<T> {

@@ -29,7 +29,7 @@ abstract class AbsFlexibleColumn<T> {
     return TableConstraintAnimationWrapper<T>(
       animations: animations,
       constraints: BoxConstraints.tightFor(
-        width: columnWidth.getColumnWidth(arguments.parentWidth),
+        width: columnWidth.getColumnWidthByArguments(arguments),
         height: arguments.rowHeight,
       ),
       child: arguments.rowHeight <= 0 ? null : buildHeaderCell(arguments),
@@ -44,7 +44,7 @@ abstract class AbsFlexibleColumn<T> {
     return TableConstraintAnimationWrapper<T>(
       animations: animations,
       constraints: BoxConstraints.tightFor(
-        width: columnWidth.getColumnWidth(arguments.parentWidth),
+        width: columnWidth.getColumnWidthByArguments(arguments),
         height: arguments.rowHeight,
       ),
       child: arguments.rowHeight <= 0 ? null : buildInfoCell(arguments),
@@ -78,7 +78,7 @@ class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
   });
 
   @override
-  final AbsFlexibleTableColumnWidth columnWidth;
+  final AbsFlexibleTableColumnWidth<T> columnWidth;
 
   final Widget? header;
   final Widget Function(TableHeaderRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column)? headerBuilder;
