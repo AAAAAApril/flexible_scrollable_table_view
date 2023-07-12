@@ -13,7 +13,7 @@ enum FlexibleColumnSortType {
 }
 
 ///列可排序的功能
-mixin SortableColumnMixin<T> on ChangeNotifier {
+mixin TableSortableMixin<T> on ChangeNotifier {
   ///切换下一个排序方式
   FlexibleColumnSortType nextSortType(FlexibleColumnSortType current) {
     switch (current) {

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 ///行可选择的功能
-mixin SelectableRowMixin<T> on ChangeNotifier {
+mixin TableSelectableMixin<T> on ChangeNotifier {
   ///当前是否是可选中模式
   final ValueNotifier<bool> _selectable = ValueNotifier<bool>(false);
 

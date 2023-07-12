@@ -4,11 +4,13 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///可排序 Column
-abstract class AbsSortableColumn<T> extends AbsFlexibleColumn<T> {
-  const AbsSortableColumn(super.id);
-
+mixin SortableColumnMixin<T> on AbsFlexibleColumn<T> {
   @override
   Comparator<T> get comparator;
+}
+
+abstract class AbsSortableColumn<T> extends AbsFlexibleColumn<T> with SortableColumnMixin<T> {
+  const AbsSortableColumn(super.id);
 }
 
 class SortableColumn<T> extends AbsSortableColumn<T> {
@@ -28,10 +30,10 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
   final Comparator<T> comparator;
 
   final Widget? header;
-  final Widget Function(TableHeaderRowBuildArguments<T> arguments, AbsSortableColumn<T> column)? headerBuilder;
+  final Widget Function(TableHeaderRowBuildArguments<T> arguments, SortableColumnMixin<T> column)? headerBuilder;
 
   final Widget? info;
-  final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsSortableColumn<T> column)? infoBuilder;
+  final Widget Function(TableInfoRowBuildArguments<T> arguments, SortableColumnMixin<T> column)? infoBuilder;
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>

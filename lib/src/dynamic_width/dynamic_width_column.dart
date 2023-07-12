@@ -1,15 +1,48 @@
+import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/dynamic_width/intrinsic_width_group.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
 import 'dynamic_width.dart';
 
 ///拥有动态列宽的列
-abstract class AbsDynamicWidthColumn<T> extends AbsFlexibleColumn<T> {
-  const AbsDynamicWidthColumn(super.id);
-
+mixin DynamicWidthColumnMixin<T> on AbsFlexibleColumn<T> {
   @override
   AbsDynamicWidth<T> get columnWidth;
+
+  @override
+  Widget buildHeaderCellInternal(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    return IntrinsicWidthChild(
+      -1,
+      controller: arguments.controller,
+      group: columnWidth.widthGroup,
+      fixedHeight: arguments.rowHeight,
+      child: buildHeaderCell(arguments),
+    );
+  }
+
+  @override
+  Widget buildInfoCellInternal(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    return IntrinsicWidthChild(
+      arguments.dataIndex,
+      controller: arguments.controller,
+      key: ValueKey<String>('${id}_${arguments.dataIndex}'),
+      group: columnWidth.widthGroup,
+      fixedHeight: arguments.rowHeight,
+      child: buildInfoCell(arguments),
+    );
+  }
+}
+
+abstract class AbsDynamicWidthColumn<T> extends AbsFlexibleColumn<T> with DynamicWidthColumnMixin<T> {
+  const AbsDynamicWidthColumn(super.id);
 }
 
 class DynamicWidthColumn<T> extends AbsDynamicWidthColumn<T> {
@@ -26,10 +59,10 @@ class DynamicWidthColumn<T> extends AbsDynamicWidthColumn<T> {
   final AbsDynamicWidth<T> columnWidth;
 
   final Widget? header;
-  final Widget Function(AbsDynamicWidthColumn<T> column, TableHeaderRowBuildArguments<T> arguments)? headerBuilder;
+  final Widget Function(DynamicWidthColumnMixin<T> column, TableHeaderRowBuildArguments<T> arguments)? headerBuilder;
 
   final Widget? info;
-  final Widget Function(AbsDynamicWidthColumn<T> column, TableInfoRowBuildArguments<T> arguments)? infoBuilder;
+  final Widget Function(DynamicWidthColumnMixin<T> column, TableInfoRowBuildArguments<T> arguments)? infoBuilder;
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>

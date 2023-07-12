@@ -128,11 +128,7 @@ class _NormalListState extends State<NormalList> {
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
-    dynamicWidth = DynamicWidth<TableDataBean>(
-      controller,
-      minWidth: 120,
-      maxWidth: 200,
-    );
+    dynamicWidth = DynamicWidth<TableDataBean>(controller);
     localConfigurations = widget.configurations.copyWith(
       scrollableColumns: <AbsFlexibleColumn<TableDataBean>>{}
         ..add(

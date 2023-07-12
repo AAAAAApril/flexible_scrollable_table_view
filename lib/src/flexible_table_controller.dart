@@ -1,19 +1,19 @@
 import 'package:flutter/foundation.dart';
 
 import 'scrollable/synchronized_scroll_mixin.dart';
-import 'selectable/selectable_row_mixin.dart';
-import 'sortable/sortable_column_mixin.dart';
+import 'selectable/table_selectable_mixin.dart';
+import 'sortable/table_sortable_mixin.dart';
 
 ///表控制器
 ///[T] 表数据实体
 class FlexibleTableController<T> extends ChangeNotifier
-    with SortableColumnMixin<T>, SelectableRowMixin<T>
+    with TableSortableMixin<T>, TableSelectableMixin<T>
     implements ValueListenable<List<T>> {
   FlexibleTableController({
     SynchronizedScrollMixin? horizontalScrollController,
   })  : _horizontalScrollController = horizontalScrollController,
         horizontalScrollController = horizontalScrollController ?? SynchronizedScrollController(),
-        super(){
+        super() {
     addValueSettingCallback(_onValueSetting);
   }
 
@@ -71,10 +71,9 @@ class FlexibleTableController<T> extends ChangeNotifier
     _settingCallback.remove(callback);
   }
 
-  void _onValueSetting(List<T> oldValue, List<T> newValue){
+  void _onValueSetting(List<T> oldValue, List<T> newValue) {
     onSelectableValueChanged();
   }
-
 }
 
 typedef TableValueSettingCallback<T> = void Function(List<T> oldValue, List<T> newValue);

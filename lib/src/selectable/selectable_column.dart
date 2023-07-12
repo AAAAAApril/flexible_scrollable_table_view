@@ -1,12 +1,14 @@
+import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
+import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
-///定制化的可选中的 Column
-abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
-  const AbsSelectableColumn(super.id);
+import 'selectable_column_cell_wrapper.dart';
 
+///定制化的可选中的 Column
+mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
   ///可选状态时的固定宽度
   AbsFlexibleTableColumnWidth get selectableWidth;
 
@@ -17,12 +19,52 @@ abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
   AbsFlexibleTableColumnWidth get columnWidth => selectableWidth;
 
   @override
+  Widget buildHeaderCellInternal(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    return SelectableColumnCellWrapper<T>(
+      arguments.controller,
+      selectableWidget: super.buildHeaderCellInternal(arguments, animations),
+      unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
+        animations: animations,
+        constraints: BoxConstraints.tightFor(
+          width: unSelectableWidth.getColumnWidth(arguments.parentWidth),
+          height: arguments.rowHeight,
+        ),
+        child: arguments.rowHeight <= 0 ? null : buildUnSelectableHeaderCell(arguments),
+      ),
+    );
+  }
+
+  @override
+  Widget buildInfoCellInternal(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    return SelectableColumnCellWrapper<T>(
+      arguments.controller,
+      selectableWidget: super.buildInfoCellInternal(arguments, animations),
+      unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
+        animations: animations,
+        constraints: BoxConstraints.tightFor(
+          width: unSelectableWidth.getColumnWidth(arguments.parentWidth),
+          height: arguments.rowHeight,
+        ),
+        child: arguments.rowHeight <= 0 ? null : buildUnSelectableInfoCell(arguments),
+      ),
+    );
+  }
+
+  @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) => buildSelectableHeaderCell(arguments);
 
   ///构建可编辑时的表头
+  @protected
   Widget buildSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments);
 
   ///构建不可编辑时的表头
+  @protected
   Widget buildUnSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
       SizedBox(width: unSelectableWidth.getColumnWidth(arguments.parentWidth));
 
@@ -30,11 +72,17 @@ abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> {
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) => buildSelectableInfoCell(arguments);
 
   ///构建可编辑时的表信息
+  @protected
   Widget buildSelectableInfoCell(TableInfoRowBuildArguments<T> arguments);
 
   ///构建不可编辑时的表信息
+  @protected
   Widget buildUnSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) =>
       SizedBox(width: unSelectableWidth.getColumnWidth(arguments.parentWidth));
+}
+
+abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> with SelectableColumnMixin<T> {
+  const AbsSelectableColumn(super.id);
 }
 
 class SelectableColumn<T> extends AbsSelectableColumn<T> {
@@ -59,28 +107,20 @@ class SelectableColumn<T> extends AbsSelectableColumn<T> {
   final AbsFlexibleTableColumnWidth unSelectableWidth;
 
   final Widget? selectableHeader;
-  final Widget Function(
-    TableHeaderRowBuildArguments<T> arguments,
-    AbsSelectableColumn<T> column,
-  )? selectableHeaderBuilder;
+  final Widget Function(TableHeaderRowBuildArguments<T> arguments, SelectableColumnMixin<T> column)?
+      selectableHeaderBuilder;
 
   final Widget? unSelectableHeader;
-  final Widget Function(
-    TableHeaderRowBuildArguments<T> arguments,
-    AbsSelectableColumn<T> column,
-  )? unSelectableHeaderBuilder;
+  final Widget Function(TableHeaderRowBuildArguments<T> arguments, SelectableColumnMixin<T> column)?
+      unSelectableHeaderBuilder;
 
   final Widget? selectableInfo;
-  final Widget Function(
-    TableInfoRowBuildArguments<T> arguments,
-    AbsSelectableColumn<T> column,
-  )? selectableInfoBuilder;
+  final Widget Function(TableInfoRowBuildArguments<T> arguments, SelectableColumnMixin<T> column)?
+      selectableInfoBuilder;
 
   final Widget? unSelectableInfo;
-  final Widget Function(
-    TableInfoRowBuildArguments<T> arguments,
-    AbsSelectableColumn<T> column,
-  )? unSelectableInfoBuilder;
+  final Widget Function(TableInfoRowBuildArguments<T> arguments, SelectableColumnMixin<T> column)?
+      unSelectableInfoBuilder;
 
   @override
   Widget buildSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>

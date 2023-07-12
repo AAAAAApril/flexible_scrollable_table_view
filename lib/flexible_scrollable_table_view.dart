@@ -26,13 +26,13 @@ export 'src/scrollable/synchronized_scroll_mixin.dart';
 
 export 'src/selectable/selectable_column.dart';
 export 'src/selectable/selectable_column_widgets.dart';
-export 'src/selectable/selectable_row_mixin.dart';
+export 'src/selectable/table_selectable_mixin.dart';
 
 export 'src/sliver/fixed_sliver_persistent_header_delegate.dart';
 export 'src/sliver/sliver_flexible_table_content.dart';
 
 export 'src/sortable/sortable_column.dart';
-export 'src/sortable/sortable_column_mixin.dart';
+export 'src/sortable/table_sortable_mixin.dart';
 
 export 'src/widgets/flexible_table_content.dart';
 export 'src/widgets/flexible_table_header.dart';

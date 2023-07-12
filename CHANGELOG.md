@@ -1,3 +1,11 @@
+## 2.12.3
+
+* Rename `SelectableRowMixin<T>` to `TableSelectableMixin<T>`.
+* Rename `SortableColumnMixin<T>` to `TableSortableMixin<T>`.
+* Move build function of column header cell from `FlexibleTableHeaderCell<T>` to `AbsFlexibleColumn<T>`.
+* Move build function of column info cell from `FlexibleTableInfoCell<T>` to `AbsFlexibleColumn<T>`.
+* Optimize the code.
+
 ## 2.12.2
 
 * New feature: Support for dynamically changing the width of columns based on the maximum width of content. See the Example project.

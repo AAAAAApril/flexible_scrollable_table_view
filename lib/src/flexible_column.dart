@@ -1,6 +1,9 @@
+import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flutter/widgets.dart';
+
+import 'animation/table_constraint_animation_wrapper.dart';
 
 ///列信息配置类
 abstract class AbsFlexibleColumn<T> {
@@ -18,10 +21,42 @@ abstract class AbsFlexibleColumn<T> {
   ///该列是否可比较
   bool get comparableColumn => comparator != null;
 
+  ///构建列头组件
+  Widget buildHeaderCellInternal(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    return TableConstraintAnimationWrapper<T>(
+      animations: animations,
+      constraints: BoxConstraints.tightFor(
+        width: columnWidth.getColumnWidth(arguments.parentWidth),
+        height: arguments.rowHeight,
+      ),
+      child: arguments.rowHeight <= 0 ? null : buildHeaderCell(arguments),
+    );
+  }
+
+  ///构建列内容组件
+  Widget buildInfoCellInternal(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    return TableConstraintAnimationWrapper<T>(
+      animations: animations,
+      constraints: BoxConstraints.tightFor(
+        width: columnWidth.getColumnWidth(arguments.parentWidth),
+        height: arguments.rowHeight,
+      ),
+      child: arguments.rowHeight <= 0 ? null : buildInfoCell(arguments),
+    );
+  }
+
   ///构建表头
+  @protected
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments);
 
   ///构建表信息
+  @protected
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments);
 
   @override
