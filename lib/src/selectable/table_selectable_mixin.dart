@@ -84,7 +84,6 @@ mixin TableSelectableMixin<T> on ChangeNotifier {
 
   ///可选数据列变更了
   ///需要移除掉所有在被选中列包含，但可选列未包含的数据
-  @Deprecated('Use addValueSettingCallback(callback) instead.')
   @protected
   void onSelectableValueChanged() {
     if (_selectedValue.value.isEmpty) {

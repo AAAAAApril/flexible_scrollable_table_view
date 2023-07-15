@@ -43,10 +43,10 @@ class MyApp extends StatelessWidget {
       scrollableColumns: {
         NormalColumn(
           'value2',
-          columnWidth: FlexibleWidth.max({
-            const FixedWidth(100),
-            ProportionalWidth(2 / 5),
-          }),
+          columnWidth: FixedOrProportionalWidth.max(
+            fixed: 100,
+            percent: 2 / 5,
+          ),
           headerText: 'value2列',
           infoText: (data) => data.value2.toString(),
           comparator: (a, b) => a.value2.compareTo(b.value2),
@@ -56,10 +56,10 @@ class MyApp extends StatelessWidget {
         ),
         NormalColumn(
           'value3',
-          columnWidth: FlexibleWidth.min({
-            const FixedWidth(130),
-            ProportionalWidth(3 / 5),
-          }),
+          columnWidth: FixedOrProportionalWidth.min(
+            fixed: 130,
+            percent: 3 / 5,
+          ),
           headerText: 'value3列',
           infoText: (data) => data.value3.toStringAsFixed(4),
           comparator: (a, b) => a.value3.compareTo(b.value3),

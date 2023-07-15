@@ -1,3 +1,7 @@
+## 2.13.0
+
+1. Remove `FlexibleWidth<T>` and add `FixedOrProportionalWidth<T>`.
+
 ## 2.12.4
 
 * Now you can get `AbsTableBuildArguments<T>` when get column width in `AbsFlexibleTableColumnWidth<T>` and `getColumnWidth(parentWidth)` is deprecated.

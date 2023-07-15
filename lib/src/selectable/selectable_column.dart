@@ -10,13 +10,13 @@ import 'selectable_column_cell_wrapper.dart';
 ///定制化的可选中的 Column
 mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
   ///可选状态时的固定宽度
-  AbsFlexibleTableColumnWidth get selectableWidth;
+  AbsFlexibleTableColumnWidth<T> get selectableWidth;
 
   ///非可选状态时的固定宽度
-  AbsFlexibleTableColumnWidth get unSelectableWidth;
+  AbsFlexibleTableColumnWidth<T> get unSelectableWidth;
 
   @override
-  AbsFlexibleTableColumnWidth get columnWidth => selectableWidth;
+  AbsFlexibleTableColumnWidth<T> get columnWidth => selectableWidth;
 
   @override
   Widget buildHeaderCellInternal(
@@ -29,7 +29,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
       unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
         animations: animations,
         constraints: BoxConstraints.tightFor(
-          width: unSelectableWidth.getColumnWidthByArguments(arguments),
+          width: unSelectableWidth.getColumnWidth(arguments),
           height: arguments.rowHeight,
         ),
         child: arguments.rowHeight <= 0 ? null : buildUnSelectableHeaderCell(arguments),
@@ -48,7 +48,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
       unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
         animations: animations,
         constraints: BoxConstraints.tightFor(
-          width: unSelectableWidth.getColumnWidthByArguments(arguments),
+          width: unSelectableWidth.getColumnWidth(arguments),
           height: arguments.rowHeight,
         ),
         child: arguments.rowHeight <= 0 ? null : buildUnSelectableInfoCell(arguments),
@@ -66,7 +66,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
   ///构建不可编辑时的表头
   @protected
   Widget buildUnSelectableHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
-      SizedBox(width: unSelectableWidth.getColumnWidthByArguments(arguments));
+      SizedBox(width: unSelectableWidth.getColumnWidth(arguments));
 
   @override
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) => buildSelectableInfoCell(arguments);
@@ -78,7 +78,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
   ///构建不可编辑时的表信息
   @protected
   Widget buildUnSelectableInfoCell(TableInfoRowBuildArguments<T> arguments) =>
-      SizedBox(width: unSelectableWidth.getColumnWidthByArguments(arguments));
+      SizedBox(width: unSelectableWidth.getColumnWidth(arguments));
 }
 
 abstract class AbsSelectableColumn<T> extends AbsFlexibleColumn<T> with SelectableColumnMixin<T> {

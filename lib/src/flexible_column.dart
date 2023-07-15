@@ -13,7 +13,7 @@ abstract class AbsFlexibleColumn<T> {
   final String id;
 
   ///该列的宽度
-  AbsFlexibleTableColumnWidth get columnWidth;
+  AbsFlexibleTableColumnWidth<T> get columnWidth;
 
   ///排序时会使用的回调（为 null 表示该列没有排序功能）
   Comparator<T>? get comparator => null;
@@ -29,7 +29,7 @@ abstract class AbsFlexibleColumn<T> {
     return TableConstraintAnimationWrapper<T>(
       animations: animations,
       constraints: BoxConstraints.tightFor(
-        width: columnWidth.getColumnWidthByArguments(arguments),
+        width: columnWidth.getColumnWidth(arguments),
         height: arguments.rowHeight,
       ),
       child: arguments.rowHeight <= 0 ? null : buildHeaderCell(arguments),
@@ -44,7 +44,7 @@ abstract class AbsFlexibleColumn<T> {
     return TableConstraintAnimationWrapper<T>(
       animations: animations,
       constraints: BoxConstraints.tightFor(
-        width: columnWidth.getColumnWidthByArguments(arguments),
+        width: columnWidth.getColumnWidth(arguments),
         height: arguments.rowHeight,
       ),
       child: arguments.rowHeight <= 0 ? null : buildInfoCell(arguments),

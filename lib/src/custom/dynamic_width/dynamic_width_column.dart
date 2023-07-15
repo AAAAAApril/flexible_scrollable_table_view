@@ -1,10 +1,10 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/dynamic_width/intrinsic_width_group.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
 import 'dynamic_width.dart';
+import 'intrinsic_width_group.dart';
 
 ///拥有动态列宽的列
 mixin DynamicWidthColumnMixin<T> on AbsFlexibleColumn<T> {
