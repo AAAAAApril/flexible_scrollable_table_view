@@ -1,6 +1,8 @@
 ## 2.13.0
 
 1. Remove `FlexibleWidth<T>` and add `FixedOrProportionalWidth<T>`.
+2. Remove deprecated fields.
+3. Deprecate `FlexibleTableController<T>`.
 
 ## 2.12.4
 

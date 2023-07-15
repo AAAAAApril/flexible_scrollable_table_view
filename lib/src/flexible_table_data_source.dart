@@ -1,32 +1,20 @@
 import 'package:flutter/foundation.dart';
 
-import 'scrollable/synchronized_scroll_mixin.dart';
 import 'selectable/table_selectable_mixin.dart';
 import 'sortable/table_sortable_mixin.dart';
 
-///表控制器
+///表数据源
 ///[T] 表数据实体
-class FlexibleTableController<T> extends ChangeNotifier
+class FlexibleTableDataSource<T> extends ChangeNotifier
     with TableSortableMixin<T>, TableSelectableMixin<T>
     implements ValueListenable<List<T>> {
-  FlexibleTableController({
-    SynchronizedScrollMixin? horizontalScrollController,
-  })  : _horizontalScrollController = horizontalScrollController,
-        horizontalScrollController = horizontalScrollController ?? SynchronizedScrollController(),
-        super() {
+  FlexibleTableDataSource() : super() {
     addValueSettingCallback(_onValueSetting);
   }
-
-  ///用于横向滚动区域的同步滚动控制器
-  final SynchronizedScrollMixin horizontalScrollController;
-  final SynchronizedScrollMixin? _horizontalScrollController;
 
   @override
   void dispose() {
     removeValueSettingCallback(_onValueSetting);
-    if (_horizontalScrollController == null) {
-      horizontalScrollController.dispose();
-    }
     super.dispose();
   }
 

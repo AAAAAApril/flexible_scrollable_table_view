@@ -18,6 +18,8 @@ export 'src/custom/dynamic_width/dynamic_width_column.dart';
 export 'src/custom/dynamic_width/intrinsic_width_group.dart';
 export 'src/custom/dynamic_width/size_listenable_widget.dart';
 
+export 'src/custom/flexible_table_controller.dart';
+
 export 'src/layout_builder/lazy_layout_builder.dart';
 export 'src/layout_builder/lazy_sliver_layout_builder.dart';
 
@@ -43,4 +45,4 @@ export 'src/widgets/flexible_table_info_cell.dart';
 
 export 'src/flexible_column.dart';
 export 'src/flexible_table_configurations.dart';
-export 'src/flexible_table_controller.dart';
+export 'src/flexible_table_data_source.dart';

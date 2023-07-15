@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 mixin SynchronizedScrollMixin on ScrollController {
   final Map<ScrollPosition, VoidCallback> _positionToListener = <ScrollPosition, VoidCallback>{};
 
+  bool get keepOffsetWhenNoClients => false;
+
   double? _lastUpdatedOffset;
 
   @override
@@ -34,7 +36,7 @@ mixin SynchronizedScrollMixin on ScrollController {
     assert(_positionToListener.containsKey(position));
     position.removeListener(_positionToListener[position]!);
     _positionToListener.remove(position);
-    if (_positionToListener.isEmpty) {
+    if (_positionToListener.isEmpty && !keepOffsetWhenNoClients) {
       _lastUpdatedOffset = null;
     }
   }
@@ -54,5 +56,9 @@ class SynchronizedScrollController extends ScrollController with SynchronizedScr
     super.initialScrollOffset,
     super.keepScrollOffset,
     super.debugLabel,
+    this.keepOffsetWhenNoClients = false,
   });
+
+  @override
+  final bool keepOffsetWhenNoClients;
 }
