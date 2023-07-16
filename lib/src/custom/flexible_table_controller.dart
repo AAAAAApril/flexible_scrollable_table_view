@@ -1,7 +1,8 @@
 import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/synchronized_scroll_mixin.dart';
 
-@Deprecated('Use FlexibleTableDataSource<T> instead.')
+/// Will be deprecated in few versions later.
+/// Use FlexibleTableDataSource<T> instead.
 class FlexibleTableController<T> extends FlexibleTableDataSource<T> {
   FlexibleTableController({
     SynchronizedScrollMixin? horizontalScrollController,
