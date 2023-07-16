@@ -1,7 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/widgets.dart';
 
 ///构建表行所需参数

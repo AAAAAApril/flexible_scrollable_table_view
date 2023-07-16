@@ -1,5 +1,4 @@
 import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/widgets.dart';
 
 ///可选列 列头 包装组件

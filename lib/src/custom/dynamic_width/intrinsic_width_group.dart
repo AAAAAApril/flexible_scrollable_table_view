@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 

@@ -121,32 +121,15 @@ class NormalList extends StatefulWidget {
 class _NormalListState extends State<NormalList> {
   late FlexibleTableController<TableDataBean> controller;
 
-  late AbsDynamicWidth<TableDataBean> dynamicWidth;
-  late AbsFlexibleTableConfigurations<TableDataBean> localConfigurations;
-
   @override
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
-    dynamicWidth = DynamicWidth<TableDataBean>(controller);
-    localConfigurations = widget.configurations.copyWith(
-      scrollableColumns: <AbsFlexibleColumn<TableDataBean>>{}
-        ..add(
-          DynamicWidthColumn<TableDataBean>(
-            '动态宽度列',
-            columnWidth: dynamicWidth,
-            headerBuilder: (column, arguments) => Center(child: Text(column.id)),
-            infoBuilder: (column, arguments) => Center(child: Text(arguments.data.strValue)),
-          ),
-        )
-        ..addAll(widget.configurations.scrollableColumns),
-    );
     refreshData();
   }
 
   @override
   void dispose() {
-    dynamicWidth.dispose();
     controller.dispose();
     super.dispose();
   }
@@ -197,14 +180,14 @@ class _NormalListState extends State<NormalList> {
             elevation: 2,
             child: FlexibleTableHeader<TableDataBean>(
               controller,
-              configurations: localConfigurations,
+              configurations: widget.configurations,
               animations: widget.animations,
             ),
           ),
           Expanded(
             child: FlexibleTableContent<TableDataBean>(
               controller,
-              configurations: localConfigurations,
+              configurations: widget.configurations,
               animations: widget.animations,
               decorations: FlexibleTableRowDecorations.infoArguments(
                 infoRowBackground: (arguments) => ColoredBox(
@@ -219,7 +202,7 @@ class _NormalListState extends State<NormalList> {
                 ),
               ),
               additions: FlexibleTableAdditions(
-                fixedHeaderHeight: localConfigurations.rowHeight.fixedInfoRowHeight,
+                fixedHeaderHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
                 header: Center(
                   child: OutlinedButton(
                     onPressed: () {
@@ -228,7 +211,7 @@ class _NormalListState extends State<NormalList> {
                     child: const Text('这里是列表的Header，一个OutlinedButton'),
                   ),
                 ),
-                fixedFooterHeight: localConfigurations.rowHeight.fixedInfoRowHeight,
+                fixedFooterHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
                 footer: Center(
                   child: OutlinedButton(
                     onPressed: () {

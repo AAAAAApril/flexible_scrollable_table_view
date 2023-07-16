@@ -13,10 +13,10 @@ export 'src/constraint/flexible_table_row_height.dart';
 
 export 'src/decoration/flexible_table_decorations.dart';
 
-export 'src/custom/dynamic_width/dynamic_width.dart';
-export 'src/custom/dynamic_width/dynamic_width_column.dart';
-export 'src/custom/dynamic_width/intrinsic_width_group.dart';
-export 'src/custom/dynamic_width/size_listenable_widget.dart';
+// export 'src/custom/dynamic_width/dynamic_width.dart';
+// export 'src/custom/dynamic_width/dynamic_width_column.dart';
+// export 'src/custom/dynamic_width/intrinsic_width_group.dart';
+// export 'src/custom/dynamic_width/size_listenable_widget.dart';
 
 export 'src/custom/flexible_table_controller.dart';
 

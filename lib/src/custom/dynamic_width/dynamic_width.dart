@@ -1,7 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/foundation.dart';
 
 import 'intrinsic_width_group.dart';
