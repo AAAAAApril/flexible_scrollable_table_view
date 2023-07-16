@@ -2,6 +2,8 @@
 
 1. Remove `FlexibleWidth<T>` and add `FixedOrProportionalWidth<T>`.
 2. Remove deprecated fields.
+3. Add `TableCellWidgetCacheMixin<T>` who can used for cache widget in `AbsFlexibleColumn<T>`. 
+4. Remove dynamic column width support.
 
 ## 2.12.4
 

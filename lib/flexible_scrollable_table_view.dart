@@ -18,6 +18,8 @@ export 'src/decoration/flexible_table_decorations.dart';
 // export 'src/custom/dynamic_width/intrinsic_width_group.dart';
 // export 'src/custom/dynamic_width/size_listenable_widget.dart';
 
+export 'src/custom/cache/table_cell_widget_cache_mixin.dart';
+
 export 'src/custom/flexible_table_controller.dart';
 
 export 'src/layout_builder/lazy_layout_builder.dart';
