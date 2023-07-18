@@ -1,20 +1,42 @@
+import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
 import 'animated_constraint_box.dart';
-
-typedef TableConstraintAnimationBuilder<T> = Widget Function(
-  //约束值
-  BoxConstraints constraints,
-  //被约束的组件
-  Widget? child,
-);
 
 ///表会用到的一些动画
 abstract class AbsFlexibleTableAnimations<T> {
   const AbsFlexibleTableAnimations();
 
-  ///约束变更动画
-  TableConstraintAnimationBuilder<T>? get constraintAnimationBuilder => null;
+  ///表头行约束变更动画组件
+  Widget buildTableHeaderRowConstraintAnimationWidget(
+    TableHeaderRowBuildArguments<T> arguments, {
+    required BoxConstraints constraints,
+    required Widget rowWidget,
+  });
+
+  ///表信息行约束变更动画组件
+  Widget buildTableInfoRowConstraintAnimationWidget(
+    TableInfoRowBuildArguments<T> arguments, {
+    required BoxConstraints constraints,
+    required Widget rowWidget,
+  });
+
+  ///表头项约束变更动画组件
+  Widget buildTableHeaderCellConstraintAnimationWidget(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsFlexibleColumn<T> column, {
+    required BoxConstraints constraints,
+    required Widget cellWidget,
+  });
+
+  ///表信息项约束变更动画组件
+  Widget buildTableInfoCellConstraintAnimationWidget(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsFlexibleColumn<T> column, {
+    required BoxConstraints constraints,
+    required Widget cellWidget,
+  });
 }
 
 class FlexibleTableAnimations<T> extends AbsFlexibleTableAnimations<T> {
@@ -29,11 +51,64 @@ class FlexibleTableAnimations<T> extends AbsFlexibleTableAnimations<T> {
   final VoidCallback? onEnd;
 
   @override
-  TableConstraintAnimationBuilder<T> get constraintAnimationBuilder => (constraints, child) => AnimatedConstraintBox(
-        constraints,
-        duration: duration,
-        curve: curve,
-        onEnd: onEnd,
-        child: child,
-      );
+  Widget buildTableHeaderRowConstraintAnimationWidget(
+    TableHeaderRowBuildArguments<T> arguments, {
+    required BoxConstraints constraints,
+    required Widget rowWidget,
+  }) {
+    return AnimatedConstraintBox(
+      constraints,
+      duration: duration,
+      curve: curve,
+      onEnd: onEnd,
+      child: rowWidget,
+    );
+  }
+
+  @override
+  Widget buildTableInfoRowConstraintAnimationWidget(
+    TableInfoRowBuildArguments<T> arguments, {
+    required BoxConstraints constraints,
+    required Widget rowWidget,
+  }) {
+    return AnimatedConstraintBox(
+      constraints,
+      duration: duration,
+      curve: curve,
+      onEnd: onEnd,
+      child: rowWidget,
+    );
+  }
+
+  @override
+  Widget buildTableHeaderCellConstraintAnimationWidget(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsFlexibleColumn<T> column, {
+    required BoxConstraints constraints,
+    required Widget cellWidget,
+  }) {
+    return AnimatedConstraintBox(
+      constraints,
+      duration: duration,
+      curve: curve,
+      onEnd: onEnd,
+      child: cellWidget,
+    );
+  }
+
+  @override
+  Widget buildTableInfoCellConstraintAnimationWidget(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsFlexibleColumn<T> column, {
+    required BoxConstraints constraints,
+    required Widget cellWidget,
+  }) {
+    return AnimatedConstraintBox(
+      constraints,
+      duration: duration,
+      curve: curve,
+      onEnd: onEnd,
+      child: cellWidget,
+    );
+  }
 }

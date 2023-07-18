@@ -10,8 +10,6 @@ import 'package:flexible_scrollable_table_view/src/scrollable/synchronized_scrol
 import 'package:flexible_scrollable_table_view/src/sliver/sliver_flexible_table_content.dart';
 import 'package:flutter/widgets.dart';
 
-import 'flexible_table_info_row.dart';
-
 ///表内容区域
 class FlexibleTableContent<T> extends StatelessWidget {
   const FlexibleTableContent(
@@ -117,8 +115,8 @@ class FlexibleTableContent<T> extends StatelessWidget {
     if (isFooterIndex(value, index)) {
       return additions!.footerBuilder!.call(arguments);
     }
-    return FlexibleTableInfoRow<T>(
-      arguments.toInfoRowArguments(
+    return configurations.buildTableInfoRow(
+      arguments: arguments.toInfoRowArguments(
         dataIndex: realDataIndex(index),
         dataList: value,
         currentItemIndex: index,

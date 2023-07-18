@@ -1,8 +1,11 @@
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_row_height.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/row/table_header_row_build_mixin.dart';
+import 'package:flexible_scrollable_table_view/src/row/table_info_row_build_mixin.dart';
 
 ///表配置
-abstract class AbsFlexibleTableConfigurations<T> {
+abstract class AbsFlexibleTableConfigurations<T>
+    implements TableHeaderRowBuildInterface<T>, TableInfoRowBuildInterface<T> {
   const AbsFlexibleTableConfigurations();
 
   ///表行高
@@ -18,17 +21,23 @@ abstract class AbsFlexibleTableConfigurations<T> {
   Set<AbsFlexibleColumn<T>> get scrollableColumns;
 
   ///根据 列 id 查找 列实例
-  AbsFlexibleColumn<T>? findColumnById(String columnId);
-
-  AbsFlexibleTableConfigurations<T> copyWith({
-    AbsFlexibleTableRowHeight<T>? rowHeight,
-    Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
-    Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
-    Set<AbsFlexibleColumn<T>>? scrollableColumns,
-  });
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    if (leftPinnedColumns.isEmpty && rightPinnedColumns.isEmpty && scrollableColumns.isEmpty) {
+      return null;
+    }
+    for (final element in Set<AbsFlexibleColumn<T>>.of(leftPinnedColumns)
+      ..addAll(rightPinnedColumns)
+      ..addAll(scrollableColumns)) {
+      if (element.id == columnId) {
+        return element;
+      }
+    }
+    return null;
+  }
 }
 
-class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
+class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T>
+    with TableHeaderRowBuildMixin<T>, TableInfoRowBuildMixin<T> {
   FlexibleTableConfigurations({
     required this.rowHeight,
     Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
@@ -50,7 +59,6 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
   @override
   final Set<AbsFlexibleColumn<T>> scrollableColumns;
 
-  @override
   FlexibleTableConfigurations<T> copyWith({
     AbsFlexibleTableRowHeight<T>? rowHeight,
     Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
@@ -63,19 +71,4 @@ class FlexibleTableConfigurations<T> extends AbsFlexibleTableConfigurations<T> {
         rightPinnedColumns: rightPinnedColumns ?? this.rightPinnedColumns,
         scrollableColumns: scrollableColumns ?? this.scrollableColumns,
       );
-
-  @override
-  AbsFlexibleColumn<T>? findColumnById(String columnId) {
-    if (leftPinnedColumns.isEmpty && rightPinnedColumns.isEmpty && scrollableColumns.isEmpty) {
-      return null;
-    }
-    for (final element in Set<AbsFlexibleColumn<T>>.of(leftPinnedColumns)
-      ..addAll(rightPinnedColumns)
-      ..addAll(scrollableColumns)) {
-      if (element.id == columnId) {
-        return element;
-      }
-    }
-    return null;
-  }
 }

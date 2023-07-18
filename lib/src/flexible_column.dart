@@ -3,8 +3,6 @@ import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arg
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flutter/widgets.dart';
 
-import 'animation/table_constraint_animation_wrapper.dart';
-
 ///列信息配置类
 abstract class AbsFlexibleColumn<T> {
   const AbsFlexibleColumn(this.id);
@@ -26,14 +24,18 @@ abstract class AbsFlexibleColumn<T> {
     TableHeaderRowBuildArguments<T> arguments,
     AbsFlexibleTableAnimations<T>? animations,
   ) {
-    return TableConstraintAnimationWrapper<T>(
-      animations: animations,
-      constraints: BoxConstraints.tightFor(
-        width: columnWidth.getColumnWidth(arguments),
-        height: arguments.rowHeight,
-      ),
-      child: arguments.rowHeight <= 0 ? null : buildHeaderCell(arguments),
+    final Widget child = arguments.rowHeight <= 0 ? const SizedBox.shrink() : buildHeaderCell(arguments);
+    final BoxConstraints constraints = BoxConstraints.tightFor(
+      width: columnWidth.getColumnWidth(arguments),
+      height: arguments.rowHeight,
     );
+    return animations?.buildTableHeaderCellConstraintAnimationWidget(
+          arguments,
+          this,
+          constraints: constraints,
+          cellWidget: child,
+        ) ??
+        ConstrainedBox(constraints: constraints, child: child);
   }
 
   ///构建列内容组件
@@ -41,14 +43,18 @@ abstract class AbsFlexibleColumn<T> {
     TableInfoRowBuildArguments<T> arguments,
     AbsFlexibleTableAnimations<T>? animations,
   ) {
-    return TableConstraintAnimationWrapper<T>(
-      animations: animations,
-      constraints: BoxConstraints.tightFor(
-        width: columnWidth.getColumnWidth(arguments),
-        height: arguments.rowHeight,
-      ),
-      child: arguments.rowHeight <= 0 ? null : buildInfoCell(arguments),
+    final Widget child = arguments.rowHeight <= 0 ? const SizedBox.shrink() : buildInfoCell(arguments);
+    final BoxConstraints constraints = BoxConstraints.tightFor(
+      width: columnWidth.getColumnWidth(arguments),
+      height: arguments.rowHeight,
     );
+    return animations?.buildTableInfoCellConstraintAnimationWidget(
+          arguments,
+          this,
+          constraints: constraints,
+          cellWidget: child,
+        ) ??
+        ConstrainedBox(constraints: constraints, child: child);
   }
 
   ///构建表头

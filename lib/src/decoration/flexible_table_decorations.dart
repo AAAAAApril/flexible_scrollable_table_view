@@ -1,25 +1,21 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
-typedef TableHeaderRowDecorationBuilder<T> = Widget Function(
-  TableHeaderRowBuildArguments<T> arguments,
-  Widget child,
-);
-
-typedef TableInfoRowDecorationBuilder<T> = Widget Function(
-  TableInfoRowBuildArguments<T> arguments,
-  Widget child,
-);
-
 ///表装饰配置
 abstract class AbsFlexibleTableDecorations<T> {
   const AbsFlexibleTableDecorations();
 
   ///构建表头行装饰
-  TableHeaderRowDecorationBuilder<T>? get headerRowDecorationBuilder => null;
+  Widget buildTableHeaderRowDecorationWidget(
+    TableHeaderRowBuildArguments<T> arguments,
+    Widget headerRowWidget,
+  );
 
   ///构建表信息行装饰
-  TableInfoRowDecorationBuilder<T>? get infoRowDecorationBuilder => null;
+  Widget buildTableInfoRowDecorationWidget(
+    TableInfoRowBuildArguments<T> arguments,
+    Widget infoRowWidget,
+  );
 }
 
 class FlexibleTableRowDecorations<T> extends AbsFlexibleTableDecorations<T> {
@@ -50,24 +46,22 @@ class FlexibleTableRowDecorations<T> extends AbsFlexibleTableDecorations<T> {
   final Widget? infoRowBackground;
 
   @override
-  TableHeaderRowDecorationBuilder<T>? get headerRowDecorationBuilder =>
-      (headerRowForeground == null && headerRowBackground == null)
-          ? null
-          : (arguments, child) => Stack(children: [
-                if (headerRowBackground != null) Positioned.fill(child: headerRowBackground!),
-                child,
-                if (headerRowForeground != null) Positioned.fill(child: headerRowForeground!),
-              ]);
+  Widget buildTableHeaderRowDecorationWidget(TableHeaderRowBuildArguments<T> arguments, Widget headerRowWidget) {
+    return Stack(children: [
+      if (headerRowBackground != null) Positioned.fill(child: headerRowBackground!),
+      headerRowWidget,
+      if (headerRowForeground != null) Positioned.fill(child: headerRowForeground!),
+    ]);
+  }
 
   @override
-  TableInfoRowDecorationBuilder<T>? get infoRowDecorationBuilder =>
-      (infoRowForeground == null && infoRowBackground == null)
-          ? null
-          : (arguments, child) => Stack(children: [
-                if (infoRowBackground != null) Positioned.fill(child: infoRowBackground!),
-                child,
-                if (infoRowForeground != null) Positioned.fill(child: infoRowForeground!),
-              ]);
+  Widget buildTableInfoRowDecorationWidget(TableInfoRowBuildArguments<T> arguments, Widget infoRowWidget) {
+    return Stack(children: [
+      if (infoRowBackground != null) Positioned.fill(child: infoRowBackground!),
+      infoRowWidget,
+      if (infoRowForeground != null) Positioned.fill(child: infoRowForeground!),
+    ]);
+  }
 }
 
 class _FlexibleTableRowDecorationsWithArguments<T> extends FlexibleTableRowDecorations<T> {
@@ -82,14 +76,17 @@ class _FlexibleTableRowDecorationsWithArguments<T> extends FlexibleTableRowDecor
   final Widget Function(TableInfoRowBuildArguments<T> arguments)? infoRowBackgroundWithArguments;
 
   @override
-  TableInfoRowDecorationBuilder<T>? get infoRowDecorationBuilder =>
-      (infoRowForegroundWithArguments == null && infoRowBackgroundWithArguments == null)
-          ? null
-          : (arguments, child) => Stack(children: [
-                if (infoRowBackgroundWithArguments != null)
-                  Positioned.fill(child: infoRowBackgroundWithArguments!.call(arguments)),
-                child,
-                if (infoRowForegroundWithArguments != null)
-                  Positioned.fill(child: infoRowForegroundWithArguments!.call(arguments)),
-              ]);
+  Widget buildTableInfoRowDecorationWidget(TableInfoRowBuildArguments<T> arguments, Widget infoRowWidget) {
+    return Stack(children: [
+      if (infoRowBackgroundWithArguments != null)
+        Positioned.fill(
+          child: infoRowBackgroundWithArguments!.call(arguments),
+        ),
+      infoRowWidget,
+      if (infoRowForegroundWithArguments != null)
+        Positioned.fill(
+          child: infoRowForegroundWithArguments!.call(arguments),
+        ),
+    ]);
+  }
 }

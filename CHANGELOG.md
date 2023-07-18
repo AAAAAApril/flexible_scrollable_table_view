@@ -1,3 +1,9 @@
+## 2.14.0
+
+* Some break changes.
+1. Move table header row and info row widget build functions into `AbsFlexibleTableConfigurations<T>` by `TableHeaderRowBuildInterface<T>` and `TableInfoRowBuildInterface<T>`.
+2. Optimize the code in `AbsFlexibleTableDecorations<T>` and `AbsFlexibleTableAnimations<T>`.
+
 ## 2.13.0
 
 1. Remove `FlexibleWidth<T>` and add `FixedOrProportionalWidth<T>`.

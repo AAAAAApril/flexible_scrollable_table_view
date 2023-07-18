@@ -1,11 +1,8 @@
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
-import 'package:flexible_scrollable_table_view/src/animation/table_constraint_animation_wrapper.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
-
-import 'selectable_column_cell_wrapper.dart';
 
 ///定制化的可选中的 Column
 mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
@@ -23,18 +20,34 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
     TableHeaderRowBuildArguments<T> arguments,
     AbsFlexibleTableAnimations<T>? animations,
   ) {
-    return SelectableColumnCellWrapper<T>(
-      arguments.controller,
-      selectableWidget: super.buildHeaderCellInternal(arguments, animations),
-      unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
-        animations: animations,
-        constraints: BoxConstraints.tightFor(
-          width: unSelectableWidth.getColumnWidth(arguments),
-          height: arguments.rowHeight,
-        ),
-        child: arguments.rowHeight <= 0 ? null : buildUnSelectableHeaderCell(arguments),
-      ),
+    return ValueListenableBuilder<bool>(
+      valueListenable: arguments.controller.selectable,
+      builder: (context, selectable, child) {
+        if (selectable) {
+          return child!;
+        }
+        return buildHeaderUnSelectableCellInternal(arguments, animations);
+      },
+      child: super.buildHeaderCellInternal(arguments, animations),
     );
+  }
+
+  Widget buildHeaderUnSelectableCellInternal(
+    TableHeaderRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    final Widget child = arguments.rowHeight <= 0 ? const SizedBox.shrink() : buildUnSelectableHeaderCell(arguments);
+    final BoxConstraints constraints = BoxConstraints.tightFor(
+      width: unSelectableWidth.getColumnWidth(arguments),
+      height: arguments.rowHeight,
+    );
+    return animations?.buildTableHeaderCellConstraintAnimationWidget(
+          arguments,
+          this,
+          constraints: constraints,
+          cellWidget: child,
+        ) ??
+        ConstrainedBox(constraints: constraints, child: child);
   }
 
   @override
@@ -42,18 +55,34 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
     TableInfoRowBuildArguments<T> arguments,
     AbsFlexibleTableAnimations<T>? animations,
   ) {
-    return SelectableColumnCellWrapper<T>(
-      arguments.controller,
-      selectableWidget: super.buildInfoCellInternal(arguments, animations),
-      unSelectableBuilder: (context) => TableConstraintAnimationWrapper<T>(
-        animations: animations,
-        constraints: BoxConstraints.tightFor(
-          width: unSelectableWidth.getColumnWidth(arguments),
-          height: arguments.rowHeight,
-        ),
-        child: arguments.rowHeight <= 0 ? null : buildUnSelectableInfoCell(arguments),
-      ),
+    return ValueListenableBuilder<bool>(
+      valueListenable: arguments.controller.selectable,
+      builder: (context, selectable, child) {
+        if (selectable) {
+          return child!;
+        }
+        return buildInfoUnSelectableCellInternal(arguments, animations);
+      },
+      child: super.buildInfoCellInternal(arguments, animations),
     );
+  }
+
+  Widget buildInfoUnSelectableCellInternal(
+    TableInfoRowBuildArguments<T> arguments,
+    AbsFlexibleTableAnimations<T>? animations,
+  ) {
+    final Widget child = arguments.rowHeight <= 0 ? const SizedBox.shrink() : buildUnSelectableInfoCell(arguments);
+    final BoxConstraints constraints = BoxConstraints.tightFor(
+      width: unSelectableWidth.getColumnWidth(arguments),
+      height: arguments.rowHeight,
+    );
+    return animations?.buildTableInfoCellConstraintAnimationWidget(
+          arguments,
+          this,
+          constraints: constraints,
+          cellWidget: child,
+        ) ??
+        ConstrainedBox(constraints: constraints, child: child);
   }
 
   @override
