@@ -120,11 +120,25 @@ class NormalList extends StatefulWidget {
 
 class _NormalListState extends State<NormalList> {
   late FlexibleTableController<TableDataBean> controller;
+  late AbsFlexibleTableConfigurations<TableDataBean> configurations;
 
   @override
   void initState() {
     super.initState();
     controller = FlexibleTableController<TableDataBean>();
+    configurations = FlexibleTableConfigurations(
+      rowHeight: widget.configurations.rowHeight,
+      leftPinnedColumns: Set.of(widget.configurations.leftPinnedColumns)
+        // ..add(DynamicWidthColumn(
+        //   '动态宽度列',
+        //   columnWidth: DynamicWidth(controller),
+        //   headerBuilder: (column, arguments) => Text(column.id),
+        //   infoBuilder: (column, arguments) => Text(arguments.data.strValue),
+        // ))
+      ,
+      rightPinnedColumns: Set.of(widget.configurations.rightPinnedColumns),
+      scrollableColumns: Set.of(widget.configurations.scrollableColumns),
+    );
     refreshData();
   }
 
@@ -137,7 +151,7 @@ class _NormalListState extends State<NormalList> {
   void refreshData() {
     final Random random = Random.secure();
     controller.value = List<TableDataBean>.generate(
-      random.nextInt(40) + 30,
+      random.nextInt(20) + 60,
       (index) => TableDataBean(
         id: index,
         title: '数据标题$index',
@@ -180,7 +194,7 @@ class _NormalListState extends State<NormalList> {
             elevation: 2,
             child: FlexibleTableHeader<TableDataBean>(
               controller,
-              configurations: widget.configurations,
+              configurations: configurations,
               horizontalScrollMixin: controller,
               animations: widget.animations,
             ),
@@ -188,7 +202,7 @@ class _NormalListState extends State<NormalList> {
           Expanded(
             child: FlexibleTableContent<TableDataBean>(
               controller,
-              configurations: widget.configurations,
+              configurations: configurations,
               horizontalScrollMixin: controller,
               animations: widget.animations,
               decorations: FlexibleTableRowDecorations.infoArguments(
@@ -204,7 +218,7 @@ class _NormalListState extends State<NormalList> {
                 ),
               ),
               additions: FlexibleTableAdditions(
-                fixedHeaderHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
+                fixedHeaderHeight: configurations.rowHeight.fixedInfoRowHeight,
                 header: Center(
                   child: OutlinedButton(
                     onPressed: () {
@@ -213,7 +227,7 @@ class _NormalListState extends State<NormalList> {
                     child: const Text('这里是列表的Header，一个OutlinedButton'),
                   ),
                 ),
-                fixedFooterHeight: widget.configurations.rowHeight.fixedInfoRowHeight,
+                fixedFooterHeight: configurations.rowHeight.fixedInfoRowHeight,
                 footer: Center(
                   child: OutlinedButton(
                     onPressed: () {

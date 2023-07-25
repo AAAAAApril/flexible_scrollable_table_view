@@ -30,7 +30,7 @@ abstract class AbsDynamicWidth<T> extends AbsFlexibleTableColumnWidth<T> {
 
   @override
   double getColumnWidth(AbsTableBuildArguments<T> arguments) {
-    throw Exception('Instance of AbsDynamicWidth<T,I> only used in AbsDynamicWidthColumn<T,I> .');
+    throw Exception('Instance of AbsDynamicWidth<T> only used in DynamicWidthColumnMixin<T> .');
   }
 }
 
