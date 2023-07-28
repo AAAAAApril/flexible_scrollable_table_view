@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flexible_scrollable_table_view/src/custom/dynamic_width/zero_box.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-
-import 'size_listenable_widget.dart';
 
 ///可以同步最大组件宽度的组
 class IntrinsicWidthGroup extends ChangeNotifier implements ValueListenable<double?> {
@@ -229,8 +228,8 @@ class _IntrinsicWidthChildState extends State<IntrinsicWidthChild> {
         }
       }
     }
-    return SizeListenableWidget(
-      onSizeChanged: onSizeChanged,
+    return ZeroBox(
+      onRealSizeCallback: onSizeChanged,
       child: ConstrainedBox(
         constraints: localWidth != null
             ? BoxConstraints.tightFor(

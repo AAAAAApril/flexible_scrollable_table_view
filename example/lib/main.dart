@@ -129,12 +129,12 @@ class _NormalListState extends State<NormalList> {
     configurations = FlexibleTableConfigurations(
       rowHeight: widget.configurations.rowHeight,
       leftPinnedColumns: Set.of(widget.configurations.leftPinnedColumns)
-        // ..add(DynamicWidthColumn(
-        //   '动态宽度列',
-        //   columnWidth: DynamicWidth(controller),
-        //   headerBuilder: (column, arguments) => Text(column.id),
-        //   infoBuilder: (column, arguments) => Text(arguments.data.strValue),
-        // ))
+      // ..add(DynamicWidthColumn(
+      //   '动态宽度列',
+      //   columnWidth: DynamicWidth(controller),
+      //   headerBuilder: (column, arguments) => Text(column.id),
+      //   infoBuilder: (column, arguments) => Text(arguments.data.strValue),
+      // ))
       ,
       rightPinnedColumns: Set.of(widget.configurations.rightPinnedColumns),
       scrollableColumns: Set.of(widget.configurations.scrollableColumns),

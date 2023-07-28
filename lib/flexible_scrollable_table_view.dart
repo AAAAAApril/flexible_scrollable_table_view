@@ -17,6 +17,7 @@ export 'src/custom/cache/table_cell_widget_cache_mixin.dart';
 // export 'src/custom/dynamic_width/dynamic_width_column.dart';
 // export 'src/custom/dynamic_width/intrinsic_width_group.dart';
 // export 'src/custom/dynamic_width/size_listenable_widget.dart';
+export 'src/custom/dynamic_width/zero_box.dart';
 
 export 'src/custom/flexible_table_controller.dart';
 
