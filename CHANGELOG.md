@@ -1,6 +1,13 @@
+## 2.14.1
+
+* Break changes.
+* There is no `Comparator<T>` in `AbsFlexibleColumn<T>` anymore, but use `compare(T,T)` in `SortableColumnMixin<T>` instead.
+* As the same, switch sorting column is only support column instance of `SortableColumnMixin<T>`.
+
 ## 2.14.0
 
 * Some break changes.
+
 1. Move table header row and info row widget build functions into `AbsFlexibleTableConfigurations<T>` by `TableHeaderRowBuildInterface<T>` and `TableInfoRowBuildInterface<T>`.
 2. Optimize the code in `AbsFlexibleTableDecorations<T>` and `AbsFlexibleTableAnimations<T>`.
 
@@ -8,7 +15,7 @@
 
 1. Remove `FlexibleWidth<T>` and add `FixedOrProportionalWidth<T>`.
 2. Remove deprecated fields.
-3. Add `TableCellWidgetCacheMixin<T>` who can used for cache widget in `AbsFlexibleColumn<T>`. 
+3. Add `TableCellWidgetCacheMixin<T>` who can used for cache widget in `AbsFlexibleColumn<T>`.
 4. Remove dynamic column width support.
 
 ## 2.12.4
