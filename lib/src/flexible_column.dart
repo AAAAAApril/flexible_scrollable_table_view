@@ -13,12 +13,6 @@ abstract class AbsFlexibleColumn<T> {
   ///该列的宽度
   AbsFlexibleTableColumnWidth<T> get columnWidth;
 
-  ///排序时会使用的回调（为 null 表示该列没有排序功能）
-  Comparator<T>? get comparator => null;
-
-  ///该列是否可比较
-  bool get comparableColumn => comparator != null;
-
   ///构建列头组件
   Widget buildHeaderCellInternal(
     TableHeaderRowBuildArguments<T> arguments,

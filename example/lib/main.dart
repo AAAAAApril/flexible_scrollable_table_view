@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
       },
       scrollableColumns: {
-        NormalColumn(
+        SortableColumn(
           'value2',
           columnWidth: FixedOrProportionalWidth.max(
             fixed: 100,
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             debugPrint('点击了value2列信息：${data.value2}');
           },
         ),
-        NormalColumn(
+        SortableColumn(
           'value3',
           columnWidth: FixedOrProportionalWidth.min(
             fixed: 130,
@@ -404,7 +404,6 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
     required this.infoText,
     this.onHeaderPressed,
     this.onInfoPressed,
-    this.comparator,
   });
 
   final String headerText;
@@ -415,40 +414,39 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
   final AbsFlexibleTableColumnWidth<T> columnWidth;
 
   @override
-  final Comparator<T>? comparator;
-
-  @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
     Widget child = SizedBox.expand(
       child: Center(
         child: Text(headerText),
       ),
     );
-    if (onHeaderPressed != null || comparableColumn) {
+    if (onHeaderPressed != null) {
       child = GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
           onHeaderPressed?.call();
           //点击列头排序
-          //当前正在排序
-          if (arguments.controller.currentSortingColumn.value == this) {
-            //切换排序方式
-            arguments.controller.switch2NextSortType();
-          }
-          //当前列未在排序
-          else {
-            //当前没有正在排序的列
-            if (arguments.controller.currentSortingColumn.value == null) {
-              //切换为当前列降序排序
-              arguments.controller.switchSortTypeAndColumn(
-                newSortType: FlexibleColumnSortType.descending,
-                newSortColumn: this,
-              );
+          if (this is SortableColumnMixin<T>) {
+            //当前正在排序
+            if (arguments.controller.currentSortingColumn.value == (this as SortableColumnMixin<T>)) {
+              //切换排序方式
+              arguments.controller.switch2NextSortType();
             }
-            //当前有正在排序的列
+            //当前列未在排序
             else {
-              //切换排序列为当前
-              arguments.controller.switchSortColumn(this);
+              //当前没有正在排序的列
+              if (arguments.controller.currentSortingColumn.value == null) {
+                //切换为当前列降序排序
+                arguments.controller.switchSortTypeAndColumn(
+                  newSortType: FlexibleColumnSortType.descending,
+                  newSortColumn: this as SortableColumnMixin<T>,
+                );
+              }
+              //当前有正在排序的列
+              else {
+                //切换排序列为当前
+                arguments.controller.switchSortColumn(this as SortableColumnMixin<T>);
+              }
             }
           }
         },
@@ -490,6 +488,24 @@ class NormalColumn<T> extends AbsFlexibleColumn<T> {
       child: child,
     );
   }
+}
+
+///可排序列
+class SortableColumn<T> extends NormalColumn<T> with SortableColumnMixin<T> {
+  const SortableColumn(
+    super.id, {
+    required super.columnWidth,
+    required super.headerText,
+    required super.infoText,
+    super.onHeaderPressed,
+    super.onInfoPressed,
+    required this.comparator,
+  });
+
+  final Comparator<T> comparator;
+
+  @override
+  int compare(T a, T b) => comparator.call(a, b);
 }
 
 ///可选择列

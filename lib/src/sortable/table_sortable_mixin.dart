@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/sortable/sortable_column.dart';
 import 'package:flutter/foundation.dart';
 
 enum FlexibleColumnSortType {
@@ -33,9 +33,9 @@ mixin TableSortableMixin<T> on ChangeNotifier {
   ValueListenable<FlexibleColumnSortType> get currentSortingType => _currentSortingType;
 
   ///触发排序的列
-  final ValueNotifier<AbsFlexibleColumn<T>?> _currentSortingColumn = ValueNotifier<AbsFlexibleColumn<T>?>(null);
+  final ValueNotifier<SortableColumnMixin<T>?> _currentSortingColumn = ValueNotifier<SortableColumnMixin<T>?>(null);
 
-  ValueListenable<AbsFlexibleColumn<T>?> get currentSortingColumn => _currentSortingColumn;
+  ValueListenable<SortableColumnMixin<T>?> get currentSortingColumn => _currentSortingColumn;
 
   @override
   void dispose() {
@@ -71,8 +71,7 @@ mixin TableSortableMixin<T> on ChangeNotifier {
   }
 
   ///切换排序列
-  void switchSortColumn(AbsFlexibleColumn<T>? newSortColumn) {
-    assert(newSortColumn == null || newSortColumn.comparableColumn);
+  void switchSortColumn(SortableColumnMixin<T>? newSortColumn) {
     //排序列相同，不切换
     if (_currentSortingColumn.value == newSortColumn) {
       return;
@@ -85,14 +84,14 @@ mixin TableSortableMixin<T> on ChangeNotifier {
   ///切换排序方式以及排序列
   void switchSortTypeAndColumn({
     required FlexibleColumnSortType newSortType,
-    required AbsFlexibleColumn<T>? newSortColumn,
+    required SortableColumnMixin<T>? newSortColumn,
   }) {
     bool needSort = false;
     if (newSortType != _currentSortingType.value) {
       _currentSortingType.value = newSortType;
       needSort = true;
     }
-    if ((newSortColumn == null || newSortColumn.comparableColumn) && _currentSortingColumn.value != newSortColumn) {
+    if (newSortColumn != _currentSortingColumn.value) {
       _currentSortingColumn.value = newSortColumn;
       needSort = true;
     }
@@ -108,11 +107,11 @@ mixin TableSortableMixin<T> on ChangeNotifier {
   void sortData() {
     final List<T> value = List<T>.of(sortableValue);
     final FlexibleColumnSortType sortType = _currentSortingType.value;
-    final Comparator<T>? comparator = _currentSortingColumn.value?.comparator;
-    if (value.isNotEmpty && sortType != FlexibleColumnSortType.normal && comparator != null) {
+    final SortableColumnMixin<T>? sortingColumn = _currentSortingColumn.value;
+    if (value.isNotEmpty && sortType != FlexibleColumnSortType.normal && sortingColumn != null) {
       value.sort(
         (a, b) {
-          int result = comparator(a, b);
+          int result = sortingColumn.compare(a, b);
           //降序的时候，取反
           if (sortType == FlexibleColumnSortType.descending) {
             result = -result;

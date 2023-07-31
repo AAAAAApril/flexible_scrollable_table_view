@@ -9,13 +9,15 @@ abstract class AbsFlexibleTableDecorations<T> {
   Widget buildTableHeaderRowDecorationWidget(
     TableHeaderRowBuildArguments<T> arguments,
     Widget headerRowWidget,
-  );
+  ) =>
+      headerRowWidget;
 
   ///构建表信息行装饰
   Widget buildTableInfoRowDecorationWidget(
     TableInfoRowBuildArguments<T> arguments,
     Widget infoRowWidget,
-  );
+  ) =>
+      infoRowWidget;
 }
 
 class FlexibleTableRowDecorations<T> extends AbsFlexibleTableDecorations<T> {

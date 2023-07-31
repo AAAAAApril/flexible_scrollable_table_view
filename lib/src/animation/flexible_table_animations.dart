@@ -13,14 +13,16 @@ abstract class AbsFlexibleTableAnimations<T> {
     TableHeaderRowBuildArguments<T> arguments, {
     required BoxConstraints constraints,
     required Widget rowWidget,
-  });
+  }) =>
+      rowWidget;
 
   ///表信息行约束变更动画组件
   Widget buildTableInfoRowConstraintAnimationWidget(
     TableInfoRowBuildArguments<T> arguments, {
     required BoxConstraints constraints,
     required Widget rowWidget,
-  });
+  }) =>
+      rowWidget;
 
   ///表头项约束变更动画组件
   Widget buildTableHeaderCellConstraintAnimationWidget(
@@ -28,7 +30,8 @@ abstract class AbsFlexibleTableAnimations<T> {
     AbsFlexibleColumn<T> column, {
     required BoxConstraints constraints,
     required Widget cellWidget,
-  });
+  }) =>
+      cellWidget;
 
   ///表信息项约束变更动画组件
   Widget buildTableInfoCellConstraintAnimationWidget(
@@ -36,7 +39,8 @@ abstract class AbsFlexibleTableAnimations<T> {
     AbsFlexibleColumn<T> column, {
     required BoxConstraints constraints,
     required Widget cellWidget,
-  });
+  }) =>
+      cellWidget;
 }
 
 class FlexibleTableAnimations<T> extends AbsFlexibleTableAnimations<T> {

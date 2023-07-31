@@ -5,8 +5,7 @@ import 'package:flutter/widgets.dart';
 
 ///可排序 Column
 mixin SortableColumnMixin<T> on AbsFlexibleColumn<T> {
-  @override
-  Comparator<T> get comparator;
+  int compare(T a, T b);
 }
 
 abstract class AbsSortableColumn<T> extends AbsFlexibleColumn<T> with SortableColumnMixin<T> {
@@ -26,7 +25,7 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
 
   @override
   final AbsFlexibleTableColumnWidth<T> columnWidth;
-  @override
+
   final Comparator<T> comparator;
 
   final Widget? header;
@@ -34,6 +33,9 @@ class SortableColumn<T> extends AbsSortableColumn<T> {
 
   final Widget? info;
   final Widget Function(TableInfoRowBuildArguments<T> arguments, SortableColumnMixin<T> column)? infoBuilder;
+
+  @override
+  int compare(T a, T b) => comparator.call(a, b);
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
