@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -113,7 +113,7 @@ class IntrinsicWidthChild extends StatefulWidget {
   const IntrinsicWidthChild(
     this.childId, {
     super.key,
-    required this.controller,
+    required this.dataSource,
     required this.group,
     required this.fixedHeight,
     required this.child,
@@ -122,7 +122,7 @@ class IntrinsicWidthChild extends StatefulWidget {
   ///当前成员的唯一标识
   final int childId;
 
-  final FlexibleTableController<dynamic> controller;
+  final FlexibleTableDataSource<dynamic> dataSource;
 
   ///所属组
   final IntrinsicWidthGroup group;
@@ -153,7 +153,7 @@ class _IntrinsicWidthChildState extends State<IntrinsicWidthChild> {
     if (oldWidget.childId != widget.childId ||
         oldWidget.child != widget.child ||
         oldWidget.group != widget.group ||
-        oldWidget.controller != widget.controller) {
+        oldWidget.dataSource != widget.dataSource) {
       _onDispose(oldWidget);
       _onInit();
     }
@@ -169,11 +169,11 @@ class _IntrinsicWidthChildState extends State<IntrinsicWidthChild> {
   void _onInit() {
     widget.group.onChildCreated(widget.childId);
     widget.group.addListener(onGroupWidthChanged);
-    widget.controller.addValueSettingCallback(onTableValueSetting);
+    widget.dataSource.addValueSettingCallback(onTableValueSetting);
   }
 
   void _onDispose(IntrinsicWidthChild widget) {
-    widget.controller.removeValueSettingCallback(onTableValueSetting);
+    widget.dataSource.removeValueSettingCallback(onTableValueSetting);
     widget.group.removeListener(onGroupWidthChanged);
     widget.group.onChildDestroyed(widget.childId);
   }

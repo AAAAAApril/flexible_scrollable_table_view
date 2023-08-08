@@ -2,11 +2,12 @@ import 'table_build_arguments.dart';
 
 ///构建表头行所需参数
 class TableHeaderRowBuildArguments<T> extends TableBuildArguments<T> with TableRowConstraintMixin<T> {
-  TableHeaderRowBuildArguments(
-    super.controller,
-    super.configurations,
-    super.parentWidth,
-  );
+  TableHeaderRowBuildArguments({
+    required super.dataSource,
+    required super.horizontalScrollMixin,
+    required super.configurations,
+    required super.parentWidth,
+  });
 
   @override
   late final double rowHeight = configurations.rowHeight.headerRowHeight;
@@ -15,15 +16,16 @@ class TableHeaderRowBuildArguments<T> extends TableBuildArguments<T> with TableR
 ///构建表信息行所需参数
 class TableInfoRowBuildArguments<T> extends TableBuildArguments<T>
     with TableRowConstraintMixin<T>, TableInfoRowArgumentsMixin<T> {
-  TableInfoRowBuildArguments(
-    super.controller,
-    super.configurations,
-    super.parentWidth,
-    this._dataList,
-    this.dataIndex,
-    this.itemIndex,
-    this.itemCount,
-  );
+  TableInfoRowBuildArguments({
+    required super.dataSource,
+    required super.horizontalScrollMixin,
+    required super.configurations,
+    required super.parentWidth,
+    required List<T> dataList,
+    required this.dataIndex,
+    required this.itemIndex,
+    required this.itemCount,
+  }) : _dataList = dataList;
 
   ///所有数据
   final List<T> _dataList;
@@ -54,9 +56,10 @@ class TableInfoRowBuildArguments<T> extends TableBuildArguments<T>
 
 extension TableBuildArgumentsExt<T> on AbsTableBuildArguments<T> {
   TableHeaderRowBuildArguments<T> toHeaderRowArguments() => TableHeaderRowBuildArguments<T>(
-        controller,
-        configurations,
-        parentWidth,
+        dataSource: dataSource,
+        horizontalScrollMixin: horizontalScrollMixin,
+        configurations: configurations,
+        parentWidth: parentWidth,
       );
 
   TableInfoRowBuildArguments<T> toInfoRowArguments({
@@ -66,12 +69,13 @@ extension TableBuildArgumentsExt<T> on AbsTableBuildArguments<T> {
     required int totalItemCount,
   }) =>
       TableInfoRowBuildArguments<T>(
-        controller,
-        configurations,
-        parentWidth,
-        dataList,
-        dataIndex,
-        currentItemIndex,
-        totalItemCount,
+        dataSource: dataSource,
+        horizontalScrollMixin: horizontalScrollMixin,
+        configurations: configurations,
+        parentWidth: parentWidth,
+        dataList: dataList,
+        dataIndex: dataIndex,
+        itemIndex: currentItemIndex,
+        itemCount: totalItemCount,
       );
 }

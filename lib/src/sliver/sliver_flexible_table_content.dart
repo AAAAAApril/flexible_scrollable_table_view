@@ -6,13 +6,13 @@ import 'package:flutter/widgets.dart';
 /// Sliver 型 表内容区域
 class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
   const SliverFlexibleTableContent(
-    super.controller, {
+    super.dataSource, {
     super.key,
     required super.configurations,
+    required super.horizontalScrollMixin,
     super.additions,
     super.decorations,
     super.animations,
-    super.horizontalScrollController,
     super.horizontalPhysics,
   });
 
@@ -21,12 +21,13 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
     return LazySliverLayoutBuilder(
       builder: (context, parentWidth) {
         final AbsTableBuildArguments<T> arguments = TableBuildArguments<T>(
-          controller,
-          configurations,
-          parentWidth,
+          dataSource: dataSource,
+          horizontalScrollMixin: horizontalScrollMixin,
+          configurations: configurations,
+          parentWidth: parentWidth,
         );
         return ValueListenableBuilder<List<T>>(
-          valueListenable: controller,
+          valueListenable: dataSource,
           builder: (context, value, child) {
             final double? itemExtent = value.isEmpty ? null : super.itemExtent;
             final int totalItemCount = getItemCount(value);

@@ -1,9 +1,11 @@
 import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/synchronized_scroll_mixin.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_mixin.dart';
+import 'package:flutter/widgets.dart';
 
 /// Will be deprecated in few versions later.
-/// Use FlexibleTableDataSource<T> instead.
-class FlexibleTableController<T> extends FlexibleTableDataSource<T> {
+@Deprecated('Use FlexibleTableDataSource<T> instead.')
+class FlexibleTableController<T> extends FlexibleTableDataSource<T> with TableHorizontalScrollMixin {
   FlexibleTableController({
     SynchronizedScrollMixin? horizontalScrollController,
   })  : _horizontalScrollController = horizontalScrollController,
@@ -20,5 +22,13 @@ class FlexibleTableController<T> extends FlexibleTableDataSource<T> {
     if (_horizontalScrollController == null) {
       horizontalScrollController.dispose();
     }
+  }
+
+  @override
+  ScrollController createScrollController() => horizontalScrollController;
+
+  @override
+  void destroyScrollController(ScrollController controller) {
+    //ignore
   }
 }

@@ -1,17 +1,17 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
-import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/foundation.dart';
 
 import 'intrinsic_width_group.dart';
 
 ///动态宽度
 abstract class AbsDynamicWidth<T> extends AbsFlexibleTableColumnWidth<T> {
-  AbsDynamicWidth(this.controller) {
-    controller.addValueSettingCallback(_onValueSetting);
+  AbsDynamicWidth(this.dataSource) {
+    dataSource.addValueSettingCallback(_onValueSetting);
   }
 
-  final FlexibleTableController<T> controller;
+  final FlexibleTableDataSource<T> dataSource;
 
   ///宽度组
   IntrinsicWidthGroup get widthGroup;
@@ -19,7 +19,7 @@ abstract class AbsDynamicWidth<T> extends AbsFlexibleTableColumnWidth<T> {
   ///释放函数
   @mustCallSuper
   void dispose() {
-    controller.removeValueSettingCallback(_onValueSetting);
+    dataSource.removeValueSettingCallback(_onValueSetting);
   }
 
   void _onValueSetting(List<T> oldValue, List<T> newValue) {

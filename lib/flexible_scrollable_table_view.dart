@@ -30,6 +30,8 @@ export 'src/row/table_info_row_build_mixin.dart';
 
 export 'src/scrollable/scroll_behavior.dart';
 export 'src/scrollable/synchronized_scroll_mixin.dart';
+export 'src/scrollable/table_horizontal_scroll_mixin.dart';
+export 'src/scrollable/table_horizontal_scroll_state_widget.dart';
 
 export 'src/selectable/selectable_column.dart';
 export 'src/selectable/selectable_column_widgets.dart';

@@ -181,6 +181,7 @@ class _NormalListState extends State<NormalList> {
             child: FlexibleTableHeader<TableDataBean>(
               controller,
               configurations: widget.configurations,
+              horizontalScrollMixin: controller,
               animations: widget.animations,
             ),
           ),
@@ -188,6 +189,7 @@ class _NormalListState extends State<NormalList> {
             child: FlexibleTableContent<TableDataBean>(
               controller,
               configurations: widget.configurations,
+              horizontalScrollMixin: controller,
               animations: widget.animations,
               decorations: FlexibleTableRowDecorations.infoArguments(
                 infoRowBackground: (arguments) => ColoredBox(
@@ -311,6 +313,7 @@ class _InSliverListState extends State<InSliverList> {
               child: FlexibleTableHeader<TableDataBean>(
                 controller,
                 configurations: widget.configurations,
+                horizontalScrollMixin: controller,
               ),
             ),
           ),
@@ -332,6 +335,7 @@ class _InSliverListState extends State<InSliverList> {
         FlexibleTableContent<TableDataBean>.sliver(
           controller,
           configurations: widget.configurations,
+          horizontalScrollMixin: controller,
           animations: widget.animations,
           decorations: FlexibleTableRowDecorations.infoArguments(
             infoRowBackground: (arguments) => ColoredBox(

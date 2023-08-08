@@ -1,3 +1,9 @@
+## 2.15.0
+
+* Break changes.
+* Now `FlexibleTableController<T>` was deprecated, use `FlexibleTableDataSource<T>` instead.
+* Now you can create custom horizontal scroll mode by `TableHorizontalScrollMixin`. 
+
 ## 2.14.1
 
 * Break changes.

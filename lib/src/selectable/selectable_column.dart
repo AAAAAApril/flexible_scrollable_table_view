@@ -21,7 +21,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
     AbsFlexibleTableAnimations<T>? animations,
   ) {
     return ValueListenableBuilder<bool>(
-      valueListenable: arguments.controller.selectable,
+      valueListenable: arguments.dataSource.selectable,
       builder: (context, selectable, child) {
         if (selectable) {
           return child!;
@@ -56,7 +56,7 @@ mixin SelectableColumnMixin<T> on AbsFlexibleColumn<T> {
     AbsFlexibleTableAnimations<T>? animations,
   ) {
     return ValueListenableBuilder<bool>(
-      valueListenable: arguments.controller.selectable,
+      valueListenable: arguments.dataSource.selectable,
       builder: (context, selectable, child) {
         if (selectable) {
           return child!;

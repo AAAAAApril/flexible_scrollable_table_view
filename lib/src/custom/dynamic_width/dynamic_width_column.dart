@@ -18,7 +18,7 @@ mixin DynamicWidthColumnMixin<T> on AbsFlexibleColumn<T> {
   ) {
     return IntrinsicWidthChild(
       -1,
-      controller: arguments.controller,
+      dataSource: arguments.dataSource,
       group: columnWidth.widthGroup,
       fixedHeight: arguments.rowHeight,
       child: buildHeaderCell(arguments),
@@ -32,7 +32,7 @@ mixin DynamicWidthColumnMixin<T> on AbsFlexibleColumn<T> {
   ) {
     return IntrinsicWidthChild(
       arguments.dataIndex,
-      controller: arguments.controller,
+      dataSource: arguments.dataSource,
       key: ValueKey<String>('${id}_${arguments.dataIndex}'),
       group: columnWidth.widthGroup,
       fixedHeight: arguments.rowHeight,

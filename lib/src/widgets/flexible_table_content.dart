@@ -2,24 +2,24 @@ import 'package:flexible_scrollable_table_view/src/addition/flexible_table_addit
 import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_layout_builder.dart';
-import 'package:flexible_scrollable_table_view/src/scrollable/synchronized_scroll_mixin.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_mixin.dart';
 import 'package:flexible_scrollable_table_view/src/sliver/sliver_flexible_table_content.dart';
 import 'package:flutter/widgets.dart';
 
 ///表内容区域
 class FlexibleTableContent<T> extends StatelessWidget {
   const FlexibleTableContent(
-    this.controller, {
+    this.dataSource, {
     super.key,
     required this.configurations,
+    required this.horizontalScrollMixin,
     this.additions,
     this.decorations,
     this.animations,
-    this.horizontalScrollController,
     this.verticalScrollController,
     this.shrinkWrap = false,
     this.primary,
@@ -28,33 +28,33 @@ class FlexibleTableContent<T> extends StatelessWidget {
   });
 
   factory FlexibleTableContent.sliver(
-    FlexibleTableController<T> controller, {
+    FlexibleTableDataSource<T> dataSource, {
     Key? key,
     required AbsFlexibleTableConfigurations<T> configurations,
     AbsFlexibleTableAdditions<T>? additions,
     AbsFlexibleTableDecorations<T>? decorations,
     AbsFlexibleTableAnimations<T>? animations,
-    SynchronizedScrollMixin? horizontalScrollController,
+    required TableHorizontalScrollMixin horizontalScrollMixin,
     ScrollPhysics? horizontalPhysics,
   }) =>
       SliverFlexibleTableContent<T>(
-        controller,
+        dataSource,
         key: key,
         configurations: configurations,
+        horizontalScrollMixin: horizontalScrollMixin,
         additions: additions,
         decorations: decorations,
         animations: animations,
-        horizontalScrollController: horizontalScrollController,
         horizontalPhysics: horizontalPhysics,
       );
 
-  final FlexibleTableController<T> controller;
+  final FlexibleTableDataSource<T> dataSource;
   final AbsFlexibleTableConfigurations<T> configurations;
   final AbsFlexibleTableAdditions<T>? additions;
   final AbsFlexibleTableDecorations<T>? decorations;
   final AbsFlexibleTableAnimations<T>? animations;
 
-  final SynchronizedScrollMixin? horizontalScrollController;
+  final TableHorizontalScrollMixin horizontalScrollMixin;
   final ScrollController? verticalScrollController;
 
   final bool shrinkWrap;
@@ -124,7 +124,6 @@ class FlexibleTableContent<T> extends StatelessWidget {
       ),
       decorations: decorations,
       animations: animations,
-      scrollController: horizontalScrollController,
       physics: horizontalPhysics,
     );
   }
@@ -152,12 +151,13 @@ class FlexibleTableContent<T> extends StatelessWidget {
     return LazyLayoutBuilder(
       builder: (context, constraints) {
         final AbsTableBuildArguments<T> arguments = TableBuildArguments<T>(
-          controller,
-          configurations,
-          constraints.maxWidth,
+          dataSource: dataSource,
+          horizontalScrollMixin: horizontalScrollMixin,
+          configurations: configurations,
+          parentWidth: constraints.maxWidth,
         );
         final Widget child = ValueListenableBuilder<List<T>>(
-          valueListenable: controller,
+          valueListenable: dataSource,
           builder: (context, value, child) {
             final int totalItemCount = getItemCount(value);
             return ListView.builder(

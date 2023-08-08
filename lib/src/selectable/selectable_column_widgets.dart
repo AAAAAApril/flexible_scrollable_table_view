@@ -1,16 +1,16 @@
-import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flutter/widgets.dart';
 
 ///可选列 列头 包装组件
 class SelectableColumnHeader<T> extends StatefulWidget {
   const SelectableColumnHeader(
-    this.controller, {
+    this.dataSource, {
     super.key,
     required this.builder,
     this.child,
   });
 
-  final FlexibleTableController<T> controller;
+  final FlexibleTableDataSource<T> dataSource;
   final Widget Function(
     BuildContext context,
     bool selected,
@@ -30,21 +30,21 @@ class _SelectableColumnHeaderState<T> extends State<SelectableColumnHeader<T>> {
   void initState() {
     super.initState();
     selected = ValueNotifier<bool>(false);
-    widget.controller.addListener(onValueChanged);
-    widget.controller.selectedValue.addListener(onValueChanged);
+    widget.dataSource.addListener(onValueChanged);
+    widget.dataSource.selectedValue.addListener(onValueChanged);
     onValueChanged();
   }
 
   @override
   void dispose() {
-    widget.controller.selectedValue.removeListener(onValueChanged);
-    widget.controller.removeListener(onValueChanged);
+    widget.dataSource.selectedValue.removeListener(onValueChanged);
+    widget.dataSource.removeListener(onValueChanged);
     selected.dispose();
     super.dispose();
   }
 
   void onValueChanged() {
-    selected.value = widget.controller.selectedValue.value.length >= widget.controller.selectableValue.length;
+    selected.value = widget.dataSource.selectedValue.value.length >= widget.dataSource.selectableValue.length;
   }
 
   void onSelectedValueChanged(bool? newValue) {
@@ -53,11 +53,11 @@ class _SelectableColumnHeaderState<T> extends State<SelectableColumnHeader<T>> {
     }
     //选中全部
     if (newValue) {
-      widget.controller.selectAllRows();
+      widget.dataSource.selectAllRows();
     }
     //取消选中全部
     else {
-      widget.controller.unselectAllRows();
+      widget.dataSource.unselectAllRows();
     }
   }
 
@@ -78,14 +78,14 @@ class _SelectableColumnHeaderState<T> extends State<SelectableColumnHeader<T>> {
 ///可选列 列信息 包装组件
 class SelectableColumnInfo<T> extends StatefulWidget {
   const SelectableColumnInfo(
-    this.controller, {
+    this.dataSource, {
     super.key,
     required this.data,
     required this.builder,
     this.child,
   });
 
-  final FlexibleTableController<T> controller;
+  final FlexibleTableDataSource<T> dataSource;
   final T data;
   final Widget Function(
     BuildContext context,
@@ -106,7 +106,7 @@ class _SelectableColumnInfoState<T> extends State<SelectableColumnInfo<T>> {
   void initState() {
     super.initState();
     selected = ValueNotifier<bool>(false);
-    widget.controller.selectedValue.addListener(onValueChanged);
+    widget.dataSource.selectedValue.addListener(onValueChanged);
     onValueChanged();
   }
 
@@ -120,13 +120,13 @@ class _SelectableColumnInfoState<T> extends State<SelectableColumnInfo<T>> {
 
   @override
   void dispose() {
-    widget.controller.selectedValue.removeListener(onValueChanged);
+    widget.dataSource.selectedValue.removeListener(onValueChanged);
     selected.dispose();
     super.dispose();
   }
 
   void onValueChanged() {
-    selected.value = widget.controller.isRowSelected(widget.data);
+    selected.value = widget.dataSource.isRowSelected(widget.data);
   }
 
   void onSelectedValueChanged(bool? newValue) {
@@ -135,11 +135,11 @@ class _SelectableColumnInfoState<T> extends State<SelectableColumnInfo<T>> {
     }
     //选中当前行
     if (newValue) {
-      widget.controller.selectRow(widget.data);
+      widget.dataSource.selectRow(widget.data);
     }
     //取消选中当前行
     else {
-      widget.controller.unselectRow(widget.data);
+      widget.dataSource.unselectRow(widget.data);
     }
   }
 

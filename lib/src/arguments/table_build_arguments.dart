@@ -1,14 +1,21 @@
-import 'package:flexible_scrollable_table_view/src/custom/flexible_table_controller.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
+import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_mixin.dart';
 import 'package:flutter/widgets.dart';
 
 ///构建表行所需参数
 abstract class AbsTableBuildArguments<T> {
   const AbsTableBuildArguments();
 
-  ///控制器
-  FlexibleTableController<T> get controller;
+  @Deprecated('Use dataSource instead.')
+  FlexibleTableDataSource<T> get controller => dataSource;
+
+  ///数据源
+  FlexibleTableDataSource<T> get dataSource;
+
+  ///横向滚动功能
+  TableHorizontalScrollMixin get horizontalScrollMixin;
 
   ///配置
   AbsFlexibleTableConfigurations<T> get configurations;
@@ -55,14 +62,18 @@ mixin TableInfoRowArgumentsMixin<T> on AbsTableBuildArguments<T> {
 
 ///构建表所需参数
 class TableBuildArguments<T> extends AbsTableBuildArguments<T> {
-  TableBuildArguments(
-    this.controller,
-    this.configurations,
-    this.parentWidth,
-  );
+  TableBuildArguments({
+    required this.dataSource,
+    required this.horizontalScrollMixin,
+    required this.configurations,
+    required this.parentWidth,
+  });
 
   @override
-  final FlexibleTableController<T> controller;
+  final FlexibleTableDataSource<T> dataSource;
+
+  @override
+  final TableHorizontalScrollMixin horizontalScrollMixin;
 
   @override
   final AbsFlexibleTableConfigurations<T> configurations;
