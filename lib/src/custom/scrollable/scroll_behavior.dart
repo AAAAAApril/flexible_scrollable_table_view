@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 mixin NoOverscrollBehaviorMixin on ScrollBehavior {
   ///不使用过度滚动效果的方向
@@ -15,7 +15,7 @@ mixin NoOverscrollBehaviorMixin on ScrollBehavior {
 }
 
 ///允许设置不使用过度滚动效果的滚动行为配置类
-class NoOverscrollScrollBehavior extends ScrollBehavior with NoOverscrollBehaviorMixin {
+class NoOverscrollScrollBehavior extends MaterialScrollBehavior with NoOverscrollBehaviorMixin {
   const NoOverscrollScrollBehavior({
     this.disallowedDirections = AxisDirection.values,
   }) : super();

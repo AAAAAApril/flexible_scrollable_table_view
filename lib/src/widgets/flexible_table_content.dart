@@ -1,12 +1,8 @@
-import 'package:flexible_scrollable_table_view/src/addition/flexible_table_additions.dart';
-import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/decoration/flexible_table_decorations.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_table_configurations.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_layout_builder.dart';
-import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_mixin.dart';
 import 'package:flexible_scrollable_table_view/src/sliver/sliver_flexible_table_content.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,58 +11,53 @@ class FlexibleTableContent<T> extends StatelessWidget {
   const FlexibleTableContent(
     this.dataSource, {
     super.key,
-    required this.configurations,
-    required this.horizontalScrollMixin,
-    this.additions,
-    this.decorations,
-    this.animations,
+    required this.rowBuilder,
     this.verticalScrollController,
     this.shrinkWrap = false,
     this.primary,
     this.verticalPhysics,
-    this.horizontalPhysics,
+    this.listHeaderBuilder,
+    this.listFooterBuilder,
+    this.listPlaceholderBuilder,
   });
 
   factory FlexibleTableContent.sliver(
     FlexibleTableDataSource<T> dataSource, {
     Key? key,
-    required AbsFlexibleTableConfigurations<T> configurations,
-    AbsFlexibleTableAdditions<T>? additions,
-    AbsFlexibleTableDecorations<T>? decorations,
-    AbsFlexibleTableAnimations<T>? animations,
-    required TableHorizontalScrollMixin horizontalScrollMixin,
-    ScrollPhysics? horizontalPhysics,
+    required FlexibleTableRowBuilder<T> rowBuilder,
+    Widget Function(AbsTableBuildArguments<T> arguments)? listHeaderBuilder,
+    Widget Function(AbsTableBuildArguments<T> arguments)? listFooterBuilder,
+    Widget Function(AbsTableBuildArguments<T> arguments)? listPlaceholderBuilder,
   }) =>
       SliverFlexibleTableContent<T>(
         dataSource,
         key: key,
-        configurations: configurations,
-        horizontalScrollMixin: horizontalScrollMixin,
-        additions: additions,
-        decorations: decorations,
-        animations: animations,
-        horizontalPhysics: horizontalPhysics,
+        rowBuilder: rowBuilder,
+        listHeaderBuilder: listHeaderBuilder,
+        listFooterBuilder: listFooterBuilder,
+        listPlaceholderBuilder: listPlaceholderBuilder,
       );
 
   final FlexibleTableDataSource<T> dataSource;
-  final AbsFlexibleTableConfigurations<T> configurations;
-  final AbsFlexibleTableAdditions<T>? additions;
-  final AbsFlexibleTableDecorations<T>? decorations;
-  final AbsFlexibleTableAnimations<T>? animations;
+  final FlexibleTableRowBuilder<T> rowBuilder;
 
-  final TableHorizontalScrollMixin horizontalScrollMixin;
   final ScrollController? verticalScrollController;
-
   final bool shrinkWrap;
   final bool? primary;
   final ScrollPhysics? verticalPhysics;
-  final ScrollPhysics? horizontalPhysics;
 
-  bool get hasHeader => additions?.headerBuilder != null;
+  final Widget Function(AbsTableBuildArguments<T> arguments)? listHeaderBuilder;
+  final Widget Function(AbsTableBuildArguments<T> arguments)? listFooterBuilder;
+  final Widget Function(AbsTableBuildArguments<T> arguments)? listPlaceholderBuilder;
 
-  bool get hasFooter => additions?.footerBuilder != null;
+  @protected
+  bool get hasHeader => listHeaderBuilder != null;
 
-  bool get hasPlaceholder => additions?.placeholderBuilder != null;
+  @protected
+  bool get hasFooter => listFooterBuilder != null;
+
+  @protected
+  bool get hasPlaceholder => listPlaceholderBuilder != null;
 
   @protected
   int getItemCount(List<T> dataList) {
@@ -107,43 +98,22 @@ class FlexibleTableContent<T> extends StatelessWidget {
   }) {
     //数据是空的，却又需要构建列表项，说明是需要绘制占位组件
     if (value.isEmpty && hasPlaceholder) {
-      return additions!.placeholderBuilder!.call(arguments);
+      return listPlaceholderBuilder!.call(arguments);
     }
     if (isHeaderIndex(index)) {
-      return additions!.headerBuilder!.call(arguments);
+      return listHeaderBuilder!.call(arguments);
     }
     if (isFooterIndex(value, index)) {
-      return additions!.footerBuilder!.call(arguments);
+      return listFooterBuilder!.call(arguments);
     }
-    return configurations.buildTableInfoRow(
-      arguments: arguments.toInfoRowArguments(
+    return rowBuilder.buildInfoRow(
+      arguments.toInfoRowArguments(
         dataIndex: realDataIndex(index),
         dataList: value,
         currentItemIndex: index,
         totalItemCount: itemCount,
       ),
-      decorations: decorations,
-      animations: animations,
-      physics: horizontalPhysics,
     );
-  }
-
-  @protected
-  double? get itemExtent {
-    if (configurations.rowHeight.infoRowHeightBuilder != null || configurations.rowHeight.fixedInfoRowHeight == null) {
-      return null;
-    }
-    if (hasHeader) {
-      if (additions!.fixedHeaderHeight != configurations.rowHeight.fixedInfoRowHeight) {
-        return null;
-      }
-    }
-    if (hasFooter) {
-      if (additions!.fixedFooterHeight != configurations.rowHeight.fixedInfoRowHeight) {
-        return null;
-      }
-    }
-    return configurations.rowHeight.fixedInfoRowHeight;
   }
 
   @override
@@ -152,8 +122,6 @@ class FlexibleTableContent<T> extends StatelessWidget {
       builder: (context, constraints) {
         final AbsTableBuildArguments<T> arguments = TableBuildArguments<T>(
           dataSource: dataSource,
-          horizontalScrollMixin: horizontalScrollMixin,
-          configurations: configurations,
           parentWidth: constraints.maxWidth,
         );
         final Widget child = ValueListenableBuilder<List<T>>(
@@ -167,7 +135,6 @@ class FlexibleTableContent<T> extends StatelessWidget {
               primary: primary,
               padding: EdgeInsets.zero,
               scrollDirection: Axis.vertical,
-              itemExtent: value.isEmpty ? null : itemExtent,
               physics: verticalPhysics,
               itemBuilder: (context, index) => buildItem(
                 context,
@@ -180,10 +147,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
           },
         );
         if (shrinkWrap) {
-          return SizedBox(
-            width: constraints.maxWidth,
-            child: child,
-          );
+          return SizedBox(width: constraints.maxWidth, child: child);
         }
         return ConstrainedBox(
           constraints: BoxConstraints.tight(

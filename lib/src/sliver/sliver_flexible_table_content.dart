@@ -8,12 +8,10 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
   const SliverFlexibleTableContent(
     super.dataSource, {
     super.key,
-    required super.configurations,
-    required super.horizontalScrollMixin,
-    super.additions,
-    super.decorations,
-    super.animations,
-    super.horizontalPhysics,
+    required super.rowBuilder,
+    super.listHeaderBuilder,
+    super.listFooterBuilder,
+    super.listPlaceholderBuilder,
   });
 
   @override
@@ -22,29 +20,24 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
       builder: (context, parentWidth) {
         final AbsTableBuildArguments<T> arguments = TableBuildArguments<T>(
           dataSource: dataSource,
-          horizontalScrollMixin: horizontalScrollMixin,
-          configurations: configurations,
           parentWidth: parentWidth,
         );
         return ValueListenableBuilder<List<T>>(
           valueListenable: dataSource,
           builder: (context, value, child) {
-            final double? itemExtent = value.isEmpty ? null : super.itemExtent;
             final int totalItemCount = getItemCount(value);
-            final SliverChildDelegate delegate = SliverChildBuilderDelegate(
-              (context, index) => buildItem(
-                context,
-                arguments: arguments,
-                value: value,
-                index: index,
-                itemCount: totalItemCount,
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => buildItem(
+                  context,
+                  arguments: arguments,
+                  value: value,
+                  index: index,
+                  itemCount: totalItemCount,
+                ),
+                childCount: totalItemCount,
               ),
-              childCount: totalItemCount,
             );
-            if (itemExtent == null) {
-              return SliverList(delegate: delegate);
-            }
-            return SliverFixedExtentList(delegate: delegate, itemExtent: itemExtent);
           },
         );
       },

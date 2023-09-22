@@ -1,10 +1,10 @@
 name: flexible_scrollable_table_view
 description: A table view who can scroll both vertical and horizontal.
-version: 2.15.0
+version: 3.0.0
 homepage: 'https://github.com/AAAAAApril/flexible_scrollable_table_view'
 
 environment:
-  sdk: '>=2.18.5 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
   flutter: ">=3.0.0"
 
 dependencies:

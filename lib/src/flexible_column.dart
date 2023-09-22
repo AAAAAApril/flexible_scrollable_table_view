@@ -1,6 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/animation/flexible_table_animations.dart';
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/constraint/flexible_table_column_width.dart';
 import 'package:flutter/widgets.dart';
 
 ///列信息配置类
@@ -10,53 +8,10 @@ abstract class AbsFlexibleColumn<T> {
   ///列 id，需要保持唯一
   final String id;
 
-  ///该列的宽度
-  AbsFlexibleTableColumnWidth<T> get columnWidth;
-
-  ///构建列头组件
-  Widget buildHeaderCellInternal(
-    TableHeaderRowBuildArguments<T> arguments,
-    AbsFlexibleTableAnimations<T>? animations,
-  ) {
-    final Widget child = arguments.rowHeight <= 0 ? const SizedBox.shrink() : buildHeaderCell(arguments);
-    final BoxConstraints constraints = BoxConstraints.tightFor(
-      width: columnWidth.getColumnWidth(arguments),
-      height: arguments.rowHeight,
-    );
-    return animations?.buildTableHeaderCellConstraintAnimationWidget(
-          arguments,
-          this,
-          constraints: constraints,
-          cellWidget: child,
-        ) ??
-        ConstrainedBox(constraints: constraints, child: child);
-  }
-
-  ///构建列内容组件
-  Widget buildInfoCellInternal(
-    TableInfoRowBuildArguments<T> arguments,
-    AbsFlexibleTableAnimations<T>? animations,
-  ) {
-    final Widget child = arguments.rowHeight <= 0 ? const SizedBox.shrink() : buildInfoCell(arguments);
-    final BoxConstraints constraints = BoxConstraints.tightFor(
-      width: columnWidth.getColumnWidth(arguments),
-      height: arguments.rowHeight,
-    );
-    return animations?.buildTableInfoCellConstraintAnimationWidget(
-          arguments,
-          this,
-          constraints: constraints,
-          cellWidget: child,
-        ) ??
-        ConstrainedBox(constraints: constraints, child: child);
-  }
-
   ///构建表头
-  @protected
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments);
 
   ///构建表信息
-  @protected
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments);
 
   @override
@@ -65,32 +20,4 @@ abstract class AbsFlexibleColumn<T> {
 
   @override
   int get hashCode => id.hashCode;
-}
-
-class FlexibleColumn<T> extends AbsFlexibleColumn<T> {
-  const FlexibleColumn(
-    super.id, {
-    required this.columnWidth,
-    this.header,
-    this.headerBuilder,
-    this.info,
-    this.infoBuilder,
-  });
-
-  @override
-  final AbsFlexibleTableColumnWidth<T> columnWidth;
-
-  final Widget? header;
-  final Widget Function(TableHeaderRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column)? headerBuilder;
-
-  final Widget? info;
-  final Widget Function(TableInfoRowBuildArguments<T> arguments, AbsFlexibleColumn<T> column)? infoBuilder;
-
-  @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) =>
-      headerBuilder?.call(arguments, this) ?? header ?? const SizedBox.shrink();
-
-  @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) =>
-      infoBuilder?.call(arguments, this) ?? info ?? const SizedBox.shrink();
 }

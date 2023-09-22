@@ -15,22 +15,11 @@ class LazySliverLayoutBuilder extends StatelessWidget {
     double? lastWidth;
     return SliverLayoutBuilder(
       builder: (context, constraints) {
-        //没有缓存的情况
-        if (cache == null) {
+        if (cache == null || lastWidth != constraints.crossAxisExtent) {
           lastWidth = constraints.crossAxisExtent;
           cache = builder.call(context, constraints.crossAxisExtent);
-          return cache!;
         }
-        //有缓存，但是约束变化了
-        else if (lastWidth != constraints.crossAxisExtent) {
-          lastWidth = constraints.crossAxisExtent;
-          cache = builder.call(context, constraints.crossAxisExtent);
-          return cache!;
-        }
-        //有缓存，约束也没变
-        else {
-          return cache!;
-        }
+        return cache!;
       },
     );
   }
