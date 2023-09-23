@@ -24,7 +24,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
   factory FlexibleTableContent.sliver(
     FlexibleTableDataSource<T> dataSource, {
     Key? key,
-    required FlexibleTableRowBuilder<T> rowBuilder,
+    required FlexibleTableRowBuilderMixin<T> rowBuilder,
     Widget Function(AbsTableBuildArguments<T> arguments)? listHeaderBuilder,
     Widget Function(AbsTableBuildArguments<T> arguments)? listFooterBuilder,
     Widget Function(AbsTableBuildArguments<T> arguments)? listPlaceholderBuilder,
@@ -39,7 +39,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
       );
 
   final FlexibleTableDataSource<T> dataSource;
-  final FlexibleTableRowBuilder<T> rowBuilder;
+  final FlexibleTableRowBuilderMixin<T> rowBuilder;
 
   final ScrollController? verticalScrollController;
   final bool shrinkWrap;

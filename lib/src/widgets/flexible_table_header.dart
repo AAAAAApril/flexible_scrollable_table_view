@@ -13,7 +13,7 @@ class FlexibleTableHeader<T> extends StatelessWidget {
   });
 
   final FlexibleTableDataSource<T> dataSource;
-  final FlexibleTableRowBuilder<T> rowBuilder;
+  final FlexibleTableRowBuilderMixin<T> rowBuilder;
 
   @override
   Widget build(BuildContext context) {

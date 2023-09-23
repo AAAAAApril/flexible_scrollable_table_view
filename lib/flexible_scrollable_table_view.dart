@@ -1,12 +1,19 @@
 library flexible_scrollable_table_view;
 
-export 'src/animation/animated_constraint_box.dart';
-
 export 'src/arguments/table_build_arguments.dart';
 export 'src/arguments/table_row_build_arguments.dart';
 
-export 'src/custom/builder/default_flexible_table_row_builder.dart';
-export 'src/custom/column/flexible_column.dart';
+export 'src/custom/builders/changeable_height_row_wrapper.dart';
+export 'src/custom/builders/default_row_builder.dart';
+export 'src/custom/builders/fixed_height_row_wrapper.dart';
+export 'src/custom/builders/merge_row_builder.dart';
+
+export 'src/custom/column/clickable_flexible_column.dart';
+export 'src/custom/column/empty_flexible_column.dart';
+export 'src/custom/column/expanded_flexible_column.dart';
+export 'src/custom/column/fixed_width_flexible_column.dart';
+export 'src/custom/column/proportional_width_flexible_column.dart';
+
 export 'src/custom/scrollable/scroll_behavior.dart';
 export 'src/custom/scrollable/synchronized_scroll_mixin.dart';
 
@@ -27,6 +34,7 @@ export 'src/sortable/sortable_column.dart';
 export 'src/widgets/flexible_table_content.dart';
 export 'src/widgets/flexible_table_header.dart';
 
+export 'src/extensions.dart';
 export 'src/flexible_column.dart';
 export 'src/flexible_table_data_source.dart';
 export 'src/flexible_table_row_builder.dart';

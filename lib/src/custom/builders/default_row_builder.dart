@@ -5,14 +5,13 @@ import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_s
 import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_state_widget.dart';
 import 'package:flutter/widgets.dart';
 
-class DefaultFlexibleTableRowBuilder<T> with FlexibleTableRowBuilder<T> {
-  DefaultFlexibleTableRowBuilder({
+///默认的行构造器
+final class DefaultRowBuilder<T> with FlexibleTableRowBuilder<T> {
+  DefaultRowBuilder({
     Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
     Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
     Set<AbsFlexibleColumn<T>>? scrollableColumns,
     required this.scrollMixin,
-    required this.headerRowHeight,
-    required this.infoRowHeight,
   })  : leftPinnedColumns = List<AbsFlexibleColumn<T>>.of(leftPinnedColumns ?? <AbsFlexibleColumn<T>>{}),
         rightPinnedColumns = List<AbsFlexibleColumn<T>>.of(rightPinnedColumns ?? <AbsFlexibleColumn<T>>{}),
         scrollableColumns = List<AbsFlexibleColumn<T>>.of(scrollableColumns ?? <AbsFlexibleColumn<T>>{});
@@ -29,12 +28,6 @@ class DefaultFlexibleTableRowBuilder<T> with FlexibleTableRowBuilder<T> {
   ///横向滚动控制器管理类
   final TableHorizontalScrollMixin scrollMixin;
 
-  ///表头行的高度
-  final double Function(TableHeaderRowBuildArguments<T> arguments) headerRowHeight;
-
-  ///表信息行的高度
-  final double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight;
-
   @override
   Set<AbsFlexibleColumn<T>> get allTableColumns => <AbsFlexibleColumn<T>>{}
     ..addAll(leftPinnedColumns)
@@ -43,23 +36,15 @@ class DefaultFlexibleTableRowBuilder<T> with FlexibleTableRowBuilder<T> {
 
   @override
   Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
-    return SizedBox(
-      width: arguments.parentWidth,
-      height: headerRowHeight.call(arguments),
-      child: _buildRow(
-        buildCell: (column) => buildColumnHeaderCell(column, arguments),
-      ),
+    return _buildRow(
+      buildCell: (column) => buildColumnHeaderCell(column, arguments),
     );
   }
 
   @override
   Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
-    return SizedBox(
-      width: arguments.parentWidth,
-      height: infoRowHeight.call(arguments),
-      child: _buildRow(
-        buildCell: (column) => buildColumnInfoCell(column, arguments),
-      ),
+    return _buildRow(
+      buildCell: (column) => buildColumnInfoCell(column, arguments),
     );
   }
 

@@ -4,15 +4,17 @@ import 'package:flexible_scrollable_table_view/src/sortable/sortable_column.dart
 import 'package:flutter/widgets.dart';
 
 ///表行构建类
-mixin FlexibleTableRowBuilder<T> {
-  ///表内的全部列
-  Set<AbsFlexibleColumn<T>> get allTableColumns;
-
+mixin FlexibleTableRowBuilderMixin<T> {
   ///构建表头行
   Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments);
 
   ///构建表信息行
   Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments);
+}
+
+mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
+  ///表内的全部列
+  Set<AbsFlexibleColumn<T>> get allTableColumns;
 
   ///构建列头项
   @protected
