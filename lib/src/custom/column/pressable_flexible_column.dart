@@ -3,22 +3,24 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///列头可点击列
-final class ClickableHeaderColumn<T> extends AbsFlexibleColumn<T> {
-  ClickableHeaderColumn(
+final class HeaderPressableColumn<T> extends AbsFlexibleColumn<T> {
+  HeaderPressableColumn(
     this._column, {
     required this.onHeaderClicked,
   }) : super(_column.id);
 
   final AbsFlexibleColumn<T> _column;
 
-  final void Function(TableHeaderRowBuildArguments<T> arguments) onHeaderClicked;
+  final void Function(TableHeaderRowBuildArguments<T> arguments, BuildContext context) onHeaderClicked;
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => onHeaderClicked.call(arguments),
-      child: _column.buildHeaderCell(arguments),
+    return Builder(
+      builder: (context) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onHeaderClicked.call(arguments, context),
+        child: _column.buildHeaderCell(arguments),
+      ),
     );
   }
 
@@ -29,15 +31,15 @@ final class ClickableHeaderColumn<T> extends AbsFlexibleColumn<T> {
 }
 
 ///列信息可点击列
-final class ClickableInfoColumn<T> extends AbsFlexibleColumn<T> {
-  ClickableInfoColumn(
+final class InfoPressableColumn<T> extends AbsFlexibleColumn<T> {
+  InfoPressableColumn(
     this._column, {
     required this.onInfoClicked,
   }) : super(_column.id);
 
   final AbsFlexibleColumn<T> _column;
 
-  final void Function(TableInfoRowBuildArguments<T> arguments) onInfoClicked;
+  final void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context) onInfoClicked;
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
@@ -46,10 +48,12 @@ final class ClickableInfoColumn<T> extends AbsFlexibleColumn<T> {
 
   @override
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => onInfoClicked.call(arguments),
-      child: _column.buildInfoCell(arguments),
+    return Builder(
+      builder: (context) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onInfoClicked.call(arguments, context),
+        child: _column.buildInfoCell(arguments),
+      ),
     );
   }
 }

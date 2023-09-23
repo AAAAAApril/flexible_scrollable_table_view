@@ -7,11 +7,13 @@ export 'src/custom/builders/changeable_height_row_wrapper.dart';
 export 'src/custom/builders/default_row_builder.dart';
 export 'src/custom/builders/fixed_height_row_wrapper.dart';
 export 'src/custom/builders/merge_row_builder.dart';
+export 'src/custom/builders/pressable_row_builder.dart';
+export 'src/custom/builders/stacked_row_builder.dart';
 
-export 'src/custom/column/clickable_flexible_column.dart';
 export 'src/custom/column/empty_flexible_column.dart';
 export 'src/custom/column/expanded_flexible_column.dart';
 export 'src/custom/column/fixed_width_flexible_column.dart';
+export 'src/custom/column/pressable_flexible_column.dart';
 export 'src/custom/column/proportional_width_flexible_column.dart';
 
 export 'src/custom/scrollable/scroll_behavior.dart';

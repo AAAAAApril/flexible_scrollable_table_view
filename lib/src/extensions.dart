@@ -4,7 +4,9 @@ import 'arguments/table_row_build_arguments.dart';
 import 'custom/builders/changeable_height_row_wrapper.dart';
 import 'custom/builders/fixed_height_row_wrapper.dart';
 import 'custom/builders/merge_row_builder.dart';
-import 'custom/column/clickable_flexible_column.dart';
+import 'custom/builders/pressable_row_builder.dart';
+import 'custom/builders/stacked_row_builder.dart';
+import 'custom/column/pressable_flexible_column.dart';
 import 'custom/column/expanded_flexible_column.dart';
 import 'custom/column/fixed_width_flexible_column.dart';
 import 'custom/column/proportional_width_flexible_column.dart';
@@ -30,16 +32,16 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
     return ExpandedFlexibleColumn<T>(this, flex: flex, fit: fit);
   }
 
-  AbsFlexibleColumn<T> withHeaderClicked(
-    void Function(TableHeaderRowBuildArguments<T> arguments) onClicked,
+  AbsFlexibleColumn<T> whenHeaderClicked(
+    void Function(TableHeaderRowBuildArguments<T> arguments, BuildContext context) onClicked,
   ) {
-    return ClickableHeaderColumn<T>(this, onHeaderClicked: onClicked);
+    return HeaderPressableColumn<T>(this, onHeaderClicked: onClicked);
   }
 
-  AbsFlexibleColumn<T> withInfoClicked(
-    void Function(TableInfoRowBuildArguments<T> arguments) onClicked,
+  AbsFlexibleColumn<T> whenInfoClicked(
+    void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context) onClicked,
   ) {
-    return ClickableInfoColumn<T>(this, onInfoClicked: onClicked);
+    return InfoPressableColumn<T>(this, onInfoClicked: onClicked);
   }
 
   AbsFlexibleColumn<T> asSelectableColumn(AbsFlexibleColumn<T> unSelectableColumn) {
@@ -71,6 +73,20 @@ extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
     required double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight,
   }) {
     return ChangeableInfoHeightRowWrapper<T>(this, headerRowHeight: headerRowHeight, infoRowHeight: infoRowHeight);
+  }
+
+  FlexibleTableRowBuilderMixin<T> withStacks({
+    Iterable<FlexibleTableRowBuilderMixin<T>>? above,
+    Iterable<FlexibleTableRowBuilderMixin<T>>? below,
+  }) {
+    return StackedRowBuilder<T>(this, aboveBuilders: above, belowBuilders: below);
+  }
+
+  FlexibleTableRowBuilderMixin<T> whenPressed({
+    void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onPressed,
+    void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onLongPressed,
+  }) {
+    return PressableInfoRowBuilder<T>(this, onPressed: onPressed, onLongPressed: onLongPressed);
   }
 }
 
