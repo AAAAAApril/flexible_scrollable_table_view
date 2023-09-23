@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
       horizontalScrollMixin: this,
     )
         //给行设置固定的高度
-        .withHeightFixed(headerRowHeight: 32, infoRowHeight: 48);
+        .withFixedHeight(headerRowHeight: 32, infoRowHeight: 48);
     refreshData();
   }
 

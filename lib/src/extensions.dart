@@ -64,7 +64,7 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
 }
 
 extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
-  FlexibleTableRowBuilderMixin<T> withHeightFixed({
+  FlexibleTableRowBuilderMixin<T> withFixedHeight({
     required double headerRowHeight,
     required double infoRowHeight,
   }) {
@@ -75,7 +75,7 @@ extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
     );
   }
 
-  FlexibleTableRowBuilderMixin<T> withHeightChangeable({
+  FlexibleTableRowBuilderMixin<T> withChangeableHeight({
     required double Function(TableHeaderRowBuildArguments<T> arguments) headerRowHeight,
     required double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight,
   }) {
@@ -86,7 +86,7 @@ extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
     );
   }
 
-  FlexibleTableRowBuilderMixin<T> withInfoHeightChangeable(
+  FlexibleTableRowBuilderMixin<T> withChangeableInfoHeight(
     double headerRowHeight, {
     required double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight,
   }) {
