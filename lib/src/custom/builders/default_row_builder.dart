@@ -11,7 +11,7 @@ final class DefaultRowBuilder<T> with FlexibleTableRowBuilder<T> {
     Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
     Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
     Set<AbsFlexibleColumn<T>>? scrollableColumns,
-    required this.scrollMixin,
+    required this.horizontalScrollMixin,
   })  : leftPinnedColumns = List<AbsFlexibleColumn<T>>.of(leftPinnedColumns ?? <AbsFlexibleColumn<T>>{}),
         rightPinnedColumns = List<AbsFlexibleColumn<T>>.of(rightPinnedColumns ?? <AbsFlexibleColumn<T>>{}),
         scrollableColumns = List<AbsFlexibleColumn<T>>.of(scrollableColumns ?? <AbsFlexibleColumn<T>>{});
@@ -26,7 +26,7 @@ final class DefaultRowBuilder<T> with FlexibleTableRowBuilder<T> {
   final List<AbsFlexibleColumn<T>> scrollableColumns;
 
   ///横向滚动控制器管理类
-  final TableHorizontalScrollMixin scrollMixin;
+  final TableHorizontalScrollMixin horizontalScrollMixin;
 
   @override
   Set<AbsFlexibleColumn<T>> get allTableColumns => <AbsFlexibleColumn<T>>{}
@@ -56,7 +56,7 @@ final class DefaultRowBuilder<T> with FlexibleTableRowBuilder<T> {
       if (scrollableColumns.isNotEmpty)
         Expanded(
           child: TableHorizontalScrollStateWidget(
-            scrollMixin,
+            horizontalScrollMixin,
             builder: (context, scrollController) => ListView.builder(
               controller: scrollController,
               itemCount: scrollableColumns.length,

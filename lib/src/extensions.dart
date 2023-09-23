@@ -16,7 +16,9 @@ import 'selectable/selectable_column.dart';
 import 'sortable/sortable_column.dart';
 
 extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
-  AbsFlexibleColumn<T> withSort(int Function(T a, T b) compare) {
+  AbsFlexibleColumn<T> withSortByPressColumnHeader(
+    int Function(SortableColumnMixin<T> column, T a, T b) compare,
+  ) {
     return SortableColumn<T>(this, compareValue: compare);
   }
 
@@ -33,13 +35,21 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
   }
 
   AbsFlexibleColumn<T> whenHeaderClicked(
-    void Function(TableHeaderRowBuildArguments<T> arguments, BuildContext context) onClicked,
+    void Function(
+      AbsFlexibleColumn<T> column,
+      TableHeaderRowBuildArguments<T> arguments,
+      BuildContext context,
+    ) onClicked,
   ) {
     return HeaderPressableColumn<T>(this, onHeaderClicked: onClicked);
   }
 
   AbsFlexibleColumn<T> whenInfoClicked(
-    void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context) onClicked,
+    void Function(
+      AbsFlexibleColumn<T> column,
+      TableInfoRowBuildArguments<T> arguments,
+      BuildContext context,
+    ) onClicked,
   ) {
     return InfoPressableColumn<T>(this, onInfoClicked: onClicked);
   }
@@ -58,21 +68,33 @@ extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
     required double headerRowHeight,
     required double infoRowHeight,
   }) {
-    return FixedHeightRowWrapper<T>(this, headerRowHeight: headerRowHeight, infoRowHeight: infoRowHeight);
+    return FixedHeightRowWrapper<T>(
+      this,
+      headerRowHeight: headerRowHeight,
+      infoRowHeight: infoRowHeight,
+    );
   }
 
   FlexibleTableRowBuilderMixin<T> withHeightChangeable({
     required double Function(TableHeaderRowBuildArguments<T> arguments) headerRowHeight,
     required double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight,
   }) {
-    return ChangeableHeightRowWrapper<T>(this, headerRowHeight: headerRowHeight, infoRowHeight: infoRowHeight);
+    return ChangeableHeightRowWrapper<T>(
+      this,
+      headerRowHeight: headerRowHeight,
+      infoRowHeight: infoRowHeight,
+    );
   }
 
   FlexibleTableRowBuilderMixin<T> withInfoHeightChangeable(
     double headerRowHeight, {
     required double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight,
   }) {
-    return ChangeableInfoHeightRowWrapper<T>(this, headerRowHeight: headerRowHeight, infoRowHeight: infoRowHeight);
+    return ChangeableInfoHeightRowWrapper<T>(
+      this,
+      headerRowHeight: headerRowHeight,
+      infoRowHeight: infoRowHeight,
+    );
   }
 
   FlexibleTableRowBuilderMixin<T> withStacks({

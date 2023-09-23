@@ -7,7 +7,7 @@ final class FixedWidthFlexibleColumn<T> extends AbsFlexibleColumn<T> {
   FixedWidthFlexibleColumn(
     this._column, {
     required this.fixedWidth,
-  }) : super(_column.id);
+  }) : super('fwfc_${_column.id}');
 
   final AbsFlexibleColumn<T> _column;
 

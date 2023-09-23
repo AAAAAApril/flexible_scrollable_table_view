@@ -7,18 +7,22 @@ final class HeaderPressableColumn<T> extends AbsFlexibleColumn<T> {
   HeaderPressableColumn(
     this._column, {
     required this.onHeaderClicked,
-  }) : super(_column.id);
+  }) : super('hpc_${_column.id}');
 
   final AbsFlexibleColumn<T> _column;
 
-  final void Function(TableHeaderRowBuildArguments<T> arguments, BuildContext context) onHeaderClicked;
+  final void Function(
+    AbsFlexibleColumn<T> column,
+    TableHeaderRowBuildArguments<T> arguments,
+    BuildContext context,
+  ) onHeaderClicked;
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
     return Builder(
       builder: (context) => GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => onHeaderClicked.call(arguments, context),
+        onTap: () => onHeaderClicked.call(this, arguments, context),
         child: _column.buildHeaderCell(arguments),
       ),
     );
@@ -35,11 +39,15 @@ final class InfoPressableColumn<T> extends AbsFlexibleColumn<T> {
   InfoPressableColumn(
     this._column, {
     required this.onInfoClicked,
-  }) : super(_column.id);
+  }) : super('ipc_${_column.id}');
 
   final AbsFlexibleColumn<T> _column;
 
-  final void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context) onInfoClicked;
+  final void Function(
+    AbsFlexibleColumn<T> column,
+    TableInfoRowBuildArguments<T> arguments,
+    BuildContext context,
+  ) onInfoClicked;
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
@@ -51,7 +59,7 @@ final class InfoPressableColumn<T> extends AbsFlexibleColumn<T> {
     return Builder(
       builder: (context) => GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => onInfoClicked.call(arguments, context),
+        onTap: () => onInfoClicked.call(this, arguments, context),
         child: _column.buildInfoCell(arguments),
       ),
     );

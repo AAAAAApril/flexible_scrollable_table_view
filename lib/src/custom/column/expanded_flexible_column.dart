@@ -8,7 +8,7 @@ final class ExpandedFlexibleColumn<T> extends AbsFlexibleColumn<T> {
     this._column, {
     this.flex = 1,
     this.fit = FlexFit.tight,
-  }) : super(_column.id);
+  }) : super('efc_${_column.id}');
 
   final AbsFlexibleColumn<T> _column;
   final int flex;

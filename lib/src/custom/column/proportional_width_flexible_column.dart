@@ -9,7 +9,7 @@ final class ProportionalWidthFlexibleColumn<T> extends AbsFlexibleColumn<T> {
     required this.percent,
     this.omittedWidth = 0,
   })  : assert(!percent.isNegative, 'The percent of column[${_column.id}] must not be negative value.'),
-        super(_column.id);
+        super('pwfc_${_column.id}');
 
   final AbsFlexibleColumn<T> _column;
 
