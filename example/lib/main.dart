@@ -44,22 +44,23 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
 
     AbsFlexibleColumn<StudentBean> idColumn = const StudentIdColumn()
         //设置列宽为固定宽度
-        .withFixedWidth(48);
+        .appointWidth(FixedWidth(48));
     AbsFlexibleColumn<StudentBean> nameColumn = const StudentNameColumn()
         //设置列宽为父容器宽度的 0.5 倍
-        .withProportionalWidth(0.5);
+        .appointWidth(ProportionalWidth(0.5));
     AbsFlexibleColumn<StudentBean> ageColumn = const StudentAgeColumn()
-        .withFixedWidth(80)
+        .appointWidth(FixedWidth(80))
         //给列头添加点击排序的功能
         .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age));
     AbsFlexibleColumn<StudentBean> genderColumn = const StudentGenderColumn()
-        .withFixedWidth(100)
+        .appointWidth(FixedWidth(100))
         //给列信息项添加点击事件
         .whenInfoClicked((column, arguments, context) {
       debugPrint('点击了[${column.id}]列的第[${arguments.dataIndex}]项的数据[${arguments.data.gender}]');
     });
 
     rowBuilder = DefaultRowBuilder(
+      this,
       leftPinnedColumns: {
         idColumn,
       },
@@ -68,10 +69,9 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
         ageColumn,
         genderColumn,
       },
-      horizontalScrollMixin: this,
     )
         //给行设置固定的高度
-        .withFixedHeight(headerRowHeight: 32, infoRowHeight: 48);
+        .appointHeight(const FixedRowHeight(headerHeight: 32, infoHeight: 48));
     refreshData();
   }
 

@@ -1,15 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 import 'arguments/table_row_build_arguments.dart';
-import 'custom/builders/changeable_height_row_wrapper.dart';
-import 'custom/builders/fixed_height_row_wrapper.dart';
+import 'custom/builders/appoint_height_row_builder.dart';
 import 'custom/builders/merge_row_builder.dart';
 import 'custom/builders/pressable_row_builder.dart';
 import 'custom/builders/stacked_row_builder.dart';
+import 'custom/column/appoint_width_flexible_column.dart';
 import 'custom/column/pressable_flexible_column.dart';
-import 'custom/column/expanded_flexible_column.dart';
-import 'custom/column/fixed_width_flexible_column.dart';
-import 'custom/column/proportional_width_flexible_column.dart';
+import 'custom/column/stacked_flexible_column.dart';
 import 'flexible_column.dart';
 import 'flexible_table_row_builder.dart';
 import 'selectable/selectable_column.dart';
@@ -22,16 +20,18 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
     return SortableColumn<T>(this, compareValue: compare);
   }
 
-  AbsFlexibleColumn<T> withFixedWidth(double fixedWidth) {
-    return FixedWidthFlexibleColumn<T>(this, fixedWidth: fixedWidth);
+  AbsFlexibleColumn<T> appointWidth(AppointedColumnWidth<T> width) {
+    return AppointWidthFlexibleColumn<T>(this, width: width);
   }
 
-  AbsFlexibleColumn<T> withProportionalWidth(double percent, {double omittedWidth = 0}) {
-    return ProportionalWidthFlexibleColumn<T>(this, percent: percent, omittedWidth: omittedWidth);
-  }
-
-  AbsFlexibleColumn<T> withExpanded({int flex = 1, FlexFit fit = FlexFit.tight}) {
-    return ExpandedFlexibleColumn<T>(this, flex: flex, fit: fit);
+  AbsFlexibleColumn<T> withStacks({
+    Iterable<AbsFlexibleColumn<T>>? above,
+    Iterable<AbsFlexibleColumn<T>>? below,
+  }) {
+    if ((above == null || above.isEmpty) && (below == null || below.isEmpty)) {
+      return this;
+    }
+    return StackedFlexibleColumn<T>(this, above: above, below: below);
   }
 
   AbsFlexibleColumn<T> whenHeaderClicked(
@@ -39,9 +39,10 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
       AbsFlexibleColumn<T> column,
       TableHeaderRowBuildArguments<T> arguments,
       BuildContext context,
-    ) onClicked,
-  ) {
-    return HeaderPressableColumn<T>(this, onHeaderClicked: onClicked);
+    ) onClicked, {
+    bool expandPressArea = false,
+  }) {
+    return HeaderPressableColumn<T>(this, onHeaderClicked: onClicked, expandPressArea: expandPressArea);
   }
 
   AbsFlexibleColumn<T> whenInfoClicked(
@@ -49,9 +50,10 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
       AbsFlexibleColumn<T> column,
       TableInfoRowBuildArguments<T> arguments,
       BuildContext context,
-    ) onClicked,
-  ) {
-    return InfoPressableColumn<T>(this, onInfoClicked: onClicked);
+    ) onClicked, {
+    bool expandPressArea = false,
+  }) {
+    return InfoPressableColumn<T>(this, onInfoClicked: onClicked, expandPressArea: expandPressArea);
   }
 
   AbsFlexibleColumn<T> asSelectableColumn(AbsFlexibleColumn<T> unSelectableColumn) {
@@ -64,43 +66,17 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
 }
 
 extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
-  FlexibleTableRowBuilderMixin<T> withFixedHeight({
-    required double headerRowHeight,
-    required double infoRowHeight,
-  }) {
-    return FixedHeightRowWrapper<T>(
-      this,
-      headerRowHeight: headerRowHeight,
-      infoRowHeight: infoRowHeight,
-    );
-  }
-
-  FlexibleTableRowBuilderMixin<T> withChangeableHeight({
-    required double Function(TableHeaderRowBuildArguments<T> arguments) headerRowHeight,
-    required double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight,
-  }) {
-    return ChangeableHeightRowWrapper<T>(
-      this,
-      headerRowHeight: headerRowHeight,
-      infoRowHeight: infoRowHeight,
-    );
-  }
-
-  FlexibleTableRowBuilderMixin<T> withChangeableInfoHeight(
-    double headerRowHeight, {
-    required double Function(TableInfoRowBuildArguments<T> arguments) infoRowHeight,
-  }) {
-    return ChangeableInfoHeightRowWrapper<T>(
-      this,
-      headerRowHeight: headerRowHeight,
-      infoRowHeight: infoRowHeight,
-    );
+  FlexibleTableRowBuilderMixin<T> appointHeight(AppointedRowHeight<T> height) {
+    return AppointHeightRowBuilder<T>(this, height: height);
   }
 
   FlexibleTableRowBuilderMixin<T> withStacks({
     Iterable<FlexibleTableRowBuilderMixin<T>>? above,
     Iterable<FlexibleTableRowBuilderMixin<T>>? below,
   }) {
+    if ((above == null || above.isEmpty) && (below == null || below.isEmpty)) {
+      return this;
+    }
     return StackedRowBuilder<T>(this, aboveBuilders: above, belowBuilders: below);
   }
 
@@ -108,12 +84,16 @@ extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
     void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onPressed,
     void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onLongPressed,
   }) {
+    if (onPressed == null && onLongPressed == null) {
+      return this;
+    }
     return PressableInfoRowBuilder<T>(this, onPressed: onPressed, onLongPressed: onLongPressed);
   }
 }
 
 extension IterableTableRowBuilderExt<T> on Iterable<FlexibleTableRowBuilderMixin<T>> {
   FlexibleTableRowBuilderMixin<T> mergeAll() {
+    assert(isNotEmpty, 'There is nothing to merge.');
     return MergeRowBuilder<T>(this);
   }
 }

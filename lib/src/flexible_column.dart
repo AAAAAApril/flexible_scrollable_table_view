@@ -25,3 +25,31 @@ abstract class AbsFlexibleColumn<T> {
   @override
   int get hashCode => id.hashCode;
 }
+
+abstract class AbsFlexibleColumnWithChild<T> extends AbsFlexibleColumn<T> {
+  const AbsFlexibleColumnWithChild(super.id);
+
+  AbsFlexibleColumn<T> get child;
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    return child.findColumnById(columnId) ?? super.findColumnById(columnId);
+  }
+}
+
+abstract class AbsFlexibleColumnWithChildren<T> extends AbsFlexibleColumn<T> {
+  const AbsFlexibleColumnWithChildren(super.id);
+
+  Iterable<AbsFlexibleColumn<T>> get children;
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    for (var value in children) {
+      var result = value.findColumnById(columnId);
+      if (result != null) {
+        return result;
+      }
+    }
+    return super.findColumnById(columnId);
+  }
+}

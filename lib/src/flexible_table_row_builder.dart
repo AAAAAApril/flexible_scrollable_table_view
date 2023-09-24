@@ -16,22 +16,23 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   ///表内的全部列
   Set<AbsFlexibleColumn<T>> get allTableColumns;
 
-  ///构建列头项
   @protected
-  Widget buildColumnHeaderCell(AbsFlexibleColumn<T> column, TableHeaderRowBuildArguments<T> arguments) {
-    return column.buildHeaderCell(arguments);
+  Widget buildTableRow(Widget Function(AbsFlexibleColumn<T> column) buildCell);
+
+  @override
+  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
+    return buildTableRow((column) => column.buildHeaderCell(arguments));
   }
 
-  ///构建列信息项
-  @protected
-  Widget buildColumnInfoCell(AbsFlexibleColumn<T> column, TableInfoRowBuildArguments<T> arguments) {
-    return column.buildInfoCell(arguments);
+  @override
+  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
+    return buildTableRow((column) => column.buildInfoCell(arguments));
   }
 
   ///根据列ID查找列配置类
   AbsFlexibleColumn<T>? findColumnById(String columnId) {
-    for (final column in allTableColumns) {
-      final result = column.findColumnById(columnId);
+    for (var column in allTableColumns) {
+      var result = column.findColumnById(columnId);
       if (result != null) {
         return result;
       }

@@ -3,13 +3,16 @@ import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///列头可点击列
-final class HeaderPressableColumn<T> extends AbsFlexibleColumn<T> {
+final class HeaderPressableColumn<T> extends AbsFlexibleColumnWithChild<T> {
   HeaderPressableColumn(
-    this._column, {
+    this.child, {
     required this.onHeaderClicked,
-  }) : super(_column.id);
+    this.expandPressArea = false,
+  }) : super(child.id);
 
-  final AbsFlexibleColumn<T> _column;
+  @override
+  final AbsFlexibleColumn<T> child;
+  final bool expandPressArea;
 
   final void Function(
     AbsFlexibleColumn<T> column,
@@ -18,35 +21,39 @@ final class HeaderPressableColumn<T> extends AbsFlexibleColumn<T> {
   ) onHeaderClicked;
 
   @override
-  AbsFlexibleColumn<T>? findColumnById(String columnId) {
-    return _column.findColumnById(columnId) ?? super.findColumnById(columnId);
-  }
-
-  @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
     return Builder(
-      builder: (context) => GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => onHeaderClicked.call(this, arguments, context),
-        child: _column.buildHeaderCell(arguments),
-      ),
+      builder: (context) {
+        Widget result = child.buildHeaderCell(arguments);
+        if (expandPressArea) {
+          result = SizedBox.expand(child: result);
+        }
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => onHeaderClicked.call(this, arguments, context),
+          child: result,
+        );
+      },
     );
   }
 
   @override
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
-    return _column.buildInfoCell(arguments);
+    return child.buildInfoCell(arguments);
   }
 }
 
 ///列信息可点击列
-final class InfoPressableColumn<T> extends AbsFlexibleColumn<T> {
+final class InfoPressableColumn<T> extends AbsFlexibleColumnWithChild<T> {
   InfoPressableColumn(
-    this._column, {
+    this.child, {
     required this.onInfoClicked,
-  }) : super(_column.id);
+    this.expandPressArea = false,
+  }) : super(child.id);
 
-  final AbsFlexibleColumn<T> _column;
+  @override
+  final AbsFlexibleColumn<T> child;
+  final bool expandPressArea;
 
   final void Function(
     AbsFlexibleColumn<T> column,
@@ -55,23 +62,24 @@ final class InfoPressableColumn<T> extends AbsFlexibleColumn<T> {
   ) onInfoClicked;
 
   @override
-  AbsFlexibleColumn<T>? findColumnById(String columnId) {
-    return _column.findColumnById(columnId) ?? super.findColumnById(columnId);
-  }
-
-  @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
-    return _column.buildHeaderCell(arguments);
+    return child.buildHeaderCell(arguments);
   }
 
   @override
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
     return Builder(
-      builder: (context) => GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => onInfoClicked.call(this, arguments, context),
-        child: _column.buildInfoCell(arguments),
-      ),
+      builder: (context) {
+        Widget result = child.buildInfoCell(arguments);
+        if (expandPressArea) {
+          result = SizedBox.expand(child: result);
+        }
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => onInfoClicked.call(this, arguments, context),
+          child: result,
+        );
+      },
     );
   }
 }
