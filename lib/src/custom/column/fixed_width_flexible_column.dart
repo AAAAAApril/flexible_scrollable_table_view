@@ -7,12 +7,17 @@ final class FixedWidthFlexibleColumn<T> extends AbsFlexibleColumn<T> {
   FixedWidthFlexibleColumn(
     this._column, {
     required this.fixedWidth,
-  }) : super('fwfc_${_column.id}');
+  }) : super(_column.id);
 
   final AbsFlexibleColumn<T> _column;
 
   ///固定的宽度
   final double fixedWidth;
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    return _column.findColumnById(columnId) ?? super.findColumnById(columnId);
+  }
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {

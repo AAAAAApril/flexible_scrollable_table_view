@@ -8,11 +8,16 @@ final class ExpandedFlexibleColumn<T> extends AbsFlexibleColumn<T> {
     this._column, {
     this.flex = 1,
     this.fit = FlexFit.tight,
-  }) : super('efc_${_column.id}');
+  }) : super(_column.id);
 
   final AbsFlexibleColumn<T> _column;
   final int flex;
   final FlexFit fit;
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    return _column.findColumnById(columnId) ?? super.findColumnById(columnId);
+  }
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {

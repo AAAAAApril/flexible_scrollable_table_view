@@ -9,7 +9,7 @@ final class ProportionalWidthFlexibleColumn<T> extends AbsFlexibleColumn<T> {
     required this.percent,
     this.omittedWidth = 0,
   })  : assert(!percent.isNegative, 'The percent of column[${_column.id}] must not be negative value.'),
-        super('pwfc_${_column.id}');
+        super(_column.id);
 
   final AbsFlexibleColumn<T> _column;
 
@@ -18,6 +18,11 @@ final class ProportionalWidthFlexibleColumn<T> extends AbsFlexibleColumn<T> {
 
   ///不参与比例计算的宽度
   final double omittedWidth;
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    return _column.findColumnById(columnId) ?? super.findColumnById(columnId);
+  }
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {

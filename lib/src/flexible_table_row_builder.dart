@@ -30,11 +30,13 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
 
   ///根据列ID查找列配置类
   AbsFlexibleColumn<T>? findColumnById(String columnId) {
-    try {
-      return allTableColumns.firstWhere((element) => element.id == columnId);
-    } catch (_) {
-      return null;
+    for (final column in allTableColumns) {
+      final result = column.findColumnById(columnId);
+      if (result != null) {
+        return result;
+      }
     }
+    return null;
   }
 
   ///根据列ID查找可排序列配置类

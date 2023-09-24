@@ -7,7 +7,7 @@ typedef SpacerColumn = SpacerFlexibleColumn;
 
 ///空白列，只有宽度，没有具体内容
 final class EmptyFlexibleColumn<T> extends AbsFlexibleColumn<T> {
-  EmptyFlexibleColumn(super.id, this.width);
+  const EmptyFlexibleColumn(super.id, this.width);
 
   final double width;
 
@@ -24,7 +24,7 @@ final class EmptyFlexibleColumn<T> extends AbsFlexibleColumn<T> {
 
 ///撑开，但没有内容的列
 final class SpacerFlexibleColumn<T> extends AbsFlexibleColumn<T> {
-  SpacerFlexibleColumn(super.id, this.flex);
+  const SpacerFlexibleColumn(super.id, this.flex);
 
   final int flex;
 

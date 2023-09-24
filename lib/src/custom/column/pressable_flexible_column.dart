@@ -7,7 +7,7 @@ final class HeaderPressableColumn<T> extends AbsFlexibleColumn<T> {
   HeaderPressableColumn(
     this._column, {
     required this.onHeaderClicked,
-  }) : super('hpc_${_column.id}');
+  }) : super(_column.id);
 
   final AbsFlexibleColumn<T> _column;
 
@@ -16,6 +16,11 @@ final class HeaderPressableColumn<T> extends AbsFlexibleColumn<T> {
     TableHeaderRowBuildArguments<T> arguments,
     BuildContext context,
   ) onHeaderClicked;
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    return _column.findColumnById(columnId) ?? super.findColumnById(columnId);
+  }
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
@@ -39,7 +44,7 @@ final class InfoPressableColumn<T> extends AbsFlexibleColumn<T> {
   InfoPressableColumn(
     this._column, {
     required this.onInfoClicked,
-  }) : super('ipc_${_column.id}');
+  }) : super(_column.id);
 
   final AbsFlexibleColumn<T> _column;
 
@@ -48,6 +53,11 @@ final class InfoPressableColumn<T> extends AbsFlexibleColumn<T> {
     TableInfoRowBuildArguments<T> arguments,
     BuildContext context,
   ) onInfoClicked;
+
+  @override
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    return _column.findColumnById(columnId) ?? super.findColumnById(columnId);
+  }
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {

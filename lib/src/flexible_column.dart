@@ -14,6 +14,10 @@ abstract class AbsFlexibleColumn<T> {
   ///构建表信息
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments);
 
+  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+    return columnId == id ? this : null;
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) || other is AbsFlexibleColumn && runtimeType == other.runtimeType && id == other.id;
