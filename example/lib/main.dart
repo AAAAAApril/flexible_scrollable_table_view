@@ -49,15 +49,14 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
         //设置列宽为父容器宽度的 0.5 倍
         .appointWidth(ProportionalWidth(0.5));
     AbsFlexibleTableColumn<StudentBean> ageColumn = const StudentAgeColumn()
-        .appointWidth(FixedWidth(80))
         //给列头添加点击排序的功能
-        .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age));
+        .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age))
+        .appointWidth(FixedWidth(80));
     AbsFlexibleTableColumn<StudentBean> genderColumn = const StudentGenderColumn()
-        .appointWidth(FixedWidth(100))
         //给列信息项添加点击事件
         .whenInfoClicked((column, arguments, context) {
       debugPrint('点击了[${column.id}]列的第[${arguments.dataIndex}]项的数据[${arguments.data.gender}]');
-    });
+    }).appointWidth(FixedWidth(100));
 
     rowBuilder = DefaultRowBuilder(
       this,
