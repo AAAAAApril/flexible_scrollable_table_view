@@ -1,15 +1,21 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flexible_scrollable_table_view/src/sortable/sortable_table_column.dart';
 import 'package:flutter/widgets.dart';
 
-///表行构建类
-mixin FlexibleTableRowBuilderMixin<T> {
-  ///构建表头行
-  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments);
+import 'arguments/table_build_arguments.dart';
 
-  ///构建表信息行
-  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments);
+///表行构建类
+mixin FlexibleTableRowBuilderMixin<T>
+    implements FlexibleTableHeaderRowBuilderMixin<T>, FlexibleTableInfoRowBuilderMixin<T> {}
+
+///构建表头行
+mixin FlexibleTableHeaderRowBuilderMixin<T> {
+  Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments);
+}
+
+///构建表信息行
+mixin FlexibleTableInfoRowBuilderMixin<T> {
+  Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments);
 }
 
 mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
@@ -20,12 +26,12 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   Widget buildTableRow(Widget Function(AbsFlexibleTableColumn<T> column) buildCell);
 
   @override
-  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments) {
     return buildTableRow((column) => column.buildHeaderCell(arguments));
   }
 
   @override
-  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments) {
     return buildTableRow((column) => column.buildInfoCell(arguments));
   }
 

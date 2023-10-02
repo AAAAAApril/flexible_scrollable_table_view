@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'arguments/table_row_build_arguments.dart';
+import 'arguments/table_build_arguments.dart';
 import 'custom/builders/appoint_height_row_builder.dart';
 import 'custom/builders/divider_row_builder.dart';
 import 'custom/builders/merge_row_builder.dart';
@@ -38,7 +38,7 @@ extension AbsFlexibleTableColumnExt<T> on AbsFlexibleTableColumn<T> {
   AbsFlexibleTableColumn<T> whenHeaderClicked(
     void Function(
       AbsFlexibleTableColumn<T> column,
-      TableHeaderRowBuildArguments<T> arguments,
+      TableBuildArgumentsMixin<T> arguments,
       BuildContext context,
     ) onClicked, {
     bool expandPressArea = false,
@@ -49,7 +49,7 @@ extension AbsFlexibleTableColumnExt<T> on AbsFlexibleTableColumn<T> {
   AbsFlexibleTableColumn<T> whenInfoClicked(
     void Function(
       AbsFlexibleTableColumn<T> column,
-      TableInfoRowBuildArguments<T> arguments,
+      TableInfoRowArgumentsMixin<T> arguments,
       BuildContext context,
     ) onClicked, {
     bool expandPressArea = false,
@@ -89,8 +89,8 @@ extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
   }
 
   FlexibleTableRowBuilderMixin<T> whenPressed({
-    void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onPressed,
-    void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onLongPressed,
+    void Function(TableInfoRowArgumentsMixin<T> arguments, BuildContext context)? onPressed,
+    void Function(TableInfoRowArgumentsMixin<T> arguments, BuildContext context)? onLongPressed,
   }) {
     if (onPressed == null && onLongPressed == null) {
       return this;

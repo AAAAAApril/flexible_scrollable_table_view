@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
@@ -13,7 +13,7 @@ final class SelectableColumn<T> extends AbsFlexibleTableColumn<T> {
   final AbsFlexibleTableColumn<T> unSelectableColumn;
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     return ValueListenableBuilder<bool>(
       valueListenable: arguments.dataSource.selectable,
       builder: (context, selectable, child) {
@@ -26,7 +26,7 @@ final class SelectableColumn<T> extends AbsFlexibleTableColumn<T> {
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     return ValueListenableBuilder<bool>(
       valueListenable: arguments.dataSource.selectable,
       builder: (context, selectable, child) {

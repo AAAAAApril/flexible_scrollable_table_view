@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,7 +20,7 @@ final class StackedRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
   final Iterable<FlexibleTableRowBuilderMixin<T>> _belowBuilders;
 
   @override
-  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments) {
     if (_aboveBuilders.isEmpty && _belowBuilders.isEmpty) {
       return _baseRowBuilder.buildHeaderRow(arguments);
     }
@@ -36,7 +36,7 @@ final class StackedRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
   }
 
   @override
-  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments) {
     if (_aboveBuilders.isEmpty && _belowBuilders.isEmpty) {
       return _baseRowBuilder.buildInfoRow(arguments);
     }

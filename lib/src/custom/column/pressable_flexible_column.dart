@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
@@ -16,12 +16,12 @@ final class HeaderPressableColumn<T> extends AbsFlexibleTableColumnWithChild<T> 
 
   final void Function(
     AbsFlexibleTableColumn<T> column,
-    TableHeaderRowBuildArguments<T> arguments,
+    TableBuildArgumentsMixin<T> arguments,
     BuildContext context,
   ) onHeaderClicked;
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     return Builder(
       builder: (context) {
         Widget result = child.buildHeaderCell(arguments);
@@ -38,7 +38,7 @@ final class HeaderPressableColumn<T> extends AbsFlexibleTableColumnWithChild<T> 
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     return child.buildInfoCell(arguments);
   }
 }
@@ -57,17 +57,17 @@ final class InfoPressableColumn<T> extends AbsFlexibleTableColumnWithChild<T> {
 
   final void Function(
     AbsFlexibleTableColumn<T> column,
-    TableInfoRowBuildArguments<T> arguments,
+    TableInfoRowArgumentsMixin<T> arguments,
     BuildContext context,
   ) onInfoClicked;
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     return child.buildHeaderCell(arguments);
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     return Builder(
       builder: (context) {
         Widget result = child.buildInfoCell(arguments);

@@ -18,7 +18,7 @@ class SliverFlexibleTableContent<T> extends FlexibleTableContent<T> {
   Widget build(BuildContext context) {
     return LazySliverLayoutBuilder(
       builder: (context, parentWidth) {
-        final AbsTableBuildArguments<T> arguments = TableBuildArguments<T>(
+        final TableBuildArgumentsMixin<T> arguments = TableBuildArguments<T>(
           dataSource: dataSource,
           parentWidth: parentWidth,
         );

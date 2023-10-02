@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,7 +20,7 @@ final class StackedFlexibleColumn<T> extends AbsFlexibleTableColumnWithChildren<
   late final Iterable<AbsFlexibleTableColumn<T>> children = <AbsFlexibleTableColumn<T>>{_base};
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     if (_above.isEmpty && _below.isEmpty) {
       return _base.buildHeaderCell(arguments);
     }
@@ -36,7 +36,7 @@ final class StackedFlexibleColumn<T> extends AbsFlexibleTableColumnWithChildren<
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     if (_above.isEmpty && _below.isEmpty) {
       return _base.buildInfoCell(arguments);
     }

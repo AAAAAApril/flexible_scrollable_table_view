@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_layout_builder.dart';
@@ -19,7 +19,7 @@ class FlexibleTableHeader<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return LazyLayoutBuilder(
       builder: (context, constraints) => rowBuilder.buildHeaderRow(
-        TableHeaderRowBuildArguments<T>(
+        TableBuildArguments<T>(
           dataSource: dataSource,
           parentWidth: constraints.maxWidth,
         ),

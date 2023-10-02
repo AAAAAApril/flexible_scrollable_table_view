@@ -144,7 +144,7 @@ class StudentIdColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentIdColumn() : super('学号');
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<StudentBean> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(id),
@@ -152,7 +152,7 @@ class StudentIdColumn extends AbsFlexibleTableColumn<StudentBean> {
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<StudentBean> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<StudentBean> arguments) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
@@ -166,12 +166,12 @@ class StudentNameColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentNameColumn() : super('姓名');
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<StudentBean> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
     return Center(child: Text(id));
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<StudentBean> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<StudentBean> arguments) {
     return Center(
       child: Text(
         arguments.data.name,
@@ -184,12 +184,12 @@ class StudentAgeColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentAgeColumn() : super('年龄');
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<StudentBean> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
     return Center(child: Text(id));
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<StudentBean> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<StudentBean> arguments) {
     return Center(
       child: Text(
         arguments.data.age.toString(),
@@ -202,12 +202,12 @@ class StudentGenderColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentGenderColumn() : super('性别');
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<StudentBean> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
     return Center(child: Text(id));
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<StudentBean> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<StudentBean> arguments) {
     return Center(
       child: Text(
         arguments.data.gender,

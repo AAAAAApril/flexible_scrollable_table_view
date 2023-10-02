@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,12 +12,12 @@ final class EmptyFlexibleColumn<T> extends AbsFlexibleTableColumn<T> {
   final double width;
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     return SizedBox(width: width, height: 0);
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     return SizedBox(width: width, height: 0);
   }
 }
@@ -29,12 +29,12 @@ final class SpacerFlexibleColumn<T> extends AbsFlexibleTableColumn<T> {
   final int flex;
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     return Spacer(flex: flex);
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     return Spacer(flex: flex);
   }
 }

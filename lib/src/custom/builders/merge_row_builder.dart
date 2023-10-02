@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flutter/widgets.dart';
 
@@ -9,7 +9,7 @@ final class MergeRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
   final Iterable<FlexibleTableRowBuilderMixin<T>> _builders;
 
   @override
-  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments) {
     return SizedBox(
       width: arguments.parentWidth,
       child: Column(
@@ -20,7 +20,7 @@ final class MergeRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
   }
 
   @override
-  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments) {
     return SizedBox(
       width: arguments.parentWidth,
       child: Column(

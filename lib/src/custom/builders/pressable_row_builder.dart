@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,16 +12,16 @@ final class PressableInfoRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
 
   final FlexibleTableRowBuilderMixin<T> _rowBuilder;
 
-  final void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onPressed;
-  final void Function(TableInfoRowBuildArguments<T> arguments, BuildContext context)? onLongPressed;
+  final void Function(TableInfoRowArgumentsMixin<T> arguments, BuildContext context)? onPressed;
+  final void Function(TableInfoRowArgumentsMixin<T> arguments, BuildContext context)? onLongPressed;
 
   @override
-  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments) {
     return _rowBuilder.buildHeaderRow(arguments);
   }
 
   @override
-  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments) {
     if (onPressed == null && onLongPressed == null) {
       return _rowBuilder.buildInfoRow(arguments);
     }

@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,7 +12,7 @@ abstract class AbsSortableTableColumn<T> extends AbsFlexibleTableColumn<T> with 
 
   final AbsFlexibleTableColumn<T> _column;
 
-  void onPressedHeader(TableHeaderRowBuildArguments<T> arguments) {
+  void onPressedHeader(TableBuildArgumentsMixin<T> arguments) {
     if (arguments.dataSource.sortingColumn.value != this) {
       arguments.dataSource.switchSortColumn(this);
     } else {
@@ -21,7 +21,7 @@ abstract class AbsSortableTableColumn<T> extends AbsFlexibleTableColumn<T> with 
   }
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => onPressedHeader(arguments),
@@ -30,7 +30,7 @@ abstract class AbsSortableTableColumn<T> extends AbsFlexibleTableColumn<T> with 
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     return _column.buildInfoCell(arguments);
   }
 }

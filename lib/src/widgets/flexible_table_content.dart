@@ -25,9 +25,9 @@ class FlexibleTableContent<T> extends StatelessWidget {
     FlexibleTableDataSource<T> dataSource, {
     Key? key,
     required FlexibleTableRowBuilderMixin<T> rowBuilder,
-    Widget Function(AbsTableBuildArguments<T> arguments)? listHeaderBuilder,
-    Widget Function(AbsTableBuildArguments<T> arguments)? listFooterBuilder,
-    Widget Function(AbsTableBuildArguments<T> arguments)? listPlaceholderBuilder,
+    Widget Function(TableBuildArgumentsMixin<T> arguments)? listHeaderBuilder,
+    Widget Function(TableBuildArgumentsMixin<T> arguments)? listFooterBuilder,
+    Widget Function(TableBuildArgumentsMixin<T> arguments)? listPlaceholderBuilder,
   }) =>
       SliverFlexibleTableContent<T>(
         dataSource,
@@ -46,9 +46,9 @@ class FlexibleTableContent<T> extends StatelessWidget {
   final bool? primary;
   final ScrollPhysics? verticalPhysics;
 
-  final Widget Function(AbsTableBuildArguments<T> arguments)? listHeaderBuilder;
-  final Widget Function(AbsTableBuildArguments<T> arguments)? listFooterBuilder;
-  final Widget Function(AbsTableBuildArguments<T> arguments)? listPlaceholderBuilder;
+  final Widget Function(TableBuildArgumentsMixin<T> arguments)? listHeaderBuilder;
+  final Widget Function(TableBuildArgumentsMixin<T> arguments)? listFooterBuilder;
+  final Widget Function(TableBuildArgumentsMixin<T> arguments)? listPlaceholderBuilder;
 
   @protected
   bool get hasHeader => listHeaderBuilder != null;
@@ -91,7 +91,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
   @protected
   Widget buildItem(
     BuildContext context, {
-    required AbsTableBuildArguments<T> arguments,
+    required TableBuildArgumentsMixin<T> arguments,
     required List<T> value,
     required int index,
     required int itemCount,
@@ -109,7 +109,6 @@ class FlexibleTableContent<T> extends StatelessWidget {
     return rowBuilder.buildInfoRow(
       arguments.toInfoRowArguments(
         dataIndex: realDataIndex(index),
-        dataList: value,
         currentItemIndex: index,
         totalItemCount: itemCount,
       ),
@@ -120,7 +119,7 @@ class FlexibleTableContent<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return LazyLayoutBuilder(
       builder: (context, constraints) {
-        final AbsTableBuildArguments<T> arguments = TableBuildArguments<T>(
+        final TableBuildArgumentsMixin<T> arguments = TableBuildArguments<T>(
           dataSource: dataSource,
           parentWidth: constraints.maxWidth,
         );

@@ -1,5 +1,4 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,12 +14,12 @@ final class AppointWidthFlexibleColumn<T> extends AbsFlexibleTableColumnWithChil
   final AppointedColumnWidth width;
 
   @override
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
     return width.constrainWidth(arguments, child.buildHeaderCell(arguments));
   }
 
   @override
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments) {
     return width.constrainWidth(arguments, child.buildInfoCell(arguments));
   }
 }
@@ -29,7 +28,7 @@ abstract class AppointedColumnWidth<T> {
   const AppointedColumnWidth();
 
   ///约束宽度
-  Widget constrainWidth(TableBuildArguments<T> arguments, Widget columnCell);
+  Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell);
 }
 
 ///固定的宽度
@@ -40,7 +39,7 @@ final class FixedWidth<T> extends AppointedColumnWidth<T> {
   final double fixedWidth;
 
   @override
-  Widget constrainWidth(TableBuildArguments<T> arguments, Widget columnCell) {
+  Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
     return SizedBox(width: fixedWidth, height: double.infinity, child: columnCell);
   }
 }
@@ -61,11 +60,11 @@ final class ProportionalWidth<T> extends AppointedColumnWidth<T> {
   final Map<double, double> _cache = <double, double>{};
 
   @override
-  Widget constrainWidth(TableBuildArguments<T> arguments, Widget columnCell) {
+  Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
     return SizedBox(width: _getWidth(arguments), height: double.infinity, child: columnCell);
   }
 
-  double _getWidth(TableBuildArguments<T> arguments) {
+  double _getWidth(TableBuildArgumentsMixin<T> arguments) {
     double? cacheWidth = _cache[arguments.parentWidth];
     if (cacheWidth == null) {
       cacheWidth = (arguments.parentWidth - omittedWidth) * proportion;
@@ -86,7 +85,7 @@ final class ExpandedWidth<T> extends AppointedColumnWidth<T> {
   final FlexFit fit;
 
   @override
-  Widget constrainWidth(TableBuildArguments<T> arguments, Widget columnCell) {
+  Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
     return Flexible(flex: flex, fit: fit, child: columnCell);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,7 @@ final class DividerRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
   final bool outsideOfRowItem;
 
   @override
-  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments) {
     Widget child = _builder.buildHeaderRow(arguments);
     if (!aroundHeaderRow) {
       return child;
@@ -29,7 +29,7 @@ final class DividerRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
   }
 
   @override
-  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       if (arguments.dataIndex == 0 && outsideOfRowItem) const Divider(),
       _builder.buildInfoRow(arguments),

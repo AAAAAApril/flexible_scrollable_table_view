@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flutter/widgets.dart';
 
 ///列信息配置类
@@ -9,10 +9,10 @@ abstract class AbsFlexibleTableColumn<T> {
   final String id;
 
   ///构建表头
-  Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments);
+  Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments);
 
   ///构建表信息
-  Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments);
+  Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments);
 
   AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
     return columnId == id ? this : null;

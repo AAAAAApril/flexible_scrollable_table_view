@@ -1,9 +1,7 @@
 import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
 
 ///构建表行所需参数
-abstract class AbsTableBuildArguments<T> {
-  const AbsTableBuildArguments();
-
+mixin TableBuildArgumentsMixin<T> {
   ///数据源
   FlexibleTableDataSource<T> get dataSource;
 
@@ -12,7 +10,7 @@ abstract class AbsTableBuildArguments<T> {
 }
 
 ///行数据
-mixin TableInfoRowArgumentsMixin<T> on AbsTableBuildArguments<T> {
+mixin TableInfoRowArgumentsMixin<T> implements TableBuildArgumentsMixin<T> {
   ///当前行所在下标
   int get dataIndex;
 
@@ -30,7 +28,7 @@ mixin TableInfoRowArgumentsMixin<T> on AbsTableBuildArguments<T> {
 }
 
 ///构建表所需参数
-class TableBuildArguments<T> extends AbsTableBuildArguments<T> {
+class TableBuildArguments<T> with TableBuildArgumentsMixin<T> {
   const TableBuildArguments({
     required this.dataSource,
     required this.parentWidth,
@@ -41,4 +39,11 @@ class TableBuildArguments<T> extends AbsTableBuildArguments<T> {
 
   @override
   final double parentWidth;
+}
+
+extension TableBuildArgumentsExt<T> on TableBuildArgumentsMixin<T> {
+  TableBuildArgumentsMixin<T> toHeaderRowArguments() => TableBuildArguments<T>(
+        dataSource: dataSource,
+        parentWidth: parentWidth,
+      );
 }

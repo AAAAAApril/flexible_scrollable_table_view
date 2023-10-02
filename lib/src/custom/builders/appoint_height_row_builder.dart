@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,15 +10,15 @@ final class AppointHeightRowBuilder<T> with FlexibleTableRowBuilderMixin<T> {
   });
 
   final FlexibleTableRowBuilderMixin<T> _builder;
-  final AppointedRowHeight height;
+  final AppointedRowHeight<T> height;
 
   @override
-  Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
+  Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments) {
     return height.constrainHeaderRowHeight(arguments, _builder.buildHeaderRow(arguments));
   }
 
   @override
-  Widget buildInfoRow(TableInfoRowBuildArguments<T> arguments) {
+  Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments) {
     return height.constrainInfoRowHeight(arguments, _builder.buildInfoRow(arguments));
   }
 }
@@ -27,10 +27,10 @@ abstract class AppointedRowHeight<T> {
   const AppointedRowHeight();
 
   ///约束表头行高度
-  Widget constrainHeaderRowHeight(TableHeaderRowBuildArguments<T> arguments, Widget rowWidget);
+  Widget constrainHeaderRowHeight(TableBuildArgumentsMixin<T> arguments, Widget rowWidget);
 
   ///约束表信息行高度
-  Widget constrainInfoRowHeight(TableInfoRowBuildArguments<T> arguments, Widget rowWidget);
+  Widget constrainInfoRowHeight(TableInfoRowArgumentsMixin<T> arguments, Widget rowWidget);
 }
 
 ///固定的行高
@@ -44,12 +44,12 @@ final class FixedRowHeight<T> extends AppointedRowHeight<T> {
   final double infoHeight;
 
   @override
-  Widget constrainHeaderRowHeight(TableHeaderRowBuildArguments<T> arguments, Widget rowWidget) {
+  Widget constrainHeaderRowHeight(TableBuildArgumentsMixin<T> arguments, Widget rowWidget) {
     return SizedBox(width: arguments.parentWidth, height: headerHeight, child: rowWidget);
   }
 
   @override
-  Widget constrainInfoRowHeight(TableInfoRowBuildArguments<T> arguments, Widget rowWidget) {
+  Widget constrainInfoRowHeight(TableInfoRowArgumentsMixin<T> arguments, Widget rowWidget) {
     return SizedBox(width: arguments.parentWidth, height: infoHeight, child: rowWidget);
   }
 }
@@ -58,17 +58,17 @@ final class FixedRowHeight<T> extends AppointedRowHeight<T> {
 abstract class AbsChangeableRowHeight<T> extends AppointedRowHeight<T> {
   const AbsChangeableRowHeight();
 
-  double getHeaderRowHeight(TableHeaderRowBuildArguments<T> arguments);
+  double getHeaderRowHeight(TableBuildArgumentsMixin<T> arguments);
 
-  double getInfoRowHeight(TableInfoRowBuildArguments<T> arguments);
+  double getInfoRowHeight(TableInfoRowArgumentsMixin<T> arguments);
 
   @override
-  Widget constrainHeaderRowHeight(TableHeaderRowBuildArguments<T> arguments, Widget rowWidget) {
+  Widget constrainHeaderRowHeight(TableBuildArgumentsMixin<T> arguments, Widget rowWidget) {
     return SizedBox(width: arguments.parentWidth, height: getHeaderRowHeight(arguments), child: rowWidget);
   }
 
   @override
-  Widget constrainInfoRowHeight(TableInfoRowBuildArguments<T> arguments, Widget rowWidget) {
+  Widget constrainInfoRowHeight(TableInfoRowArgumentsMixin<T> arguments, Widget rowWidget) {
     return SizedBox(width: arguments.parentWidth, height: getInfoRowHeight(arguments), child: rowWidget);
   }
 }
@@ -79,14 +79,14 @@ final class ChangeableRowHeight<T> extends AbsChangeableRowHeight<T> {
     required this.infoHeight,
   });
 
-  final double Function(TableHeaderRowBuildArguments<T> arguments) headerHeight;
-  final double Function(TableInfoRowBuildArguments<T> arguments) infoHeight;
+  final double Function(TableBuildArgumentsMixin<T> arguments) headerHeight;
+  final double Function(TableInfoRowArgumentsMixin<T> arguments) infoHeight;
 
   @override
-  double getHeaderRowHeight(TableHeaderRowBuildArguments<T> arguments) => headerHeight.call(arguments);
+  double getHeaderRowHeight(TableBuildArgumentsMixin<T> arguments) => headerHeight.call(arguments);
 
   @override
-  double getInfoRowHeight(TableInfoRowBuildArguments<T> arguments) => infoHeight.call(arguments);
+  double getInfoRowHeight(TableInfoRowArgumentsMixin<T> arguments) => infoHeight.call(arguments);
 }
 
 ///固定表头行高度，表信息行高度可以在每次重新构建时改变
@@ -97,11 +97,11 @@ final class FixedHeaderRowHeight<T> extends AbsChangeableRowHeight<T> {
   });
 
   final double headerHeight;
-  final double Function(TableInfoRowBuildArguments<T> arguments) infoHeight;
+  final double Function(TableInfoRowArgumentsMixin<T> arguments) infoHeight;
 
   @override
-  double getHeaderRowHeight(TableHeaderRowBuildArguments<T> arguments) => headerHeight;
+  double getHeaderRowHeight(TableBuildArgumentsMixin<T> arguments) => headerHeight;
 
   @override
-  double getInfoRowHeight(TableInfoRowBuildArguments<T> arguments) => infoHeight.call(arguments);
+  double getInfoRowHeight(TableInfoRowArgumentsMixin<T> arguments) => infoHeight.call(arguments);
 }
