@@ -1,9 +1,9 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///列头可点击列
-final class HeaderPressableColumn<T> extends AbsFlexibleColumnWithChild<T> {
+final class HeaderPressableColumn<T> extends AbsFlexibleTableColumnWithChild<T> {
   HeaderPressableColumn(
     this.child, {
     required this.onHeaderClicked,
@@ -11,11 +11,11 @@ final class HeaderPressableColumn<T> extends AbsFlexibleColumnWithChild<T> {
   }) : super(child.id);
 
   @override
-  final AbsFlexibleColumn<T> child;
+  final AbsFlexibleTableColumn<T> child;
   final bool expandPressArea;
 
   final void Function(
-    AbsFlexibleColumn<T> column,
+    AbsFlexibleTableColumn<T> column,
     TableHeaderRowBuildArguments<T> arguments,
     BuildContext context,
   ) onHeaderClicked;
@@ -44,7 +44,7 @@ final class HeaderPressableColumn<T> extends AbsFlexibleColumnWithChild<T> {
 }
 
 ///列信息可点击列
-final class InfoPressableColumn<T> extends AbsFlexibleColumnWithChild<T> {
+final class InfoPressableColumn<T> extends AbsFlexibleTableColumnWithChild<T> {
   InfoPressableColumn(
     this.child, {
     required this.onInfoClicked,
@@ -52,11 +52,11 @@ final class InfoPressableColumn<T> extends AbsFlexibleColumnWithChild<T> {
   }) : super(child.id);
 
   @override
-  final AbsFlexibleColumn<T> child;
+  final AbsFlexibleTableColumn<T> child;
   final bool expandPressArea;
 
   final void Function(
-    AbsFlexibleColumn<T> column,
+    AbsFlexibleTableColumn<T> column,
     TableInfoRowBuildArguments<T> arguments,
     BuildContext context,
   ) onInfoClicked;

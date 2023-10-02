@@ -1,23 +1,23 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///层叠的列
-final class StackedFlexibleColumn<T> extends AbsFlexibleColumnWithChildren<T> {
+final class StackedFlexibleColumn<T> extends AbsFlexibleTableColumnWithChildren<T> {
   StackedFlexibleColumn(
     this._base, {
-    Iterable<AbsFlexibleColumn<T>>? above,
-    Iterable<AbsFlexibleColumn<T>>? below,
-  })  : _above = above ?? <AbsFlexibleColumn<T>>{},
-        _below = below ?? <AbsFlexibleColumn<T>>{},
+    Iterable<AbsFlexibleTableColumn<T>>? above,
+    Iterable<AbsFlexibleTableColumn<T>>? below,
+  })  : _above = above ?? <AbsFlexibleTableColumn<T>>{},
+        _below = below ?? <AbsFlexibleTableColumn<T>>{},
         super(_base.id);
 
-  final AbsFlexibleColumn<T> _base;
-  final Iterable<AbsFlexibleColumn<T>> _above;
-  final Iterable<AbsFlexibleColumn<T>> _below;
+  final AbsFlexibleTableColumn<T> _base;
+  final Iterable<AbsFlexibleTableColumn<T>> _above;
+  final Iterable<AbsFlexibleTableColumn<T>> _below;
 
   @override
-  late final Iterable<AbsFlexibleColumn<T>> children = <AbsFlexibleColumn<T>>{_base};
+  late final Iterable<AbsFlexibleTableColumn<T>> children = <AbsFlexibleTableColumn<T>>{_base};
 
   @override
   Widget buildHeaderCell(TableHeaderRowBuildArguments<T> arguments) {

@@ -1,16 +1,16 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///可排序 Column
-mixin SortableColumnMixin<T> on AbsFlexibleColumn<T> {
+mixin SortableTableColumnMixin<T> on AbsFlexibleTableColumn<T> {
   int compare(T a, T b);
 }
 
-abstract class AbsSortableColumn<T> extends AbsFlexibleColumn<T> with SortableColumnMixin<T> {
-  AbsSortableColumn(this._column) : super('asc_${_column.id}');
+abstract class AbsSortableTableColumn<T> extends AbsFlexibleTableColumn<T> with SortableTableColumnMixin<T> {
+  AbsSortableTableColumn(this._column) : super('asc_${_column.id}');
 
-  final AbsFlexibleColumn<T> _column;
+  final AbsFlexibleTableColumn<T> _column;
 
   void onPressedHeader(TableHeaderRowBuildArguments<T> arguments) {
     if (arguments.dataSource.sortingColumn.value != this) {
@@ -35,13 +35,13 @@ abstract class AbsSortableColumn<T> extends AbsFlexibleColumn<T> with SortableCo
   }
 }
 
-final class SortableColumn<T> extends AbsSortableColumn<T> {
-  SortableColumn(
+final class SortableTableColumn<T> extends AbsSortableTableColumn<T> {
+  SortableTableColumn(
     super.column, {
     required this.compareValue,
   });
 
-  final int Function(SortableColumnMixin<T> column, T a, T b) compareValue;
+  final int Function(SortableTableColumnMixin<T> column, T a, T b) compareValue;
 
   @override
   int compare(T a, T b) => compareValue.call(this, a, b);

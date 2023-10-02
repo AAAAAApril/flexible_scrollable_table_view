@@ -42,17 +42,17 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
     dataSource = FlexibleTableDataSource();
     scrollMixin = SynchronizedScrollController();
 
-    AbsFlexibleColumn<StudentBean> idColumn = const StudentIdColumn()
+    AbsFlexibleTableColumn<StudentBean> idColumn = const StudentIdColumn()
         //设置列宽为固定宽度
         .appointWidth(FixedWidth(48));
-    AbsFlexibleColumn<StudentBean> nameColumn = const StudentNameColumn()
+    AbsFlexibleTableColumn<StudentBean> nameColumn = const StudentNameColumn()
         //设置列宽为父容器宽度的 0.5 倍
         .appointWidth(ProportionalWidth(0.5));
-    AbsFlexibleColumn<StudentBean> ageColumn = const StudentAgeColumn()
+    AbsFlexibleTableColumn<StudentBean> ageColumn = const StudentAgeColumn()
         .appointWidth(FixedWidth(80))
         //给列头添加点击排序的功能
         .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age));
-    AbsFlexibleColumn<StudentBean> genderColumn = const StudentGenderColumn()
+    AbsFlexibleTableColumn<StudentBean> genderColumn = const StudentGenderColumn()
         .appointWidth(FixedWidth(100))
         //给列信息项添加点击事件
         .whenInfoClicked((column, arguments, context) {
@@ -140,7 +140,7 @@ class StudentBean {
   int get hashCode => id.hashCode ^ name.hashCode ^ age.hashCode ^ gender.hashCode;
 }
 
-class StudentIdColumn extends AbsFlexibleColumn<StudentBean> {
+class StudentIdColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentIdColumn() : super('学号');
 
   @override
@@ -162,7 +162,7 @@ class StudentIdColumn extends AbsFlexibleColumn<StudentBean> {
   }
 }
 
-class StudentNameColumn extends AbsFlexibleColumn<StudentBean> {
+class StudentNameColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentNameColumn() : super('姓名');
 
   @override
@@ -180,7 +180,7 @@ class StudentNameColumn extends AbsFlexibleColumn<StudentBean> {
   }
 }
 
-class StudentAgeColumn extends AbsFlexibleColumn<StudentBean> {
+class StudentAgeColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentAgeColumn() : super('年龄');
 
   @override
@@ -198,7 +198,7 @@ class StudentAgeColumn extends AbsFlexibleColumn<StudentBean> {
   }
 }
 
-class StudentGenderColumn extends AbsFlexibleColumn<StudentBean> {
+class StudentGenderColumn extends AbsFlexibleTableColumn<StudentBean> {
   const StudentGenderColumn() : super('性别');
 
   @override

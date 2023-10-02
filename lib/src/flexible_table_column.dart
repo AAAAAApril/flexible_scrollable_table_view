@@ -2,8 +2,8 @@ import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arg
 import 'package:flutter/widgets.dart';
 
 ///列信息配置类
-abstract class AbsFlexibleColumn<T> {
-  const AbsFlexibleColumn(this.id);
+abstract class AbsFlexibleTableColumn<T> {
+  const AbsFlexibleTableColumn(this.id);
 
   ///列 id，需要保持唯一
   final String id;
@@ -14,36 +14,36 @@ abstract class AbsFlexibleColumn<T> {
   ///构建表信息
   Widget buildInfoCell(TableInfoRowBuildArguments<T> arguments);
 
-  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
     return columnId == id ? this : null;
   }
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is AbsFlexibleColumn && runtimeType == other.runtimeType && id == other.id;
+      identical(this, other) || other is AbsFlexibleTableColumn && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
 }
 
-abstract class AbsFlexibleColumnWithChild<T> extends AbsFlexibleColumn<T> {
-  const AbsFlexibleColumnWithChild(super.id);
+abstract class AbsFlexibleTableColumnWithChild<T> extends AbsFlexibleTableColumn<T> {
+  const AbsFlexibleTableColumnWithChild(super.id);
 
-  AbsFlexibleColumn<T> get child;
+  AbsFlexibleTableColumn<T> get child;
 
   @override
-  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
     return child.findColumnById(columnId) ?? super.findColumnById(columnId);
   }
 }
 
-abstract class AbsFlexibleColumnWithChildren<T> extends AbsFlexibleColumn<T> {
-  const AbsFlexibleColumnWithChildren(super.id);
+abstract class AbsFlexibleTableColumnWithChildren<T> extends AbsFlexibleTableColumn<T> {
+  const AbsFlexibleTableColumnWithChildren(super.id);
 
-  Iterable<AbsFlexibleColumn<T>> get children;
+  Iterable<AbsFlexibleTableColumn<T>> get children;
 
   @override
-  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
     for (var value in children) {
       var result = value.findColumnById(columnId);
       if (result != null) {

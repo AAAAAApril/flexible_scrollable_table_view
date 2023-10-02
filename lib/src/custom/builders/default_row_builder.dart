@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_mixin.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_state_widget.dart';
@@ -8,34 +8,34 @@ import 'package:flutter/widgets.dart';
 final class DefaultRowBuilder<T> with FlexibleTableRowBuilder<T> {
   DefaultRowBuilder(
     this._horizontalScrollMixin, {
-    Set<AbsFlexibleColumn<T>>? leftPinnedColumns,
-    Set<AbsFlexibleColumn<T>>? rightPinnedColumns,
-    Set<AbsFlexibleColumn<T>>? scrollableColumns,
-  })  : _leftPinnedColumns = List<AbsFlexibleColumn<T>>.of(leftPinnedColumns ?? <AbsFlexibleColumn<T>>{}),
-        _rightPinnedColumns = List<AbsFlexibleColumn<T>>.of(rightPinnedColumns ?? <AbsFlexibleColumn<T>>{}),
-        _scrollableColumns = List<AbsFlexibleColumn<T>>.of(scrollableColumns ?? <AbsFlexibleColumn<T>>{});
+    Set<AbsFlexibleTableColumn<T>>? leftPinnedColumns,
+    Set<AbsFlexibleTableColumn<T>>? rightPinnedColumns,
+    Set<AbsFlexibleTableColumn<T>>? scrollableColumns,
+  })  : _leftPinnedColumns = List<AbsFlexibleTableColumn<T>>.of(leftPinnedColumns ?? <AbsFlexibleTableColumn<T>>{}),
+        _rightPinnedColumns = List<AbsFlexibleTableColumn<T>>.of(rightPinnedColumns ?? <AbsFlexibleTableColumn<T>>{}),
+        _scrollableColumns = List<AbsFlexibleTableColumn<T>>.of(scrollableColumns ?? <AbsFlexibleTableColumn<T>>{});
 
   ///横向滚动控制器管理类
   final TableHorizontalScrollMixin _horizontalScrollMixin;
 
   @protected
-  final List<AbsFlexibleColumn<T>> _leftPinnedColumns;
+  final List<AbsFlexibleTableColumn<T>> _leftPinnedColumns;
 
   @protected
-  final List<AbsFlexibleColumn<T>> _rightPinnedColumns;
+  final List<AbsFlexibleTableColumn<T>> _rightPinnedColumns;
 
   @protected
-  final List<AbsFlexibleColumn<T>> _scrollableColumns;
+  final List<AbsFlexibleTableColumn<T>> _scrollableColumns;
 
   @override
-  late final Set<AbsFlexibleColumn<T>> allTableColumns = <AbsFlexibleColumn<T>>{
+  late final Set<AbsFlexibleTableColumn<T>> allTableColumns = <AbsFlexibleTableColumn<T>>{
     ..._leftPinnedColumns,
     ..._scrollableColumns,
     ..._rightPinnedColumns,
   };
 
   @override
-  Widget buildTableRow(Widget Function(AbsFlexibleColumn<T> column) buildCell) {
+  Widget buildTableRow(Widget Function(AbsFlexibleTableColumn<T> column) buildCell) {
     return Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
       ..._leftPinnedColumns.map<Widget>(buildCell),
       if (_scrollableColumns.isNotEmpty)

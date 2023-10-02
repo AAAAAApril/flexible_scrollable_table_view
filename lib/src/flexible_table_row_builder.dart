@@ -1,6 +1,6 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
-import 'package:flexible_scrollable_table_view/src/sortable/sortable_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
+import 'package:flexible_scrollable_table_view/src/sortable/sortable_table_column.dart';
 import 'package:flutter/widgets.dart';
 
 ///表行构建类
@@ -14,10 +14,10 @@ mixin FlexibleTableRowBuilderMixin<T> {
 
 mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   ///表内的全部列
-  Set<AbsFlexibleColumn<T>> get allTableColumns;
+  Set<AbsFlexibleTableColumn<T>> get allTableColumns;
 
   @protected
-  Widget buildTableRow(Widget Function(AbsFlexibleColumn<T> column) buildCell);
+  Widget buildTableRow(Widget Function(AbsFlexibleTableColumn<T> column) buildCell);
 
   @override
   Widget buildHeaderRow(TableHeaderRowBuildArguments<T> arguments) {
@@ -30,7 +30,7 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   }
 
   ///根据列ID查找列配置类
-  AbsFlexibleColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
     for (var column in allTableColumns) {
       var result = column.findColumnById(columnId);
       if (result != null) {
@@ -41,7 +41,7 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   }
 
   ///根据列ID查找可排序列配置类
-  SortableColumnMixin<T>? findSortableColumnById(String columnId) {
-    return findColumnById(columnId) as SortableColumnMixin<T>?;
+  SortableTableColumnMixin<T>? findSortableColumnById(String columnId) {
+    return findColumnById(columnId) as SortableTableColumnMixin<T>?;
   }
 }

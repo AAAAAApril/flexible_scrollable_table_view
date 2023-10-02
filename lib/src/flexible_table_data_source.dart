@@ -1,4 +1,4 @@
-import 'package:flexible_scrollable_table_view/src/sortable/sortable_column.dart';
+import 'package:flexible_scrollable_table_view/src/sortable/sortable_table_column.dart';
 import 'package:flutter/foundation.dart';
 
 import 'selectable/table_selectable_mixin.dart';
@@ -24,9 +24,9 @@ class FlexibleTableDataSource<T> extends ChangeNotifier
   ValueListenable<FlexibleTableSortType> get sortingType => _currentSortingType;
 
   ///触发排序的列
-  final ValueNotifier<SortableColumnMixin<T>?> _currentSortingColumn = ValueNotifier(null);
+  final ValueNotifier<SortableTableColumnMixin<T>?> _currentSortingColumn = ValueNotifier(null);
 
-  ValueListenable<SortableColumnMixin<T>?> get sortingColumn => _currentSortingColumn;
+  ValueListenable<SortableTableColumnMixin<T>?> get sortingColumn => _currentSortingColumn;
 
   //====================================================================================================================
 
@@ -59,7 +59,7 @@ class FlexibleTableDataSource<T> extends ChangeNotifier
   }
 
   ///切换排序列
-  void switchSortColumn(SortableColumnMixin<T>? newSortColumn) {
+  void switchSortColumn(SortableTableColumnMixin<T>? newSortColumn) {
     //排序列相同，不切换
     if (_currentSortingColumn.value == newSortColumn) {
       return;
@@ -72,7 +72,7 @@ class FlexibleTableDataSource<T> extends ChangeNotifier
   ///切换排序方式以及排序列
   void switchSortTypeAndColumn({
     required FlexibleTableSortType newSortType,
-    required SortableColumnMixin<T>? newSortColumn,
+    required SortableTableColumnMixin<T>? newSortColumn,
   }) {
     bool needSort = false;
     if (newSortType != _currentSortingType.value) {
@@ -95,7 +95,7 @@ class FlexibleTableDataSource<T> extends ChangeNotifier
   void notifyListeners() {
     final List<T> value = List<T>.of(_rawValue);
     final FlexibleTableSortType sortType = _currentSortingType.value;
-    final SortableColumnMixin<T>? sortingColumn = _currentSortingColumn.value;
+    final SortableTableColumnMixin<T>? sortingColumn = _currentSortingColumn.value;
     if (value.isNotEmpty && sortType != FlexibleTableSortType.normal && sortingColumn != null) {
       value.sort(
         (a, b) {

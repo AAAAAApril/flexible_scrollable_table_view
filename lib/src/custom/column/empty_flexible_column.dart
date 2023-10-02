@@ -1,12 +1,12 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
 typedef BlankColumn = EmptyFlexibleColumn;
 typedef SpacerColumn = SpacerFlexibleColumn;
 
 ///空白列，只有宽度，没有具体内容
-final class EmptyFlexibleColumn<T> extends AbsFlexibleColumn<T> {
+final class EmptyFlexibleColumn<T> extends AbsFlexibleTableColumn<T> {
   const EmptyFlexibleColumn(super.id, this.width);
 
   final double width;
@@ -23,7 +23,7 @@ final class EmptyFlexibleColumn<T> extends AbsFlexibleColumn<T> {
 }
 
 ///撑开，但没有内容的列
-final class SpacerFlexibleColumn<T> extends AbsFlexibleColumn<T> {
+final class SpacerFlexibleColumn<T> extends AbsFlexibleTableColumn<T> {
   const SpacerFlexibleColumn(super.id, this.flex);
 
   final int flex;

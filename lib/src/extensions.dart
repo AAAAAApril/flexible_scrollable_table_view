@@ -2,31 +2,32 @@ import 'package:flutter/widgets.dart';
 
 import 'arguments/table_row_build_arguments.dart';
 import 'custom/builders/appoint_height_row_builder.dart';
+import 'custom/builders/divider_row_builder.dart';
 import 'custom/builders/merge_row_builder.dart';
 import 'custom/builders/pressable_row_builder.dart';
 import 'custom/builders/stacked_row_builder.dart';
 import 'custom/column/appoint_width_flexible_column.dart';
 import 'custom/column/pressable_flexible_column.dart';
 import 'custom/column/stacked_flexible_column.dart';
-import 'flexible_column.dart';
+import 'flexible_table_column.dart';
 import 'flexible_table_row_builder.dart';
 import 'selectable/selectable_column.dart';
-import 'sortable/sortable_column.dart';
+import 'sortable/sortable_table_column.dart';
 
-extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
-  AbsFlexibleColumn<T> withSortByPressColumnHeader(
-    int Function(SortableColumnMixin<T> column, T a, T b) compare,
+extension AbsFlexibleTableColumnExt<T> on AbsFlexibleTableColumn<T> {
+  AbsFlexibleTableColumn<T> withSortByPressColumnHeader(
+    int Function(SortableTableColumnMixin<T> column, T a, T b) compare,
   ) {
-    return SortableColumn<T>(this, compareValue: compare);
+    return SortableTableColumn<T>(this, compareValue: compare);
   }
 
-  AbsFlexibleColumn<T> appointWidth(AppointedColumnWidth<T> width) {
+  AbsFlexibleTableColumn<T> appointWidth(AppointedColumnWidth<T> width) {
     return AppointWidthFlexibleColumn<T>(this, width: width);
   }
 
-  AbsFlexibleColumn<T> withStacks({
-    Iterable<AbsFlexibleColumn<T>>? above,
-    Iterable<AbsFlexibleColumn<T>>? below,
+  AbsFlexibleTableColumn<T> withStacks({
+    Iterable<AbsFlexibleTableColumn<T>>? above,
+    Iterable<AbsFlexibleTableColumn<T>>? below,
   }) {
     if ((above == null || above.isEmpty) && (below == null || below.isEmpty)) {
       return this;
@@ -34,9 +35,9 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
     return StackedFlexibleColumn<T>(this, above: above, below: below);
   }
 
-  AbsFlexibleColumn<T> whenHeaderClicked(
+  AbsFlexibleTableColumn<T> whenHeaderClicked(
     void Function(
-      AbsFlexibleColumn<T> column,
+      AbsFlexibleTableColumn<T> column,
       TableHeaderRowBuildArguments<T> arguments,
       BuildContext context,
     ) onClicked, {
@@ -45,9 +46,9 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
     return HeaderPressableColumn<T>(this, onHeaderClicked: onClicked, expandPressArea: expandPressArea);
   }
 
-  AbsFlexibleColumn<T> whenInfoClicked(
+  AbsFlexibleTableColumn<T> whenInfoClicked(
     void Function(
-      AbsFlexibleColumn<T> column,
+      AbsFlexibleTableColumn<T> column,
       TableInfoRowBuildArguments<T> arguments,
       BuildContext context,
     ) onClicked, {
@@ -56,11 +57,11 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
     return InfoPressableColumn<T>(this, onInfoClicked: onClicked, expandPressArea: expandPressArea);
   }
 
-  AbsFlexibleColumn<T> asSelectableColumn(AbsFlexibleColumn<T> unSelectableColumn) {
+  AbsFlexibleTableColumn<T> asSelectableColumn(AbsFlexibleTableColumn<T> unSelectableColumn) {
     return SelectableColumn<T>(selectableColumn: this, unSelectableColumn: unSelectableColumn);
   }
 
-  AbsFlexibleColumn<T> asUnSelectableColumn(AbsFlexibleColumn<T> selectableColumn) {
+  AbsFlexibleTableColumn<T> asUnSelectableColumn(AbsFlexibleTableColumn<T> selectableColumn) {
     return SelectableColumn<T>(selectableColumn: selectableColumn, unSelectableColumn: this);
   }
 }
@@ -68,6 +69,13 @@ extension AbsFlexibleColumnExt<T> on AbsFlexibleColumn<T> {
 extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
   FlexibleTableRowBuilderMixin<T> appointHeight(AppointedRowHeight<T> height) {
     return AppointHeightRowBuilder<T>(this, height: height);
+  }
+
+  FlexibleTableRowBuilderMixin<T> withDivider({
+    bool aroundHeaderRow = false,
+    bool outsideOfRowItem = false,
+  }) {
+    return DividerRowBuilder<T>(this, aroundHeaderRow: aroundHeaderRow, outsideOfRowItem: outsideOfRowItem);
   }
 
   FlexibleTableRowBuilderMixin<T> withStacks({
