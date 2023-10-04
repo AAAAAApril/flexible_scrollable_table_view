@@ -65,4 +65,9 @@ FlexibleTableHeader<T>(dataSource, rowBuilder: rowBuilder);
 FlexibleTableContent<T>(dataSource, rowBuilder: rowBuilder);
 ```
 
+* 5、Set data for dataSource.
+```dart
+dataSource.value = <T>[];
+```
+
 * Example project for more usage.
