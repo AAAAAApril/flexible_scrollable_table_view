@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
 import 'package:flutter/material.dart';
 
@@ -42,41 +44,38 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
     dataSource = FlexibleTableDataSource();
     scrollMixin = SynchronizedScrollController();
 
-    AbsFlexibleTableColumn<StudentBean> idColumn = const StudentIdColumn()
-        //设置列宽为固定宽度
-        .appointWidth(FixedWidth(48));
-    AbsFlexibleTableColumn<StudentBean> nameColumn = const StudentNameColumn()
-        //设置列宽为父容器宽度的 0.5 倍
-        .appointWidth(ProportionalWidth(0.5));
-    AbsFlexibleTableColumn<StudentBean> ageColumn = const StudentAgeColumn()
-        //给列头添加点击排序的功能
-        .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age))
-        .appointWidth(FixedWidth(80));
-    AbsFlexibleTableColumn<StudentBean> genderColumn = const StudentGenderColumn()
-        //给列信息项添加点击事件
-        .whenInfoClicked((column, arguments, context) {
-      debugPrint('点击了[${column.id}]列的第[${arguments.dataIndex}]项的数据[${arguments.data.gender}]');
-    }).appointWidth(FixedWidth(100));
-
     rowBuilder = DefaultRowBuilder(
       this,
       leftPinnedColumns: {
-        idColumn,
+        const StudentIdColumn()
+            //设置列宽为固定宽度
+            .appointWidth(const FixedWidth(100)),
       },
       scrollableColumns: {
-        nameColumn,
-        ageColumn,
-        genderColumn,
+        const StudentNameColumn()
+            //设置列宽为父容器宽度的 0.5 倍
+            .appointWidth(ProportionalWidth(0.5)),
+        const StudentAgeColumn()
+            //给列头添加点击排序的功能
+            .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age))
+            .appointWidth(const FixedWidth(60)),
+        const StudentGenderColumn()
+            //给列信息项添加点击事件
+            .whenInfoClicked((column, arguments, context) {
+          debugPrint('点击了[${column.id}]列的第[${arguments.dataIndex}]项的数据[${arguments.data.gender}]');
+        }).appointWidth(const FixedWidth(60)),
       },
     )
         //给行设置固定的高度
-        .appointHeight(const FixedRowHeight(headerHeight: 32, infoHeight: 48));
+        .appointHeight(const FixedRowHeight(headerHeight: 48, infoHeight: 48))
+        .withDivider();
     refreshData();
   }
 
   @override
   void dispose() {
     super.dispose();
+    scrollMixin.dispose();
   }
 
   @override
@@ -88,7 +87,18 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
   void destroyScrollController(ScrollController controller) {}
 
   void refreshData() {
-    // dataSource.value;
+    final Random random = Random.secure();
+    final List<String> names = List.of(randomNames);
+    dataSource.value = names
+        .map<StudentBean>(
+          (e) => StudentBean(
+            id: int.parse(e.hashCode.toString().substring(0, 3)),
+            name: e,
+            age: random.nextInt(3) + 12,
+            gender: random.nextBool() ? '男' : '女',
+          ),
+        )
+        .toList(growable: false);
   }
 
   @override
@@ -97,46 +107,25 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: refreshData,
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+        ],
       ),
       body: Column(children: [
-        FlexibleTableHeader<StudentBean>(dataSource, rowBuilder: rowBuilder),
+        Material(
+          elevation: 2,
+          color: Colors.white,
+          child: FlexibleTableHeader<StudentBean>(dataSource, rowBuilder: rowBuilder),
+        ),
         Expanded(
           child: FlexibleTableContent<StudentBean>(dataSource, rowBuilder: rowBuilder),
         ),
       ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: refreshData,
-        child: const Icon(Icons.refresh),
-      ),
     );
   }
-}
-
-class StudentBean {
-  const StudentBean({
-    required this.id,
-    required this.name,
-    required this.age,
-    required this.gender,
-  });
-
-  final int id;
-  final String name;
-  final int age;
-  final String gender;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is StudentBean &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          age == other.age &&
-          gender == other.gender;
-
-  @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ age.hashCode ^ gender.hashCode;
 }
 
 class StudentIdColumn extends AbsFlexibleTableColumn<StudentBean> {
@@ -214,3 +203,63 @@ class StudentGenderColumn extends AbsFlexibleTableColumn<StudentBean> {
     );
   }
 }
+
+class StudentBean {
+  const StudentBean({
+    required this.id,
+    required this.name,
+    required this.age,
+    required this.gender,
+  });
+
+  final int id;
+  final String name;
+  final int age;
+  final String gender;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StudentBean &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          age == other.age &&
+          gender == other.gender;
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode ^ age.hashCode ^ gender.hashCode;
+}
+
+List<String> get randomNames => [
+      'Zelda',
+      'Sebastian',
+      'Trista',
+      'Holy',
+      'Joyce',
+      'Kirstyn',
+      'Dale',
+      'Walter',
+      'Immortal',
+      'Garret',
+      'Jillian',
+      'Timothea',
+      'Quinlan',
+      'Philomena',
+      'Logan',
+      'Fairy',
+      'Gazelle',
+      'Lorelei',
+      'Haley',
+      'Miriam',
+      'Ian',
+      'Beautiful',
+      'Audrey',
+      'Harmony',
+      'Quintana',
+      'Russell',
+      'Patience',
+      'Edric',
+      'Rosalind',
+      'Serpent',
+    ]..shuffle();

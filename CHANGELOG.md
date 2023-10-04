@@ -1,3 +1,7 @@
+## 3.0.0
+
+* Fully refactored, more flexible, more customizable.
+
 ## 2.15.0
 
 * Break changes.

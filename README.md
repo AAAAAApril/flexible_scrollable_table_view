@@ -1,60 +1,68 @@
 ## Usage
 
-* 1、Init `FlexibleTableController<T>` and release in `dispose()` lifecycle callback functions. (Required)
+* 1、Init `FlexibleTableDataSource<T>` and release in `dispose()` lifecycle callback functions. (Required)
+
 ```dart
-late FlexibleTableController<T> controller;
+late FlexibleTableDataSource<T> dataSource;
 
 @override
 void initState() {
   super.initState();
-  controller = FlexibleTableController<T>();
+  dataSource = FlexibleTableDataSource<T>();
 }
 
 @override
 void dispose() {
-  controller.dispose();
   super.dispose();
+  dataSource.dispose();
 }
 ```
 
-* 2、Init `AbsFlexibleTableConfigurations<T>` and add some instances of `AbsFlexibleColumn<T>`. (Required)   
-`rowHeight` is required and subclass of `AbsFlexibleTableRowHeight<T>`.   
-`leftPinnedColumns` is optional and place columns pinned at left.   
-`rightPinnedColumns` is optional and place columns pinned at right.   
-`scrollableColumns` is optional and place columns in a horizontal-scrolling ListView.
+* 2、Init `FlexibleTableRowBuilderMixin<T>`. (Required)  `DefaultRowBuilder<T>` is a default implementation.
+
 ```dart
-AbsFlexibleTableConfigurations<T> configurations = FlexibleTableConfigurations<T>(
-  rowHeight: const FixedHeight(
-    headerRowHeight: 40,
-    fixedInfoRowHeight: 50,
-  ),
-  leftPinnedColumns: {},
-  rightPinnedColumns: {},
-  scrollableColumns: {},
-);
+
+FlexibleTableRowBuilderMixin<T> rowBuilder = DefaultRowBuilder<T>(
+  this,
+  leftPinnedColumns: {
+    const StudentIdColumn()
+        //设置列宽为固定宽度
+        .appointWidth(const FixedWidth(100)),
+  },
+  scrollableColumns: {
+    const StudentNameColumn()
+        //设置列宽为父容器宽度的 0.5 倍
+        .appointWidth(ProportionalWidth(0.5)),
+    const StudentAgeColumn()
+        //给列头添加点击排序的功能
+        .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age))
+        .appointWidth(const FixedWidth(60)),
+    const StudentGenderColumn()
+        //给列信息项添加点击事件
+        .whenInfoClicked((column, arguments, context) {
+      debugPrint('点击了[${column.id}]列的第[${arguments.dataIndex}]项的数据[${arguments.data.gender}]');
+    }).appointWidth(const FixedWidth(60)),
+  },
+)
+    //给行设置固定的高度
+    .appointHeight(const FixedRowHeight(headerHeight: 48, infoHeight: 48))
+    .withDivider();
 ```
 
-* 3、Init `FlexibleTableHeader<T>` widget. (Optional)   
-Instance of `FlexibleTableController<T>` is required.    
-Instance of `AbsFlexibleTableConfigurations<T>` is required. 
+* 3、Init `FlexibleTableHeader<T>` widget.   
+  Instance of `FlexibleTableDataSource<T>` is required.    
+  Instance of `FlexibleTableRowBuilderMixin<T>` is required.
+
 ```dart
-FlexibleTableHeader<T>(
-  controller,
-  configurations: configurations,
-);
+FlexibleTableHeader<T>(dataSource, rowBuilder: rowBuilder);
 ```
 
-* 4、Init `FlexibleTableContent<T>` widget.  (Required)
+* 4、Init `FlexibleTableContent<T>` widget.   
+  Instance of `FlexibleTableDataSource<T>` is required.    
+  Instance of `FlexibleTableRowBuilderMixin<T>` is required.
+
 ```dart
-FlexibleTableContent<T>(
-  controller,
-  configurations: configurations,
-);
+FlexibleTableContent<T>(dataSource, rowBuilder: rowBuilder);
 ```
 
 * Example project for more usage.
-
-## Example
-
-![selecting](https://github.com/AAAAAApril/flexible_scrollable_table_view/blob/pub/example/img_1.jpg?raw=true)
-![not selectable](https://github.com/AAAAAApril/flexible_scrollable_table_view/blob/pub/example/img.jpg?raw=true)

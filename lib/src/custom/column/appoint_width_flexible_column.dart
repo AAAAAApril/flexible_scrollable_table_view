@@ -34,7 +34,7 @@ abstract class AppointedColumnWidth<T> {
 ///固定的宽度
 final class FixedWidth<T> extends AppointedColumnWidth<T> {
   const FixedWidth(this.fixedWidth)
-      : assert(fixedWidth < 0, 'The fixedWidth of column width must not be negative value.');
+      : assert(fixedWidth >= 0, 'The fixedWidth of column width must not be negative value.');
 
   final double fixedWidth;
 
@@ -49,7 +49,7 @@ final class ProportionalWidth<T> extends AppointedColumnWidth<T> {
   ProportionalWidth(
     this.proportion, {
     this.omittedWidth = 0,
-  }) : assert(proportion < 0, 'The proportion of column width must not be negative value.');
+  }) : assert(proportion >= 0, 'The proportion of column width must not be negative value.');
 
   ///当前列占父容器宽度的比例
   final double proportion;
