@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'arguments/table_build_arguments.dart';
 import 'custom/builders/appoint_height_row_builder.dart';
+import 'custom/builders/decoration_row_builder.dart';
 import 'custom/builders/divider_row_builder.dart';
 import 'custom/builders/merge_row_builder.dart';
 import 'custom/builders/pressable_row_builder.dart';
@@ -86,6 +87,19 @@ extension TableRowBuilderExt<T> on FlexibleTableRowBuilderMixin<T> {
       return this;
     }
     return StackedRowBuilder<T>(this, aboveBuilders: above, belowBuilders: below);
+  }
+
+  FlexibleTableRowBuilderMixin<T> withDecoration({
+    DecorationPosition position = DecorationPosition.background,
+    Decoration Function(TableBuildArgumentsMixin<T> arguments)? headerRowDecoration,
+    Decoration Function(TableInfoRowArgumentsMixin<T> arguments)? infoRowDecoration,
+  }) {
+    return DecorationRowBuilder<T>(
+      this,
+      position: position,
+      headerRowDecoration: headerRowDecoration,
+      infoRowDecoration: infoRowDecoration,
+    );
   }
 
   FlexibleTableRowBuilderMixin<T> whenPressed({

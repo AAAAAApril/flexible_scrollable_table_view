@@ -68,7 +68,14 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
     )
         //给行设置固定的高度
         .appointHeight(const FixedRowHeight(headerHeight: 48, infoHeight: 48))
-        .withDivider();
+        //给行设置装饰
+        .withDecoration(
+      infoRowDecoration: (arguments) {
+        return BoxDecoration(
+          color: arguments.dataIndex.isEven ? Colors.blue.shade50 : Colors.blue.shade100,
+        );
+      },
+    );
     refreshData();
   }
 
@@ -116,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
       ),
       body: Column(children: [
         Material(
-          elevation: 2,
+          elevation: 4,
           color: Colors.white,
           child: FlexibleTableHeader<StudentBean>(dataSource, rowBuilder: rowBuilder),
         ),

@@ -4,6 +4,7 @@ export 'src/arguments/table_build_arguments.dart';
 export 'src/arguments/table_row_build_arguments.dart';
 
 export 'src/custom/builders/appoint_height_row_builder.dart';
+export 'src/custom/builders/decoration_row_builder.dart';
 export 'src/custom/builders/default_row_builder.dart';
 export 'src/custom/builders/divider_row_builder.dart';
 export 'src/custom/builders/merge_row_builder.dart';

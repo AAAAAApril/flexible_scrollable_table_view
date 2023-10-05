@@ -1,3 +1,7 @@
+## 3.0.1
+
+* Optimize the code.
+
 ## 3.0.0
 
 * Fully refactored, more flexible, more customizable.
