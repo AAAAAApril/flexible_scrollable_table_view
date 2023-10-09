@@ -1,3 +1,7 @@
+## 3.0.2
+
+* Add `ScalableRowBuilder<T>` who has different width-tactics of column in different `parentWidth`.
+
 ## 3.0.1
 
 * Optimize the code.
