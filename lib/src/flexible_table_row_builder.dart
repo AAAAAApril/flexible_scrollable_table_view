@@ -23,16 +23,19 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   Set<AbsFlexibleTableColumn<T>> get allTableColumns;
 
   @protected
-  Widget buildTableRow(Widget Function(AbsFlexibleTableColumn<T> column) buildCell);
+  Widget buildTableRow(
+    TableBuildArgumentsMixin<T> arguments,
+    Widget Function(AbsFlexibleTableColumn<T> column) buildCell,
+  );
 
   @override
   Widget buildHeaderRow(TableBuildArgumentsMixin<T> arguments) {
-    return buildTableRow((column) => column.buildHeaderCell(arguments));
+    return buildTableRow(arguments, (column) => column.buildHeaderCell(arguments));
   }
 
   @override
   Widget buildInfoRow(TableInfoRowArgumentsMixin<T> arguments) {
-    return buildTableRow((column) => column.buildInfoCell(arguments));
+    return buildTableRow(arguments, (column) => column.buildInfoCell(arguments));
   }
 
   ///根据列ID查找列配置类

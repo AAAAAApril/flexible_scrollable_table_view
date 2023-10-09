@@ -2,8 +2,8 @@ import 'package:flexible_scrollable_table_view/src/arguments/table_build_argumen
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flutter/widgets.dart';
 
-typedef BlankColumn = EmptyFlexibleColumn;
-typedef SpacerColumn = SpacerFlexibleColumn;
+typedef BlankColumn<T> = EmptyFlexibleColumn<T>;
+typedef SpacerColumn<T> = SpacerFlexibleColumn<T>;
 
 ///空白列，只有宽度，没有具体内容
 final class EmptyFlexibleColumn<T> extends AbsFlexibleTableColumn<T> {

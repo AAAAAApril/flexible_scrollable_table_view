@@ -1,3 +1,4 @@
+import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_mixin.dart';
@@ -18,13 +19,10 @@ final class DefaultRowBuilder<T> with FlexibleTableRowBuilder<T> {
   ///横向滚动控制器管理类
   final TableHorizontalScrollMixin _horizontalScrollMixin;
 
-  @protected
   final List<AbsFlexibleTableColumn<T>> _leftPinnedColumns;
 
-  @protected
   final List<AbsFlexibleTableColumn<T>> _rightPinnedColumns;
 
-  @protected
   final List<AbsFlexibleTableColumn<T>> _scrollableColumns;
 
   @override
@@ -35,7 +33,10 @@ final class DefaultRowBuilder<T> with FlexibleTableRowBuilder<T> {
   };
 
   @override
-  Widget buildTableRow(Widget Function(AbsFlexibleTableColumn<T> column) buildCell) {
+  Widget buildTableRow(
+    TableBuildArgumentsMixin<T> arguments,
+    Widget Function(AbsFlexibleTableColumn<T> column) buildCell,
+  ) {
     return Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
       ..._leftPinnedColumns.map<Widget>(buildCell),
       if (_scrollableColumns.isNotEmpty)

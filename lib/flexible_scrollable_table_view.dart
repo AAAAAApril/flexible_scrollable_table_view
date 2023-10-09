@@ -9,6 +9,7 @@ export 'src/custom/builders/default_row_builder.dart';
 export 'src/custom/builders/divider_row_builder.dart';
 export 'src/custom/builders/merge_row_builder.dart';
 export 'src/custom/builders/pressable_row_builder.dart';
+export 'src/custom/builders/scalable_row_builder.dart';
 export 'src/custom/builders/stacked_row_builder.dart';
 
 export 'src/custom/column/appoint_width_flexible_column.dart';

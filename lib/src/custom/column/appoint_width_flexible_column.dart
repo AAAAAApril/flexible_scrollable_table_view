@@ -11,7 +11,7 @@ final class AppointWidthFlexibleColumn<T> extends AbsFlexibleTableColumnWithChil
 
   @override
   final AbsFlexibleTableColumn<T> child;
-  final AppointedColumnWidth width;
+  final AppointedColumnWidth<T> width;
 
   @override
   Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments) {
@@ -31,21 +31,30 @@ abstract class AppointedColumnWidth<T> {
   Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell);
 }
 
+///已知宽度
+mixin KnownColumnWidthMixin<T> on AppointedColumnWidth<T> {
+  ///获取已知的宽度
+  double getKnownWidth(TableBuildArgumentsMixin<T> arguments);
+
+  @override
+  Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
+    return SizedBox(width: getKnownWidth(arguments), height: double.infinity, child: columnCell);
+  }
+}
+
 ///固定的宽度
-final class FixedWidth<T> extends AppointedColumnWidth<T> {
+final class FixedWidth<T> extends AppointedColumnWidth<T> with KnownColumnWidthMixin<T> {
   const FixedWidth(this.fixedWidth)
       : assert(fixedWidth >= 0, 'The fixedWidth of column width must not be negative value.');
 
   final double fixedWidth;
 
   @override
-  Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
-    return SizedBox(width: fixedWidth, height: double.infinity, child: columnCell);
-  }
+  double getKnownWidth(TableBuildArgumentsMixin<T> arguments) => fixedWidth;
 }
 
 ///父容器宽度保持某个比例
-final class ProportionalWidth<T> extends AppointedColumnWidth<T> {
+final class ProportionalWidth<T> extends AppointedColumnWidth<T> with KnownColumnWidthMixin<T> {
   ProportionalWidth(
     this.proportion, {
     this.omittedWidth = 0,
@@ -60,11 +69,7 @@ final class ProportionalWidth<T> extends AppointedColumnWidth<T> {
   final Map<double, double> _cache = <double, double>{};
 
   @override
-  Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
-    return SizedBox(width: _getWidth(arguments), height: double.infinity, child: columnCell);
-  }
-
-  double _getWidth(TableBuildArgumentsMixin<T> arguments) {
+  double getKnownWidth(TableBuildArgumentsMixin<T> arguments) {
     double? cacheWidth = _cache[arguments.parentWidth];
     if (cacheWidth == null) {
       cacheWidth = (arguments.parentWidth - omittedWidth) * proportion;
