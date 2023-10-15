@@ -1,5 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/custom/column/appoint_width_flexible_column.dart';
+import 'package:flexible_scrollable_table_view/src/custom/column_width/appointed_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_column.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_scroll_mixin.dart';

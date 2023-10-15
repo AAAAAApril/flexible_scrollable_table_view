@@ -1,16 +1,17 @@
 import 'package:flutter/widgets.dart';
 
 import 'arguments/table_build_arguments.dart';
-import 'custom/builders/appoint_height_row_builder.dart';
-import 'custom/builders/decoration_row_builder.dart';
-import 'custom/builders/divider_row_builder.dart';
-import 'custom/builders/merge_row_builder.dart';
-import 'custom/builders/pressable_row_builder.dart';
-import 'custom/builders/scalable_row_builder.dart';
-import 'custom/builders/stacked_row_builder.dart';
+import 'custom/row/appoint_height_row_builder.dart';
+import 'custom/row/decoration_row_builder.dart';
+import 'custom/row/divider_row_builder.dart';
+import 'custom/row/merge_row_builder.dart';
+import 'custom/row/pressable_row_builder.dart';
+import 'custom/row/scalable_row_builder.dart';
+import 'custom/row/stacked_row_builder.dart';
 import 'custom/column/appoint_width_flexible_column.dart';
 import 'custom/column/pressable_flexible_column.dart';
 import 'custom/column/stacked_flexible_column.dart';
+import 'custom/column_width/appointed_column_width.dart';
 import 'flexible_table_column.dart';
 import 'flexible_table_row_builder.dart';
 import 'selectable/selectable_column.dart';
