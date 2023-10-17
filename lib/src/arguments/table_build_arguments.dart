@@ -10,7 +10,7 @@ mixin TableBuildArgumentsMixin<T> {
 }
 
 ///行数据
-mixin TableInfoRowArgumentsMixin<T> implements TableBuildArgumentsMixin<T> {
+mixin TableInfoRowArgumentsMixin<T> on TableBuildArgumentsMixin<T> {
   ///当前行所在下标
   int get dataIndex;
 

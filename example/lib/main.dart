@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flexible_scrollable_table_view/flexible_scrollable_table_view.dart';
@@ -38,11 +39,18 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
 
   late SynchronizedScrollMixin scrollMixin;
 
+  late AdaptedGroup group;
+
+  late ValueNotifier<String> randomName;
+
   @override
   void initState() {
     super.initState();
     dataSource = FlexibleTableDataSource();
     scrollMixin = SynchronizedScrollController();
+
+    group = AdaptedGroup();
+    randomName = ValueNotifier<String>('');
 
     rowBuilder = DefaultRowBuilder(
       this,
@@ -52,13 +60,16 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
             .appointWidth(const FixedWidth(100)),
       },
       scrollableColumns: {
-        const StudentNameColumn()
-            //设置列宽为父容器宽度的 0.5 倍
-            .appointWidth(ProportionalWidth(0.5)),
+        StudentNameColumn(
+          randomName: randomName,
+        )
+            //设置列的宽度根据其内容自动变化
+            .appointWidth(AdaptedWidth<StudentBean>(group)),
         const StudentAgeColumn()
             //给列头添加点击排序的功能
             .withSortByPressColumnHeader((column, a, b) => a.age.compareTo(b.age))
-            .appointWidth(const FixedWidth(60)),
+            //设置列宽为父容器宽度的 0.5 倍
+            .appointWidth(ProportionalWidth(0.5)),
         const StudentGenderColumn()
             //给列信息项添加点击事件
             .whenInfoClicked((column, arguments, context) {
@@ -67,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
       },
     )
         //给行设置固定的高度
-        .appointHeight(const FixedRowHeight(headerHeight: 48, infoHeight: 48))
+        .appointHeight(const FixedRowHeight(headerHeight: 48, infoHeight: 150))
         //给行设置装饰
         .withDecoration(
       infoRowDecoration: (arguments) {
@@ -76,13 +87,25 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
         );
       },
     );
+    refreshName();
     refreshData();
   }
 
   @override
   void dispose() {
     super.dispose();
+    timer.cancel();
+    randomName.dispose();
+    group.dispose();
     scrollMixin.dispose();
+  }
+
+  late Timer timer;
+
+  void refreshName() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      randomName.value = randomNames.first;
+    });
   }
 
   @override
@@ -158,7 +181,11 @@ class StudentIdColumn extends AbsFlexibleTableColumn<StudentBean> {
 }
 
 class StudentNameColumn extends AbsFlexibleTableColumn<StudentBean> {
-  const StudentNameColumn() : super('姓名');
+  const StudentNameColumn({
+    required this.randomName,
+  }) : super('姓名');
+
+  final ValueNotifier<String> randomName;
 
   @override
   Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
@@ -167,9 +194,23 @@ class StudentNameColumn extends AbsFlexibleTableColumn<StudentBean> {
 
   @override
   Widget buildInfoCell(TableInfoRowArgumentsMixin<StudentBean> arguments) {
-    return Center(
-      child: Text(
+    final Widget child;
+    if (arguments.dataIndex == 3) {
+      //将3号下标的内容替换为会变化的文字
+      child = ValueListenableBuilder<String>(
+        valueListenable: randomName,
+        builder: (context, value, child) => Text(value),
+      );
+    } else {
+      child = Text(
         arguments.data.name,
+      );
+    }
+    return ColoredBox(
+      color: arguments.dataIndex.isOdd ? Colors.pinkAccent : Colors.purple,
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: child,
       ),
     );
   }

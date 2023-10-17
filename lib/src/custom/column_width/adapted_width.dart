@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/custom/column_width/appointed_column_width.dart';
 import 'package:flexible_scrollable_table_view/src/custom/widgets/zero_box.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 ///自适应列宽
@@ -13,8 +14,14 @@ final class AdaptedWidth<T> extends AppointedColumnWidth<T> {
 
   @override
   Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
+    final int index;
+    if (arguments is TableInfoRowArgumentsMixin<T>) {
+      index = arguments.dataIndex;
+    }
     //用 -1 表示表头行
-    final index = (arguments as TableInfoRowArgumentsMixin?)?.dataIndex ?? -1;
+    else {
+      index = -1;
+    }
     return AdaptedChild(
       index,
       key: ValueKey<String>('${hashCode}_$index'),
@@ -28,7 +35,7 @@ final class AdaptedGroup with ChangeNotifier {
   AdaptedGroup({
     this.minWidth = 0,
     this.maxWidth = double.infinity,
-  });
+  }) : assert(minWidth <= maxWidth, 'maxWidth must lager than minWidth');
 
   ///允许的最小宽度
   final double minWidth;
@@ -42,7 +49,7 @@ final class AdaptedGroup with ChangeNotifier {
   Map<int, double> get widthCache => Map.of(_widthCache);
 
   ///列的必须宽度
-  double _width = 0;
+  late double _width = minWidth;
 
   double get width => _width;
 
@@ -69,12 +76,14 @@ final class AdaptedGroup with ChangeNotifier {
   bool _locked = false;
 
   @override
+  @protected
   void notifyListeners() {
     if (_locked) {
       return;
     }
     _locked = true;
-    Future.delayed(Duration.zero, () {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _locked = false;
       _width = min<double>(
         maxWidth,
         _widthCache.values.fold(
@@ -84,7 +93,6 @@ final class AdaptedGroup with ChangeNotifier {
           },
         ),
       );
-      _locked = false;
       super.notifyListeners();
     });
   }
@@ -147,7 +155,7 @@ class _AdaptedChildState extends State<AdaptedChild> {
     }
     setState(() {
       childWidth = newChildWidth;
-      realWidth == newRealWidth;
+      realWidth = newRealWidth;
     });
   }
 
@@ -164,9 +172,13 @@ class _AdaptedChildState extends State<AdaptedChild> {
       child: Stack(children: [
         ZeroBox(
           onRealSizeCallback: onRealSizeCallback,
+          constraints: BoxConstraints(
+            minWidth: widget.group.minWidth,
+            maxWidth: widget.group.maxWidth,
+          ),
           child: widget.child,
         ),
-        if (realWidth != null) widget.child,
+        widget.child,
       ]),
     );
   }

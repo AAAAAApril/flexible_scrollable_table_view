@@ -8,6 +8,7 @@ export 'src/custom/column/empty_flexible_column.dart';
 export 'src/custom/column/pressable_flexible_column.dart';
 export 'src/custom/column/stacked_flexible_column.dart';
 
+export 'src/custom/column_width/adapted_width.dart';
 export 'src/custom/column_width/appointed_column_width.dart';
 export 'src/custom/column_width/expanded_width.dart';
 export 'src/custom/column_width/fixed_width.dart';

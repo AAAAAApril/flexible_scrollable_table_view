@@ -1,6 +1,6 @@
 name: flexible_scrollable_table_view
 description: A table view who can scroll both vertical and horizontal.
-version: 3.0.2
+version: 3.0.3
 homepage: 'https://github.com/AAAAAApril/flexible_scrollable_table_view'
 
 environment:

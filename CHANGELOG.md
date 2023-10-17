@@ -1,3 +1,7 @@
+## 3.0.3
+
+* Add `AdaptedWidth<T>` who is instance of `AppointedColumnWidth<T>` and will constraint column width by max child-width.
+
 ## 3.0.2
 
 * Add `ScalableRowBuilder<T>` who has different width-tactics of column in different `parentWidth`.
