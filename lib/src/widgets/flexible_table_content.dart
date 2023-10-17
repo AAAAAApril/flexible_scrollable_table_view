@@ -2,7 +2,7 @@ import 'package:flexible_scrollable_table_view/src/arguments/table_build_argumen
 import 'package:flexible_scrollable_table_view/src/arguments/table_row_build_arguments.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_row_builder.dart';
 import 'package:flexible_scrollable_table_view/src/flexible_table_data_source.dart';
-import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_layout_builder.dart';
+import 'package:flexible_scrollable_table_view/src/custom/widgets/lazy_layout_builder.dart';
 import 'package:flexible_scrollable_table_view/src/sliver/sliver_flexible_table_content.dart';
 import 'package:flutter/widgets.dart';
 

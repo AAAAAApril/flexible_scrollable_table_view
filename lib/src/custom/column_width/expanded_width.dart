@@ -15,6 +15,13 @@ final class ExpandedWidth<T> extends AppointedColumnWidth<T> {
 
   @override
   Widget constrainWidth(TableBuildArgumentsMixin<T> arguments, Widget columnCell) {
-    return Flexible(flex: flex, fit: fit, child: columnCell);
+    return Flexible(
+      flex: flex,
+      fit: fit,
+      child: SizedBox(
+        height: double.infinity,
+        child: columnCell,
+      ),
+    );
   }
 }

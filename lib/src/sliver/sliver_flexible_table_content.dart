@@ -1,5 +1,5 @@
 import 'package:flexible_scrollable_table_view/src/arguments/table_build_arguments.dart';
-import 'package:flexible_scrollable_table_view/src/layout_builder/lazy_sliver_layout_builder.dart';
+import 'package:flexible_scrollable_table_view/src/custom/widgets/lazy_sliver_layout_builder.dart';
 import 'package:flexible_scrollable_table_view/src/widgets/flexible_table_content.dart';
 import 'package:flutter/widgets.dart';
 

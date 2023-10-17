@@ -42,6 +42,19 @@ mixin SynchronizedScrollMixin on ScrollController {
   }
 
   @override
+  void jumpTo(double value) {
+    super.jumpTo(value);
+    _lastUpdatedOffset = value;
+  }
+
+  @override
+  Future<void> animateTo(double offset, {required Duration duration, required Curve curve}) {
+    return super.animateTo(offset, duration: duration, curve: curve).then<void>((value) {
+      _lastUpdatedOffset = offset;
+    });
+  }
+
+  @override
   void dispose() {
     for (final ScrollPosition position in positions) {
       assert(_positionToListener.containsKey(position));
