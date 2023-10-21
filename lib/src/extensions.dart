@@ -12,6 +12,7 @@ import 'custom/column/appoint_width_flexible_column.dart';
 import 'custom/column/pressable_flexible_column.dart';
 import 'custom/column/stacked_flexible_column.dart';
 import 'custom/column_width/appointed_column_width.dart';
+import 'custom/row_height/appointed_row_height.dart';
 import 'flexible_table_column.dart';
 import 'flexible_table_row_builder.dart';
 import 'selectable/selectable_column.dart';

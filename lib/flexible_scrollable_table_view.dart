@@ -23,6 +23,10 @@ export 'src/custom/row/pressable_row_builder.dart';
 export 'src/custom/row/scalable_row_builder.dart';
 export 'src/custom/row/stacked_row_builder.dart';
 
+export 'src/custom/row_height/appointed_row_height.dart';
+export 'src/custom/row_height/changeable_height.dart';
+export 'src/custom/row_height/fixed_height.dart';
+
 export 'src/custom/scrollable/scroll_behavior.dart';
 export 'src/custom/scrollable/synchronized_scroll_mixin.dart';
 

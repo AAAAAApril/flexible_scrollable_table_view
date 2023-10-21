@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> with TableHorizontalScrollMixin
       },
     )
         //给行设置固定的高度
-        .appointHeight(const FixedRowHeight(headerHeight: 48, infoHeight: 150))
+        .appointHeight(const FixedHeight(headerHeight: 48, infoHeight: 150))
         //给行设置装饰
         .withDecoration(
       infoRowDecoration: (arguments) {
