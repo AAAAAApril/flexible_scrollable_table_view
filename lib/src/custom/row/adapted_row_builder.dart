@@ -7,25 +7,25 @@ import 'package:flexible_scrollable_table_view/src/scrollable/table_horizontal_s
 import 'package:flutter/widgets.dart';
 
 ///行中的列可伸缩的[行]构造器
-///Tips：在父容器宽度不足时，所有的列宽使用 [ScalableTableColumn] 中的 [knownWidth]，否则使用 [unKnownWidth]
-final class ScalableRowBuilder<T> with FlexibleTableRowBuilder<T> {
-  ScalableRowBuilder(
+///Tips：在父容器宽度不足时，所有的列宽使用 [AdaptedTableColumnConfig] 中的 [knownWidth]，否则使用 [unKnownWidth]
+final class AdaptedRowBuilder<T> with FlexibleTableRowBuilder<T> {
+  AdaptedRowBuilder(
     this._horizontalScrollMixin, {
-    Set<ScalableTableColumn<T>>? leftPinnedColumns,
-    Set<ScalableTableColumn<T>>? rightPinnedColumns,
-    Set<ScalableTableColumn<T>>? scrollableColumns,
-  })  : _leftPinnedColumns = List<ScalableTableColumn<T>>.of(leftPinnedColumns ?? <ScalableTableColumn<T>>[]),
-        _rightPinnedColumns = List<ScalableTableColumn<T>>.of(rightPinnedColumns ?? <ScalableTableColumn<T>>[]),
-        _scrollableColumns = List<ScalableTableColumn<T>>.of(scrollableColumns ?? <ScalableTableColumn<T>>[]);
+    Set<AdaptedTableColumnConfig<T>>? leftPinnedColumns,
+    Set<AdaptedTableColumnConfig<T>>? rightPinnedColumns,
+    Set<AdaptedTableColumnConfig<T>>? scrollableColumns,
+  })  : _leftPinnedColumns = List<AdaptedTableColumnConfig<T>>.of(leftPinnedColumns ?? <AdaptedTableColumnConfig<T>>[]),
+        _rightPinnedColumns = List<AdaptedTableColumnConfig<T>>.of(rightPinnedColumns ?? <AdaptedTableColumnConfig<T>>[]),
+        _scrollableColumns = List<AdaptedTableColumnConfig<T>>.of(scrollableColumns ?? <AdaptedTableColumnConfig<T>>[]);
 
   ///横向滚动控制器管理类
   final TableHorizontalScrollMixin _horizontalScrollMixin;
 
-  final List<ScalableTableColumn<T>> _leftPinnedColumns;
+  final List<AdaptedTableColumnConfig<T>> _leftPinnedColumns;
 
-  final List<ScalableTableColumn<T>> _rightPinnedColumns;
+  final List<AdaptedTableColumnConfig<T>> _rightPinnedColumns;
 
-  final List<ScalableTableColumn<T>> _scrollableColumns;
+  final List<AdaptedTableColumnConfig<T>> _scrollableColumns;
 
   @override
   late final Set<AbsFlexibleTableColumn<T>> allTableColumns = <AbsFlexibleTableColumn<T>>{
@@ -36,7 +36,7 @@ final class ScalableRowBuilder<T> with FlexibleTableRowBuilder<T> {
 
   ///获取所有列的总共已知列宽
   double getTotalKnownWidth(TableBuildArgumentsMixin<T> arguments) {
-    return (List<ScalableTableColumn<T>>.of(_leftPinnedColumns)
+    return (List<AdaptedTableColumnConfig<T>>.of(_leftPinnedColumns)
           ..addAll(_scrollableColumns)
           ..addAll(_rightPinnedColumns))
         .fold<double>(0, (value, element) => value + element.knownWidth.getKnownWidth(arguments));
@@ -65,7 +65,7 @@ final class ScalableRowBuilder<T> with FlexibleTableRowBuilder<T> {
                 padding: EdgeInsets.zero,
                 physics: const ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  final ScalableTableColumn<T> column = _scrollableColumns[index];
+                  final AdaptedTableColumnConfig<T> column = _scrollableColumns[index];
                   return column.knownWidth.constrainWidth(arguments, buildCell(column.child));
                 },
               ),
@@ -83,9 +83,24 @@ final class ScalableRowBuilder<T> with FlexibleTableRowBuilder<T> {
         ..._leftPinnedColumns.map<Widget>((e) {
           return e.unKnownWidth.constrainWidth(arguments, buildCell(e.child));
         }),
-        ..._scrollableColumns.map((e) {
-          return e.unKnownWidth.constrainWidth(arguments, buildCell(e.child));
-        }),
+        if (_scrollableColumns.isNotEmpty)
+          Expanded(
+            child: TableHorizontalScrollStateWidget(
+              _horizontalScrollMixin,
+              builder: (context, scrollController) => ListView.builder(
+                controller: scrollController,
+                itemCount: _scrollableColumns.length,
+                scrollDirection: Axis.horizontal,
+                primary: false,
+                padding: EdgeInsets.zero,
+                physics: const ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final AdaptedTableColumnConfig<T> column = _scrollableColumns[index];
+                  return column.unKnownWidth.constrainWidth(arguments, buildCell(column.child));
+                },
+              ),
+            ),
+          ),
         ..._rightPinnedColumns.map<Widget>((e) {
           return e.unKnownWidth.constrainWidth(arguments, buildCell(e.child));
         }),
@@ -95,8 +110,8 @@ final class ScalableRowBuilder<T> with FlexibleTableRowBuilder<T> {
 }
 
 ///可伸缩的列宽
-final class ScalableTableColumn<T> {
-  const ScalableTableColumn(
+final class AdaptedTableColumnConfig<T> {
+  const AdaptedTableColumnConfig(
     this.child, {
     required this.knownWidth,
     AppointedColumnWidth<T>? unKnownWidth,
@@ -114,7 +129,7 @@ final class ScalableTableColumn<T> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalableTableColumn && runtimeType == other.runtimeType && child == other.child;
+      other is AdaptedTableColumnConfig && runtimeType == other.runtimeType && child == other.child;
 
   @override
   int get hashCode => child.hashCode;

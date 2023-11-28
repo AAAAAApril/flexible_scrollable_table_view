@@ -6,7 +6,7 @@ import 'custom/row/decoration_row_builder.dart';
 import 'custom/row/divider_row_builder.dart';
 import 'custom/row/merge_row_builder.dart';
 import 'custom/row/pressable_row_builder.dart';
-import 'custom/row/scalable_row_builder.dart';
+import 'custom/row/adapted_row_builder.dart';
 import 'custom/row/stacked_row_builder.dart';
 import 'custom/column/appoint_width_flexible_column.dart';
 import 'custom/column/pressable_flexible_column.dart';
@@ -69,11 +69,11 @@ extension AbsFlexibleTableColumnExt<T> on AbsFlexibleTableColumn<T> {
     return SelectableColumn<T>(selectableColumn: selectableColumn, unSelectableColumn: this);
   }
 
-  ScalableTableColumn<T> withScalableWith(
+  AdaptedTableColumnConfig<T> withAdaptedWith(
     KnownColumnWidthMixin<T> knownWidth, {
     AppointedColumnWidth<T>? unKnownWidth,
   }) {
-    return ScalableTableColumn<T>(this, knownWidth: knownWidth, unKnownWidth: unKnownWidth);
+    return AdaptedTableColumnConfig<T>(this, knownWidth: knownWidth, unKnownWidth: unKnownWidth);
   }
 }
 

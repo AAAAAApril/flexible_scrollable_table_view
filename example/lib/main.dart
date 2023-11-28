@@ -165,7 +165,7 @@ class StudentIdColumn extends AbsFlexibleTableColumn<StudentBean> {
   Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text(id),
+      child: Text(id.toString()),
     );
   }
 
@@ -189,7 +189,7 @@ class StudentNameColumn extends AbsFlexibleTableColumn<StudentBean> {
 
   @override
   Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
-    return Center(child: Text(id));
+    return Center(child: Text(id.toString()));
   }
 
   @override
@@ -221,7 +221,7 @@ class StudentAgeColumn extends AbsFlexibleTableColumn<StudentBean> {
 
   @override
   Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
-    return Center(child: Text(id));
+    return Center(child: Text(id.toString()));
   }
 
   @override
@@ -239,7 +239,7 @@ class StudentGenderColumn extends AbsFlexibleTableColumn<StudentBean> {
 
   @override
   Widget buildHeaderCell(TableBuildArgumentsMixin<StudentBean> arguments) {
-    return Center(child: Text(id));
+    return Center(child: Text(id.toString()));
   }
 
   @override

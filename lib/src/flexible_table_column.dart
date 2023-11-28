@@ -6,7 +6,7 @@ abstract class AbsFlexibleTableColumn<T> {
   const AbsFlexibleTableColumn(this.id);
 
   ///列 id，需要保持唯一
-  final String id;
+  final Object id;
 
   ///构建表头
   Widget buildHeaderCell(TableBuildArgumentsMixin<T> arguments);

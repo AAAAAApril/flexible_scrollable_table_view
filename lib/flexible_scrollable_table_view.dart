@@ -14,13 +14,13 @@ export 'src/custom/column_width/expanded_width.dart';
 export 'src/custom/column_width/fixed_width.dart';
 export 'src/custom/column_width/proportional_width.dart';
 
+export 'src/custom/row/adapted_row_builder.dart';
 export 'src/custom/row/appoint_height_row_builder.dart';
 export 'src/custom/row/decoration_row_builder.dart';
 export 'src/custom/row/default_row_builder.dart';
 export 'src/custom/row/divider_row_builder.dart';
 export 'src/custom/row/merge_row_builder.dart';
 export 'src/custom/row/pressable_row_builder.dart';
-export 'src/custom/row/scalable_row_builder.dart';
 export 'src/custom/row/stacked_row_builder.dart';
 
 export 'src/custom/row_height/appointed_row_height.dart';
