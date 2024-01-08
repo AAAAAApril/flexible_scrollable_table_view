@@ -90,9 +90,8 @@ class FlexibleTableDataSource<T> extends ChangeNotifier
 
   //====================================================================================================================
 
-  ///通知数据更新之前先给数据排序
-  @override
-  void notifyListeners() {
+  @protected
+  List<T> sortValue() {
     final List<T> value = List<T>.of(_rawValue);
     final FlexibleTableSortType sortType = _currentSortingType.value;
     final SortableTableColumnMixin<T>? sortingColumn = _currentSortingColumn.value;
@@ -108,8 +107,13 @@ class FlexibleTableDataSource<T> extends ChangeNotifier
         },
       );
     }
+    return value;
+  }
 
-    _sortedValue = value;
+  ///通知数据更新之前先给数据排序
+  @override
+  void notifyListeners() {
+    _sortedValue = sortValue();
     super.notifyListeners();
   }
 

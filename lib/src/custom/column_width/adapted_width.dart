@@ -69,20 +69,25 @@ final class AdaptedGroup with ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     _widthCache.clear();
     super.dispose();
   }
 
   bool _locked = false;
+  bool _disposed = false;
 
   @override
   @protected
   void notifyListeners() {
-    if (_locked) {
+    if (_disposed || _locked) {
       return;
     }
     _locked = true;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (_disposed) {
+        return;
+      }
       _locked = false;
       _width = min<double>(
         maxWidth,
@@ -161,6 +166,9 @@ class _AdaptedChildState extends State<AdaptedChild> {
 
   ///获取了真实大小
   void onRealSizeCallback(Size size) {
+    if (!mounted) {
+      return;
+    }
     widget.group._resetWidth(widget.index, size.width);
   }
 
