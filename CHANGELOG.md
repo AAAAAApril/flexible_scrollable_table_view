@@ -1,3 +1,7 @@
+## 3.0.5
+
+* Fix bug.
+
 ## 3.0.3
 
 * Add `AdaptedWidth<T>` who is instance of `AppointedColumnWidth<T>` and will constraint column width by max child-width.
