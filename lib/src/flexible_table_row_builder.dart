@@ -39,7 +39,7 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   }
 
   ///根据列ID查找列配置类
-  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(Object columnId) {
     for (var column in allTableColumns) {
       var result = column.findColumnById(columnId);
       if (result != null) {
@@ -50,7 +50,7 @@ mixin FlexibleTableRowBuilder<T> implements FlexibleTableRowBuilderMixin<T> {
   }
 
   ///根据列ID查找可排序列配置类
-  SortableTableColumnMixin<T>? findSortableColumnById(String columnId) {
+  SortableTableColumnMixin<T>? findSortableColumnById(Object columnId) {
     return findColumnById(columnId) as SortableTableColumnMixin<T>?;
   }
 }

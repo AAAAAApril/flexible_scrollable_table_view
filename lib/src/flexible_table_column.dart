@@ -14,7 +14,7 @@ abstract class AbsFlexibleTableColumn<T> {
   ///构建表信息
   Widget buildInfoCell(TableInfoRowArgumentsMixin<T> arguments);
 
-  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(Object columnId) {
     return columnId == id ? this : null;
   }
 
@@ -32,7 +32,7 @@ abstract class AbsFlexibleTableColumnWithChild<T> extends AbsFlexibleTableColumn
   AbsFlexibleTableColumn<T> get child;
 
   @override
-  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(Object columnId) {
     return child.findColumnById(columnId) ?? super.findColumnById(columnId);
   }
 }
@@ -43,7 +43,7 @@ abstract class AbsFlexibleTableColumnWithChildren<T> extends AbsFlexibleTableCol
   Iterable<AbsFlexibleTableColumn<T>> get children;
 
   @override
-  AbsFlexibleTableColumn<T>? findColumnById(String columnId) {
+  AbsFlexibleTableColumn<T>? findColumnById(Object columnId) {
     for (var value in children) {
       var result = value.findColumnById(columnId);
       if (result != null) {
